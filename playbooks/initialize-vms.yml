@@ -20,7 +20,7 @@
   gather_facts:     false
 
 
-- include: roles/initialize-vm.yml
+- include: ../roles/initialize-vm.yml
   tags: [initialize-vm, init]
   vars:
     targets: all
