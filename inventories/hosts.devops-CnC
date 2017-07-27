@@ -1,0 +1,2 @@
+[devops-CnC]
+devops-CnC       ansible_connection=local
