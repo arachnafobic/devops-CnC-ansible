@@ -1,0 +1,8 @@
+*~
+*.swp
+*.retry
+
+/*.box
+/.ssh-config
+/.vagrant
+/shared
