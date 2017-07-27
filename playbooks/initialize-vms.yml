@@ -1,0 +1,26 @@
+---
+
+# take inventory
+# always include this when using tags!
+- name:             Gather facts and create dynamic groups before we start
+  hosts:            all
+  become:           true
+  become_user:      root
+  gather_facts:     true
+  tags:             gather
+  tasks:
+     - group_by:     key={{ ansible_distribution }}_{{ ansible_distribution_release }}
+       changed_when: false
+
+# go time
+- name:             Running Plays now
+  hosts:            all
+  become:           true
+  become_user:      root
+  gather_facts:     false
+
+
+- include: roles/initialize-vm.yml
+  tags: [initialize-vm, init]
+  vars:
+    targets: all
