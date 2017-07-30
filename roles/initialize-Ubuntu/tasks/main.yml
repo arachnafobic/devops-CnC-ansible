@@ -1,0 +1,35 @@
+---
+
+- name:             touch status file
+  file:             path=/root/._ansible state=touch
+
+- name:             set ubuntu user password
+  shell:            usermod -p '{{ my_password2 }}' ubuntu
+  when:             my_password2 is defined and my_password2_vm is not defined
+
+- name:             set ubuntu user password
+  shell:            usermod -p `mkpasswd -m sha-512 {{ my_password2 }}` ubuntu
+  when:             my_password2 is defined and my_password2_vm is defined
+
+- name:             set sudo passwd_tries to 1 (default=3)
+  copy:             src=passwd_tries dest=/etc/sudoers.d/passwd_tries mode=0440 validate='visudo -cf %s'
+
+- name:             check for /etc/sudoers.d/90-cloud-init-users (VM version)
+  command:          /usr/bin/test -e /etc/sudoers.d/90-cloud-init-users
+  register:         cloudinit_exists
+  failed_when:      false
+  changed_when:     false
+
+- name:             check for /etc/sudoers.d/90-cloudimg-ubuntu (AWS version)
+  command:          /usr/bin/test -e /etc/sudoers.d/90-cloudimg-ubuntu
+  register:         cloudimg_exists
+  failed_when:      false
+  changed_when:     false
+
+- name:             disable passwordless sudo for ubuntu user (VM version)
+  command:          mv /etc/sudoers.d/90-cloud-init-users /etc/sudoers.d/90-cloud-init-users.DISABLED
+  when:             cloudinit_exists.rc == 0
+
+- name:             disable passwordless sudo for ubuntu user (AWS version)
+  command:          mv /etc/sudoers.d/90-cloudimg-ubuntu /etc/sudoers.d/90-cloudimg-ubuntu.DISABLED
+  when:             cloudimg_exists.rc == 0

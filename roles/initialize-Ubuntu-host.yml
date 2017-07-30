@@ -1,0 +1,19 @@
+---
+
+- name:             initialize-Ubuntu
+  hosts:            "{{ targets }}"
+  gather_facts:     no
+  become:           true
+  become_user:      root
+
+  vars_prompt:
+    - name: "my_password2"
+      prompt: "Enter password for ubuntu user"
+      encrypt: "sha512_crypt"
+      private: yes
+      confirm: yes
+      salt_size: 7
+
+  roles:
+    - initialize-Ubuntu
+

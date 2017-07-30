@@ -9,10 +9,10 @@
   gather_facts:     true
   tags:             gather
   tasks:
-     - group_by:     key={{ ansible_distribution }}
-       changed_when: false
-     - group_by:     key={{ ansible_distribution }}_{{ ansible_distribution_release }}
-       changed_when: false
+    - group_by:     key={{ ansible_distribution }}
+      changed_when: false
+    - group_by:     key={{ ansible_distribution }}_{{ ansible_distribution_release }}
+      changed_when: false
 
 # go time
 - name:             Running Plays now
@@ -21,14 +21,7 @@
   become_user:      root
   gather_facts:     false
 
-- include: ../roles/initialize-vm.yml
-  tags: [initialize-vm, init]
-  vars:
-    targets: all
-
-- include: ../roles/initialize-Ubuntu.yml
+- include: ../roles/initialize-Ubuntu-host.yml
   tags: [initialize-Ubuntu, init]
   vars:
     targets: Ubuntu
-    my_password2: "foo"
-    my_password2_vm: "yes"
