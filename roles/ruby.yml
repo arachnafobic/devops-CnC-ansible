@@ -1,0 +1,12 @@
+---
+
+- name:             ruby
+  hosts:            "{{ targets }}"
+  gather_facts:     no
+  become:           true
+  become_user:      root
+
+  roles:
+    - { role: ruby19, when: ansible_distribution_release == 'precise' }
+    - { role: ruby20, when: ansible_distribution_release == 'trusty' }
+    - { role: chruby, when: ansible_hostname == 'vm-ubuntu'}

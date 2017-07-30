@@ -1,0 +1,8 @@
+---
+
+gh_repos:
+  - kchmck/vim-coffee-script
+  - plasticboy/vim-markdown
+  - obfusk/map.sh
+  - obfusk/venv
+

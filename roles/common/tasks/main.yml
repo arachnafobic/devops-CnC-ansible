@@ -1,0 +1,91 @@
+---
+
+- name:             create 700 directories in ~root
+  file:             path=/root/{{ item }} state=directory mode=0700
+  with_items:       '{{ root_folders }}'
+
+- name:             create directories in /opt + /root/cache
+  file:             path={{ item }} state=directory mode=0755
+  with_items:       '{{ default_folders }}'
+
+- name:             install some tools
+  apt:              name={{ item }} state=present
+  with_items:       '{{ install_tools }}'
+
+- name:             install development packages
+  apt:              name={{ item }} state=present
+  with_items:       '{{ install_dev }}'
+
+- name:             install python packages thru pip
+  pip:              name={{ item }} state=present umask=0022
+  with_items:       '{{ install_dev_pip }}'
+
+- name:             install mongodb specific packages
+  apt:              name=python-pymongo state=present
+  when:             inventory_hostname in groups['mongodb']|default([])
+
+- name:             install postfix specific packages
+  apt:              name=python-pymongo state=present
+  when:             inventory_hostname in groups['postfix']|default([])
+
+- name:             remove unwanted packages
+  apt:              name={{ item }} state=absent
+  with_items:       '{{ uninstall_unwanted }}'
+
+- name:             set FQDN - localhost
+  lineinfile:       dest=/etc/hosts regexp='^127\.0\.0\.1' line='127.0.0.1 localhost' owner=root group=root mode=0644
+
+- name:             set example.com FQDN - hostname
+  lineinfile:       dest=/etc/hosts insertafter='^127\.0\.0\.1' line='127.0.1.1 {{ ansible_hostname }}.example.com {{ ansible_hostname }} netdata.me' owner=root group=root mode=0644
+
+- name:             remove any leftover 127.0.1.1 entries from pre-netdata
+  lineinfile:       dest=/etc/hosts state=absent regexp='^127\.0\.1\.1 {{ ansible_hostname }} {{ ansible_hostname }}'
+
+- name:             remove any leftover 127.0.1.1 entries from pre-netdata
+  lineinfile:       dest=/etc/hosts state=absent regexp='^127\.0\.1\.1 {{ ansible_hostname }}.example.com {{ ansible_hostname }}$'
+
+- name:             remove any leftover 127.0.1.1 entries from post-netdata
+  lineinfile:       dest=/etc/hosts state=absent regexp='^127\.0\.1\.1 {{ ansible_hostname }} {{ ansible_hostname }} netdata.me'
+
+- name:             set default editor
+  command:          update-alternatives --set editor {{ alt.editor }}
+  register:         common_alt_editor
+  changed_when:     '"using" in common_alt_editor.stdout'
+
+- name:             link ack to ack-grep
+  file:             path=/usr/local/bin/ack src=/usr/bin/ack-grep state=link
+
+- name:             place /etc/prompt.bash
+  copy:             dest=/etc/prompt.bash src=prompt.bash mode=0644
+
+- name:             place /etc/checkrestart.blacklist
+  copy:             dest=/etc/checkrestart.blacklist src=checkrestart.blacklist mode=0644
+
+- name:             fix stock sshd_config in trusty (add EOF..)
+  shell:            'test "$( tail -c1 /etc/ssh/sshd_config )" = "" || echo >> /etc/ssh/sshd_config'
+  changed_when:     false
+
+- name:             update ssh parameters
+  lineinfile:       dest=/etc/ssh/sshd_config
+                    state=present
+                    regexp=^{{ item.key }}
+                    line="{{ item.key }} {{ item.value }}"
+                    insertafter=EOF
+  with_items:
+    - { key: 'PermitRootLogin', value: 'no' }
+    - { key: 'LoginGraceTime', value: '120' }
+    - { key: 'TCPKeepAlive', value: 'yes' }
+    - { key: 'X11Forwarding', value: 'yes' }
+    - { key: 'ClientAliveInterval', value: '60' }
+  notify:
+    - restart ssh
+
+- name:             Set firewall rules for web traffic and SSH
+  ufw:              rule=allow port={{ item }} proto=tcp
+  with_items:
+    - ssh
+    - http
+    - https
+
+- name:             Deny everything and enable UFW
+  ufw:              state=enabled policy=deny

@@ -1,0 +1,10 @@
+---
+
+- name:             python
+  hosts:            "{{ targets }}"
+  gather_facts:     no
+  become:           true
+  become_user:      root
+
+  roles:
+    - python

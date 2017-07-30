@@ -1,0 +1,6 @@
+---
+
+- name:             github repos
+  git:              repo=https://github.com/{{ item }}.git
+                    dest=/opt/src/{{ item|basename }}
+  with_items:       '{{ gh_repos }}'

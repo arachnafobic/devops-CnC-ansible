@@ -1,0 +1,75 @@
+---
+
+# take inventory
+# always include this when using tags!
+- name:             Gather facts and create dynamic groups before we start
+  hosts:            all
+  become:           true
+  become_user:      root
+  gather_facts:     true
+  tags:             gather
+  tasks:
+     - group_by:     key={{ ansible_distribution }}
+       changed_when: false
+     - group_by:     key={{ ansible_distribution }}_{{ ansible_distribution_release }}
+       changed_when: false
+
+# go time
+- name:             Running Plays now
+  hosts:            all
+  become:           true
+  become_user:      root
+  gather_facts:     false
+
+# base
+- include: ../roles/update.yml
+  tags: [update, init]
+  vars:
+    targets: all
+
+- include: ../roles/common.yml
+  tags: [common, init]
+  vars:
+    targets: all
+
+- include: ../roles/repos.yml
+  tags: [repos, init]
+  vars:
+    targets: all
+
+# dev
+- include: ../roles/ruby.yml
+  tags: [ruby, dev]
+  vars:
+    targets: all
+
+- include: ../roles/python.yml
+  tags: [python, dev]
+  vars:
+    targets: all
+
+# general user setup
+- include: ../roles/setup-user.yml
+  tags: [users, user-root]
+  vars:
+    targets:  all
+    user:   root
+    home:   /root
+    keygen: false
+
+- include: ../roles/setup-user.yml
+  tags: [users, user-ubuntu]
+  vars:
+    targets:  Ubuntu
+    user:   ubuntu
+    home:   /home/ubuntu
+    keygen: false
+
+- include: ../roles/setup-user.yml
+  tags: [users, user-vagrant]
+  vars:
+    targets:  vm-ubuntu,devops-CnC
+    user:   vagrant
+    home:   /home/vagrant
+    keygen: false
+

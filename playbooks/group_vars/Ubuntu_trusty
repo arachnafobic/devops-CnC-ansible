@@ -1,0 +1,33 @@
+---
+
+ruby_version:   2.0.0   # trusty
+gem_exec:       /usr/bin/gem2.0
+npms:
+  - uglify-js
+  - coffee-script
+links:
+  root:
+    - path:     /usr/local/bin/filter
+      src:      /opt/src/map.sh/bin/filter
+    - path:     /usr/local/bin/map
+      src:      /opt/src/map.sh/bin/map
+    - path:     /usr/local/bin/taskmaster
+      src:      /opt/src/taskmaster/taskmaster
+    - path:     /usr/local/bin/venv
+      src:      /opt/src/venv/venv
+  user:
+    - path:     ~/bin/erb
+      src:      /usr/bin/erb2.0
+    - path:     ~/bin/gem
+      src:      /usr/bin/gem2.0
+    - path:     ~/bin/irb
+      src:      /usr/bin/irb2.0
+    - path:     ~/bin/rdoc
+      src:      /usr/bin/rdoc2.0
+    - path:     ~/bin/ri
+      src:      /usr/bin/ri2.0
+    - path:     ~/bin/ruby
+      src:      /usr/bin/ruby2.0
+    - path:     ~/bin/testrb
+      src:      /usr/bin/testrb2.0
+

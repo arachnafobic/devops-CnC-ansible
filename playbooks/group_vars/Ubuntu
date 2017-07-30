@@ -1,0 +1,37 @@
+---
+
+install_tools:
+  - ack-grep
+  - byobu
+  - curl
+  - git
+  - grc
+  - htop
+  - tree
+  - vim
+  - mc
+  - tig
+  - apg
+  - debian-goodies
+install_dev:
+  - build-essential
+  - zlib1g-dev
+  - libssl-dev
+  - libreadline-gplv2-dev
+  - libxml2-dev
+  - libxslt1-dev
+  - python-pip
+  - python-psycopg2
+  - python-pyasn1
+  - libmagic-dev
+  - freetds-dev
+install_dev_pip:
+  - ndg-httpsclient
+uninstall_unwanted:
+  - rpcbind
+  - cloud-init
+  - puppet
+  - puppet-common
+  - chef
+  - chef-zero
+

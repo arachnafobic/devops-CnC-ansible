@@ -1,0 +1,10 @@
+---
+
+- name:             common
+  hosts:            "{{ targets }}"
+  gather_facts:     no
+  become:           true
+  become_user:      root
+
+  roles:
+    - common

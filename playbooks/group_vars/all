@@ -1,0 +1,32 @@
+---
+
+release:        "{{ ansible_distribution_release }}"
+gems:
+  - bundler
+  - pry
+  - localconfig
+  - bcrypt
+alt:
+  editor:       /bin/nano
+root_folders:
+  - tmp
+  - stat_services.d
+  - pg.d
+  - mongo.d
+default_folders:
+  - /opt/src
+  - /opt/pkg
+  - /root/cache
+  - /__data
+gh_repos:
+  - kchmck/vim-coffee-script
+  - plasticboy/vim-markdown
+  - obfusk/cpbak
+  - obfusk/dev-misc
+  - obfusk/map.sh
+  - obfusk/sh-config
+  - obfusk/srvbak
+  - obfusk/stat
+  - obfusk/taskmaster
+  - obfusk/venv
+

@@ -1,0 +1,3 @@
+prefix = ~/.node
+unicode = false
+tmp = /tmp

@@ -1,0 +1,54 @@
+---
+
+- name:             check if chruby install was done previously
+  stat:             path=/usr/local/bin/chruby-exec
+  register:         chruby_statuscheck
+  changed_when:     false
+
+- name:             get chruby 0.3.9 source
+  get_url:          url=https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz dest=/tmp/chruby-0.3.9.tar.gz
+                    checksum=sha256:7220a96e355b8a613929881c091ca85ec809153988d7d691299e0a16806b42fd
+  when:             chruby_statuscheck.stat.exists == false
+
+- name:             unpack chruby source
+  unarchive:        src=/tmp/chruby-0.3.9.tar.gz dest=/tmp copy=no
+  no_log:           true
+  when:             chruby_statuscheck.stat.exists == false
+
+- name:             make chruby
+  shell:            make install
+                    chdir=/tmp/chruby-0.3.9/
+                    creates=/usr/local/bin/chruby-exec
+  when:             chruby_statuscheck.stat.exists == false
+
+- name:             activate chruby in systemwide profile
+  copy:             src=chruby.sh dest=/etc/profile.d/chruby.sh mode=0644 owner=root group=root
+
+- name:             check if ruby-install install was done previously
+  stat:             path=/usr/local/bin/ruby-install
+  register:         rubyinstall_statuscheck
+  changed_when:     false
+
+- name:             get ruby-install 0.6.0 source
+  get_url:          url=https://github.com/postmodern/ruby-install/archive/v0.6.0.tar.gz dest=/tmp/ruby-install-0.6.0.tar.gz
+                    checksum=sha256:3cc90846ca972d88b601789af2ad9ed0a496447a13cb986a3d74a4de062af37d
+  when:             rubyinstall_statuscheck.stat.exists == false
+
+- name:             unpack ruby-install source
+  unarchive:        src=/tmp/ruby-install-0.6.0.tar.gz dest=/tmp copy=no
+  no_log:           true
+  when:             rubyinstall_statuscheck.stat.exists == false
+
+- name:             make ruby-install
+  shell:            make install
+                    chdir=/tmp/ruby-install-0.6.0/
+                    creates=/usr/local/bin/ruby-install
+  when:             rubyinstall_statuscheck.stat.exists == false
+
+#- name:             install ruby 2.2.5 for vagrant user, this WILL take a long time, output is piped to /tmp/ruby-2.2.5-install.txt on the VM
+#  become:           true
+#  become_user:      vagrant
+#  shell:            . /home/vagrant/.profile && . /etc/profile.d/chruby.sh && ruby-install --no-install-deps ruby 2.2.5 > /tmp/ruby-2.2.5-install.txt 2>&1
+#                    chdir=/home/vagrant
+#                    creates=/home/vagrant/.rubies/ruby-2.2.5/bin/ruby
+#                    executable=/bin/bash

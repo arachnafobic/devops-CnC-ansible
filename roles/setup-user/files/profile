@@ -1,0 +1,51 @@
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+	. "$HOME/.bashrc"
+    fi
+fi
+
+# MODIFIED {
+
+if [ -e /usr/bin/ruby2.0 ]; then
+  _ruby_v=2.0.0
+else
+  _ruby_v=1.9.1
+fi
+
+for _path in \
+  "$HOME/.node/bin" "$HOME/.gem/ruby/$_ruby_v/bin" "$HOME/bin" "$HOME/.bin";
+do
+  [ -d "$_path" ] && PATH="$_path:$PATH"
+done
+unset _path
+
+export LC_ALL=C LANG=C GEM_HOME="$HOME/.gem/ruby/$_ruby_v"
+export NODE_PATH="$HOME/.node/lib/node_modules"
+export ASPNETCORE_ENVIRONMENT=Production
+export ASPNETCORE_DB_ENGINE=pg
+
+[ ! -e ~/.profile_more ] || source ~/.profile_more
+[ ! -e /opt/ansible/hacking/env-setup ] || source /opt/ansible/hacking/env-setup 1>/dev/null 2>&1
+
+become () {
+  if [ -z $1 ]
+  then
+    echo "become <user>"
+  else
+    sudo -H -u $1 bash -l
+  fi
+}
+
+# } MODIFIED

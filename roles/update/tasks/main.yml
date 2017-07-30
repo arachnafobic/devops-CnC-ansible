@@ -1,0 +1,68 @@
+---
+
+- name:             get stat into of status file
+  stat:             path=/root/._ansible
+  register:         update_statuscheck
+  changed_when:     false
+
+- name:             update packages list
+  apt:              update_cache=yes
+  when:             ansible_date_time.epoch|int - update_statuscheck.stat.mtime|int > 3600
+
+- name:             list packages to upgrade (1/2)
+  shell:            aptitude -q -F%p --disable-columns search "~U"
+  register:         updates
+  changed_when:     false
+
+- name:             list packages to upgrade (2/2)
+  debug:            msg="{{ updates.stdout_lines | count }} packages to upgrade ({{ updates.stdout_lines | join(', ') }})"
+  when:             updates.stdout_lines
+
+- name:             update packages
+  apt:              upgrade=safe
+#  when:             ansible_date_time.epoch|int - update_statuscheck.stat.mtime|int > 3600
+#  ^ uncomment to only run updates once an hour at minimum
+
+- name:             Check what the new version is
+  shell:            lsb_release -r | awk '{print $2}'
+  changed_when:     false
+  register:         new_release
+
+- name:             Notify distribution version upgrade
+  debug:            msg="Ubuntu has been upgraded from {{ ansible_lsb.release }} to {{ new_release.stdout }}"
+  when:             ansible_lsb.release != new_release.stdout
+
+- name:             List services to restart (1/2)
+  shell:            checkrestart | grep ^service | awk '{print $2}'
+  register:         services
+  changed_when:     false
+
+- name:             List services to restart (2/2)
+  debug:            msg="{{ services.stdout_lines | count }} services to restart ({{ services.stdout_lines | join (', ') }})"
+  when:             services.stdout_lines
+
+- name:             touch status file
+  file:             path=/root/._ansible state=touch
+  changed_when:     false
+
+- name:             check unattended-upgrades
+  command:          /usr/bin/debconf-show unattended-upgrades
+  register:         update_unattendedcheck
+  failed_when:      false
+  changed_when:     false
+
+- name:             preseed debconf
+  copy:             src=preseed_unattended-upgrades dest=/root/tmp/debconf.preseed force=yes
+  when:             'update_unattendedcheck.stdout != "* unattended-upgrades/enable_auto_updates: true"'
+
+- name:             run debconf
+  shell:            /usr/bin/debconf-set-selections /root/tmp/debconf.preseed
+  when:             'update_unattendedcheck.stdout != "* unattended-upgrades/enable_auto_updates: true"'
+
+- name:             process preseed
+  shell:            /usr/sbin/dpkg-reconfigure -fnoninteractive unattended-upgrades
+  when:             'update_unattendedcheck.stdout != "* unattended-upgrades/enable_auto_updates: true"'
+
+- name:             cleanup preseed
+  file:             path=/root/tmp/debconf.preseed state=absent
+  when:             'update_unattendedcheck.stdout != "* unattended-upgrades/enable_auto_updates: true"'

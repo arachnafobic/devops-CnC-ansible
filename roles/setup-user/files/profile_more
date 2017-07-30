@@ -1,0 +1,2 @@
+export PATH="/__nap/nap/bin:$PATH" NAPRC=/__nap/cfg/naprc                                                                                                                         
+
