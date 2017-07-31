@@ -22,13 +22,13 @@
   gather_facts:     false
 
 # base
-- include: ../roles/update.yml
-  tags: [update, init]
+- include: ../roles/common.yml
+  tags: [common, init]
   vars:
     targets: all
 
-- include: ../roles/common.yml
-  tags: [common, init]
+- include: ../roles/update.yml
+  tags: [update, init]
   vars:
     targets: all
 
