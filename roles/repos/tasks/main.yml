@@ -3,4 +3,10 @@
 - name:             github repos
   git:              repo=https://github.com/{{ item }}.git
                     dest=/opt/src/{{ item|basename }}
-  with_items:       '{{ gh_repos }}'
+  with_items:
+    - "{{ gh_repos }}"
+
+- name:             github repo related symlinks
+  file:             path={{ item.path }} src={{ item.src }} state=link
+  with_items:
+    - "{{ gh_links }}"
