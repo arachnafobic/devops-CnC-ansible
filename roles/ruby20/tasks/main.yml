@@ -3,5 +3,4 @@
 - name:             install ruby packages
   apt:              name={{ item }} state=present install_recommends=no
   with_items:
-    - ruby2.0
-    - ruby2.0-dev
+    - "{{ pkgs_ruby20 }}"

@@ -3,8 +3,7 @@
 - name:             install etckeeper and git
   apt:              name={{ item }} state=present
   with_items:
-    - etckeeper
-    - git
+    - "{{ pkgs_etckeeper }}"
 
 - name:             etckeeper w/o bzr
   lineinfile:       dest=/etc/etckeeper/etckeeper.conf

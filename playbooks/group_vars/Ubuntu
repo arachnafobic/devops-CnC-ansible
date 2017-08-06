@@ -36,3 +36,15 @@ uninstall_unwanted:
   - chef
   - chef-zero
 
+pkgs_etckeeper:
+  - etckeeper
+  - git
+pkgs_python:
+  - python-virtualenv
+  - python-dev
+pkgs_ruby19:
+  - ruby1.9.1-full
+pkgs_ruby20:
+  - ruby2.0
+  - ruby2.0-dev
+
