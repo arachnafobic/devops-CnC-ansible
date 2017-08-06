@@ -58,6 +58,11 @@
   vars:
     targets: all
 
+- include: ../roles/dotnet.yml
+  tags: [dotnet, dev]
+  vars:
+    targets: all
+
 # general user setup
 - include: ../roles/setup-user.yml
   tags: [users, user-root]

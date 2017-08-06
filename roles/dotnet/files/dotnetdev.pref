@@ -1,0 +1,7 @@
+Package: dotnet*
+Pin: origin apt-mo.trafficmanager.net
+Pin-Priority: 750
+
+Package: *
+Pin: origin apt-mo.trafficmanager.net
+Pin-Priority: 250
