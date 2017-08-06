@@ -52,3 +52,6 @@ pkgs_ntp:
 pkgs_dotnet:
   - dotnet-dev-1.0.4
 
+# Default, set to true for distribution's nodejs, or per host in host_vars
+node_from_ubuntu: false
+

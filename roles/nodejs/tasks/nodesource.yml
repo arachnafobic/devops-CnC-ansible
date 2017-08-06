@@ -1,0 +1,33 @@
+---
+
+- name:             get apt key for nodesource
+  get_url:          url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key dest=/root/cache/68576280.asc
+                    sha256sum=773b328f7b1d6db58a8c6a7fc89e2ed58ac5e06c3ab148411cf8272be7b1c472
+
+- name:             install apt key for nodesource
+  apt_key:          id=68576280 file=/root/cache/68576280.asc state=present
+
+- name:             sources.list.d for nodesource
+  template:         dest=/etc/apt/sources.list.d/nodesource.list src=nodesource.list
+                    owner=root group=root mode=0644
+  register:         nodesource_sources
+
+- name:             preferences.d for nodesource
+  copy:             dest=/etc/apt/preferences.d/nodesource.pref src=nodesource.pref
+                    owner=root group=root mode=0644
+
+- name:             update apt cache
+  apt:              update_cache=yes
+  when:             nodesource_sources|changed
+
+- name:             ensure distribution nodejs packages are not installed
+  apt:              name={{ item }} state=absent
+  with_items:
+    - nodejs-legacy
+    - nodejs-dev
+    - npm
+
+- name:             install nodejs 4.x from nodesource
+  apt:              name={{ item }} state=present
+  with_items:
+    - nodejs

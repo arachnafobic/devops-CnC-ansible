@@ -1,0 +1,11 @@
+---
+# nodejs.yml
+
+- name:             nodejs
+  hosts:            "{{ targets }}"
+  gather_facts:     no
+  become:           true
+  become_user:      root
+
+  roles:
+    - nodejs
