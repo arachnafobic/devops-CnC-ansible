@@ -2,8 +2,8 @@
 
 - name:             install nodejs packages
   apt:              name={{ item }} state=present
-  with_items:       '{{ nodejs }}'
-  when:             node_from_ubuntu == true
+  with_items:       '{{ pkgs_nodejs }}'
+  when:             nodesource_use == false
 
 - include:          nodesource.yml
-  when:             node_from_ubuntu == false
+  when:             nodesource_use == true

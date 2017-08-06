@@ -23,11 +23,9 @@
 - name:             ensure distribution nodejs packages are not installed
   apt:              name={{ item }} state=absent
   with_items:
-    - nodejs-legacy
-    - nodejs-dev
-    - npm
+    - "{{ nodesource_pkgs_preclean }}"
 
-- name:             install nodejs 4.x from nodesource
+- name:            "install nodejs {{ nodesource_version }} from nodesource"
   apt:              name={{ item }} state=present
   with_items:
-    - nodejs
+    - "{{ nodesource_pkgs_nodejs }}"

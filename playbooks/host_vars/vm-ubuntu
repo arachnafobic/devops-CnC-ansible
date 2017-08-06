@@ -1,2 +1,5 @@
 ---
 
+nodesource_use: true
+nodesource_version: 6.x
+
