@@ -37,6 +37,11 @@
   vars:
     targets: all
 
+- include: ../roles/ntp.yml
+  tags: [ntp, init]
+  vars:
+    targets: all
+
 - include: ../roles/repos.yml
   tags: [repos, init]
   vars:

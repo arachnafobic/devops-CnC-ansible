@@ -47,4 +47,5 @@ pkgs_ruby19:
 pkgs_ruby20:
   - ruby2.0
   - ruby2.0-dev
-
+pkgs_ntp:
+  - ntp
