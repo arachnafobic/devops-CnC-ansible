@@ -22,6 +22,11 @@
   gather_facts:     false
 
 # base
+- include: ../roles/etckeeper.yml
+  tags: [etckeeper, init]
+  vars:
+    targets: all
+
 - include: ../roles/common.yml
   tags: [common, init]
   vars:
