@@ -1,0 +1,6 @@
+---
+
+- name:             install imagemagick packages
+  apt:              name={{ item }} state=present install_recommends=no
+  with_items:
+    - "{{ pkgs_imagemagick }}"

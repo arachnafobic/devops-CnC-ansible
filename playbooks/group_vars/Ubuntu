@@ -61,6 +61,11 @@ pkgs_libav:
   - libavdevice-extra-53
   - libavfilter-extra-3
   - libavformat-extra-54
+pkgs_imagemagick:
+  - imagemagick
+  - libmagickwand-dev
+  - ghostscript
+  - netpbm
 
 # Defaults, change here or per host in host_vars
 nodesource_use:     false              # if false, nodejs is ubuntu's default, 0.10
