@@ -55,6 +55,12 @@ pkgs_nodejs:
   - nodejs-legacy
   - nodejs-dev
   - npm
+pkgs_libav:
+  - libav-tools
+  - libavcodec-extra-54
+  - libavdevice-extra-53
+  - libavfilter-extra-3
+  - libavformat-extra-54
 
 # Defaults, change here or per host in host_vars
 nodesource_use:     false              # if false, nodejs is ubuntu's default, 0.10

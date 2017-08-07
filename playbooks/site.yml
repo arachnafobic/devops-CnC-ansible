@@ -68,6 +68,11 @@
   vars:
     targets: all
 
+- include: ../roles/libav.yml
+  tags: [libav, dev]
+  vars:
+    targets: all
+
 # general user setup
 - include: ../roles/setup-user.yml
   tags: [users, user-root]
