@@ -33,3 +33,6 @@
 - name:             disable passwordless sudo for ubuntu user (AWS version)
   command:          mv /etc/sudoers.d/90-cloudimg-ubuntu /etc/sudoers.d/90-cloudimg-ubuntu.DISABLED
   when:             cloudimg_exists.rc == 0
+
+- name:             install squid-deb-proxy-client
+  apt:              name=squid-deb-proxy-client state=present
