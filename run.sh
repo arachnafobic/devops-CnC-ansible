@@ -70,7 +70,7 @@ do
              VERBOSE=vvv
              ;;
          s)
-             SKIPCLONE=yes
+             SKIPCLONE=
              ;;
          ?)
              echo "invalid usage"
@@ -126,7 +126,7 @@ then
                echo "$tag is not specified as a tag in playbook.$PLAYBOOK.yml!"
                exit 1
           else
-               FOUNDTAGS+="`grep "$tag" playbook.$PLAYBOOK.yml | grep tags:`\n"
+               FOUNDTAGS+="`grep "$tag" playbooks/$PLAYBOOK.yml | grep tags:`\n"
           fi
      done
      if [[ -z $FOUNDTAGS ]]
@@ -151,11 +151,11 @@ then
                echo "$limit is not specified as a server or group in hosts.$TARGET!"
                exit 1
           else
-               if [[ $(grep "\[$limit\]" hosts.$TARGET) ]]
+               if [[ $(grep "\[$limit\]" inventories/hosts.$TARGET) ]]
                then
-                    FOUNDLIMIT+="  `grep "\[$limit\]" hosts.$TARGET`\n"
+                    FOUNDLIMIT+="  `grep "\[$limit\]" inventories/hosts.$TARGET`\n"
                else
-                    FOUNDLIMIT+="  `grep "\[$limit:children\]" hosts.$TARGET`\n"
+                    FOUNDLIMIT+="  `grep "\[$limit:children\]" inventories/hosts.$TARGET`\n"
                fi
           fi
           if [[ -z $FOUNDLIMIT ]]
