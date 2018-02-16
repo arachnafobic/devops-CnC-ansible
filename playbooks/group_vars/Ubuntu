@@ -47,6 +47,9 @@ pkgs_ruby19:
 pkgs_ruby20:
   - ruby2.0
   - ruby2.0-dev
+pkgs_ruby23:
+  - ruby2.3
+  - ruby2.3-dev
 pkgs_ntp:
   - ntp
 pkgs_dotnet:
@@ -55,12 +58,6 @@ pkgs_nodejs:
   - nodejs-legacy
   - nodejs-dev
   - npm
-pkgs_libav:
-  - libav-tools
-  - libavcodec-extra-54
-  - libavdevice-extra-53
-  - libavfilter-extra-3
-  - libavformat-extra-54
 pkgs_imagemagick:
   - imagemagick
   - libmagickwand-dev

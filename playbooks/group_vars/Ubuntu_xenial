@@ -1,2 +1,24 @@
 ---
 
+ruby_version:   2.3.0
+gem_exec:       /usr/bin/gem2.3
+
+links:
+  user:
+    - path:     ~/bin/erb
+      src:      /usr/bin/erb2.3
+    - path:     ~/bin/gem
+      src:      /usr/bin/gem2.3
+    - path:     ~/bin/irb
+      src:      /usr/bin/irb2.3
+    - path:     ~/bin/rdoc
+      src:      /usr/bin/rdoc2.3
+    - path:     ~/bin/ri
+      src:      /usr/bin/ri2.3
+    - path:     ~/bin/ruby
+      src:      /usr/bin/ruby2.3
+
+pkgs_libav:
+  - libav-tools
+  - libavcodec-extra
+

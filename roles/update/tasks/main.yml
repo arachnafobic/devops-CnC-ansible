@@ -46,7 +46,7 @@
   changed_when:     false
 
 - name:             check unattended-upgrades
-  command:          /usr/bin/debconf-show unattended-upgrades
+  shell:            /usr/bin/debconf-show unattended-upgrades 2>/dev/null | grep "enable_auto_updates"
   register:         update_unattendedcheck
   failed_when:      false
   changed_when:     false
