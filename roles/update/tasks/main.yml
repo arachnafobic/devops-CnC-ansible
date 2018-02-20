@@ -13,6 +13,13 @@
   shell:            aptitude -q -F%p --disable-columns search "~U"
   register:         updates
   changed_when:     false
+  when:             ansible_distribution_release == "precise" or ansible_distribution_release == "trusty"
+
+- name:             list packages to upgrade (1/2)
+  shell:            apt list --upgradeable
+  register:         updates
+  changed_when:     false
+  when:             ansible_distribution_release != "precise" and ansible_distribution_release != "trusty"
 
 - name:             list packages to upgrade (2/2)
   debug:            msg="{{ updates.stdout_lines | count }} packages to upgrade ({{ updates.stdout_lines | join(', ') }})"
