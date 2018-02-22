@@ -1,5 +1,5 @@
 ---
 
-- include:          setup-user.yml
+- include_tasks:    setup-user.yml
   become:           yes
   become_user:      "{{ user }}"

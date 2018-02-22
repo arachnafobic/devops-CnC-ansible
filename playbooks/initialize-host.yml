@@ -21,7 +21,7 @@
   become_user:      root
   gather_facts:     false
 
-- include: ../roles/initialize-Ubuntu-host.yml
+- import_playbook: ../roles/initialize-Ubuntu-host.yml
   tags: [initialize-Ubuntu, init]
   vars:
     targets: Ubuntu

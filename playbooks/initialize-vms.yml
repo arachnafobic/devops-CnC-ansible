@@ -21,12 +21,12 @@
   become_user:      root
   gather_facts:     false
 
-- include: ../roles/initialize-vm.yml
+- import_playbook: ../roles/initialize-vm.yml
   tags: [initialize-vm, init]
   vars:
     targets: all
 
-- include: ../roles/initialize-Ubuntu.yml
+- import_playbook: ../roles/initialize-Ubuntu.yml
   tags: [initialize-Ubuntu, init]
   vars:
     targets: Ubuntu

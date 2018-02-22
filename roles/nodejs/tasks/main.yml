@@ -5,5 +5,5 @@
   with_items:       '{{ pkgs_nodejs }}'
   when:             nodesource_use == false
 
-- include:          nodesource.yml
+- include_tasks:    nodesource.yml
   when:             nodesource_use == true

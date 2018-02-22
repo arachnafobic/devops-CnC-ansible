@@ -22,34 +22,34 @@
   gather_facts:     false
 
 # base
-- include: ../roles/common.yml
+- import_playbook: ../roles/common.yml
   tags: [common, init]
   vars:
     targets: all
 
-- include: ../roles/update.yml
+- import_playbook: ../roles/update.yml
   tags: [update, init]
   vars:
     targets: all
 
-- include: ../roles/repos.yml
+- import_playbook: ../roles/repos.yml
   tags: [repos, init]
   vars:
     targets: all
 
 # dev
-- include: ../roles/ruby.yml
+- import_playbook: ../roles/ruby.yml
   tags: [ruby, dev]
   vars:
     targets: all
 
-- include: ../roles/python.yml
+- import_playbook: ../roles/python.yml
   tags: [python, dev]
   vars:
     targets: all
 
 # general user setup
-- include: ../roles/setup-user.yml
+- import_playbook: ../roles/setup-user.yml
   tags: [users, user-root]
   vars:
     targets:  all
@@ -57,7 +57,7 @@
     home:   /root
     keygen: false
 
-- include: ../roles/setup-user.yml
+- import_playbook: ../roles/setup-user.yml
   tags: [users, user-ubuntu]
   vars:
     targets:  Ubuntu
@@ -65,7 +65,7 @@
     home:   /home/ubuntu
     keygen: false
 
-- include: ../roles/setup-user.yml
+- import_playbook: ../roles/setup-user.yml
   tags: [users, user-vagrant]
   vars:
     targets:  vm-ubuntu,devops-CnC
