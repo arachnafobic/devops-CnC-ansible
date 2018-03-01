@@ -1,5 +1,29 @@
 ---
 
+- name:             check for squid-deb-proxy-client pressence
+  stat:             path=/usr/share/squid-deb-proxy-client/apt-avahi-discover
+  register:         squiddeb_statuscheck
+  changed_when:     false
+
+- name:             make a copy off the http discover script to use for https
+  shell:            /bin/cp /usr/share/squid-deb-proxy-client/apt-avahi-discover /usr/share/squid-deb-proxy-client/apt-avahi-discover-https
+                    creates="/usr/share/squid-deb-proxy-client/apt-avahi-discover-https"
+  when:             squiddeb_statuscheck.stat.exists
+
+- name:             replace http with https in our new script
+  lineinfile:       path=/usr/share/squid-deb-proxy-client/apt-avahi-discover-https
+                    regexp="{{ item.regexp }}"
+                    line="{{ item.line }}"
+                    backrefs=yes
+  with_items:
+    - {regexp: '            print "http:(.*)', line: '            print "https:\1'}
+    - {regexp: '            print "http:(.*)', line: '            print "https:\1'}
+
+- name:             add https discovery to squid-deb-proxy-client's apt config
+  lineinfile:       path=/etc/apt/apt.conf.d/30autoproxy
+                    line='Acquire::https::Proxy-Auto-Detect "/usr/share/squid-deb-proxy-client/apt-avahi-discover-https";'
+                    state=present
+
 - name:             get stat into of status file
   stat:             path=/root/._ansible
   register:         update_statuscheck
