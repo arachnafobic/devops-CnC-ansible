@@ -22,13 +22,13 @@
   gather_facts:     false
 
 # base
-- import_playbook: ../roles/etckeeper.yml
-  tags: [etckeeper, init]
+- import_playbook: ../roles/common.yml
+  tags: [common, init]
   vars:
     targets: all
 
-- import_playbook: ../roles/common.yml
-  tags: [common, init]
+- import_playbook: ../roles/etckeeper.yml
+  tags: [etckeeper, init]
   vars:
     targets: all
 

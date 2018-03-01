@@ -33,6 +33,30 @@
   apt:              update_cache=yes
   when:             ansible_date_time.epoch|int - update_statuscheck.stat.mtime|int > 3600
 
+- name:             install some tools
+  apt:              name={{ item }} state=present
+  with_items:       '{{ install_tools }}'
+
+- name:             install development packages
+  apt:              name={{ item }} state=present
+  with_items:       '{{ install_dev }}'
+
+- name:             install python packages thru pip
+  pip:              name={{ item }} state=present umask=0022
+  with_items:       '{{ install_dev_pip }}'
+
+- name:             install mongodb specific packages
+  apt:              name=python-pymongo state=present
+  when:             inventory_hostname in groups['mongodb']|default([])
+
+- name:             install postfix specific packages
+  apt:              name=python-pymongo state=present
+  when:             inventory_hostname in groups['postfix']|default([])
+
+- name:             remove unwanted packages
+  apt:              name={{ item }} state=absent
+  with_items:       '{{ uninstall_unwanted }}'
+
 - name:             list packages to upgrade (1/2)
   shell:            aptitude -q -F%p --disable-columns search "~U"
   register:         updates
