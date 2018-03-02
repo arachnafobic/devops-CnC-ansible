@@ -1,0 +1,11 @@
+---
+# mariadb.yml
+
+- name:             mariadb
+  hosts:            "{{ targets }}"
+  gather_facts:     no
+  become:           true
+  become_user:      root
+
+  roles:
+    - mariadb

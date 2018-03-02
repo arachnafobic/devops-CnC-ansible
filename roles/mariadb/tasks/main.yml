@@ -1,0 +1,7 @@
+---
+
+- name:             install mariadb packages
+  apt:              name=mariadb-server state=present
+
+- name:             install mariadb support packages
+  apt:              name=python-mysqldb state=present

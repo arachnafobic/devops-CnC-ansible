@@ -84,6 +84,11 @@
   vars:
     targets: all
 
+- import_playbook: ../roles/mariadb.yml
+  tags: [mariadb, services]
+  vars:
+    targets: all
+
 # general user setup
 - import_playbook: ../roles/setup-user.yml
   tags: [users, user-root]
