@@ -78,6 +78,12 @@
   vars:
     targets: all
 
+# services
+- import_playbook: ../roles/nginx.yml
+  tags: [nginx, services]
+  vars:
+    targets: all
+
 # general user setup
 - import_playbook: ../roles/setup-user.yml
   tags: [users, user-root]
