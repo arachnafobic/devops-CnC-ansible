@@ -89,6 +89,11 @@
   vars:
     targets: all
 
+- import_playbook: ../roles/php-fpm.yml
+  tags: [php-fpm, services]
+  vars:
+    targets: all
+
 # general user setup
 - import_playbook: ../roles/setup-user.yml
   tags: [users, user-root]
