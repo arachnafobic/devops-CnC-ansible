@@ -82,17 +82,17 @@
 - import_playbook: ../roles/nginx.yml
   tags: [nginx, services]
   vars:
-    targets: all
+    targets: nginx
 
 - import_playbook: ../roles/mariadb.yml
   tags: [mariadb, services]
   vars:
-    targets: all
+    targets: mariadb
 
 - import_playbook: ../roles/php-fpm.yml
   tags: [php-fpm, services]
   vars:
-    targets: all
+    targets: phpfpm
 
 # general user setup
 - import_playbook: ../roles/setup-user.yml
