@@ -16,7 +16,6 @@
   when:             phpfpm_ppa.changed
 
 - name:             install php-fpm
-  apt:              name={{ item }} state=present
+  apt:              name={{ item }} state=present install_recommends=no
   with_items:
-    - php7.2-cli
-    - php7.2-fpm
+    - "{{ pkgs_phpfpm }}"

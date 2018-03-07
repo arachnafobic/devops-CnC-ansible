@@ -64,6 +64,20 @@ pkgs_imagemagick:
   - libmagickwand-dev
   - ghostscript
   - netpbm
+pkgs_nginx:
+  - nginx
+pkgs_mariadb:
+  - mariadb-server
+  - python-mysqldb
+pkgs_phpfpm:
+  - php7.2-cli
+  - php7.2-fpm
+  - php7.2-mysql
+  - php7.2-xml
+  - php7.2-mbstring
+  - php7.2-curl
+  - php7.2-bcmath
+  - php7.2-zip
 
 # Defaults, change here or per host in host_vars
 nodesource_use:     false              # if false, nodejs is ubuntu's default, 0.10
