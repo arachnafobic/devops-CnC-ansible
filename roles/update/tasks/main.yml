@@ -64,7 +64,7 @@
   when:             ansible_distribution_release == "precise" or ansible_distribution_release == "trusty"
 
 - name:             list packages to upgrade (1/2)
-  shell:            apt list --upgradeable
+  shell:            apt list --upgradeable 2>/dev/null | sed '1d'
   register:         updates
   changed_when:     false
   when:             ansible_distribution_release != "precise" and ansible_distribution_release != "trusty"
