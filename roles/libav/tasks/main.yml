@@ -1,6 +1,6 @@
 ---
 
 - name:             install libav packages
-  apt:              name={{ item }} state=present
+  apt:              name={{ item }} state=present install_recommends=no
   with_items:
    - "{{ pkgs_libav }}"
