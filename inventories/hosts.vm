@@ -1,2 +1,19 @@
 vm-ubuntu        ansible_host=vm-ubuntu ansible_port=22 ansible_user=vagrant ansible_ssh_private_key_file=/home/vagrant/.ssh/vm-ubuntu.id_rsa
 
+[ruby]
+vm-ubuntu
+
+[python]
+vm-ubuntu
+
+[dotnet]
+vm-ubuntu
+
+[nodejs]
+vm-ubuntu
+
+[libraries:children]
+ruby
+python
+dotnet
+nodejs

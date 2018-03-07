@@ -51,32 +51,32 @@
 - import_playbook: ../roles/ruby.yml
   tags: [ruby, dev]
   vars:
-    targets: all
+    targets: ruby
 
 - import_playbook: ../roles/python.yml
   tags: [python, dev]
   vars:
-    targets: all
+    targets: python
 
 - import_playbook: ../roles/dotnet.yml
   tags: [dotnet, dev]
   vars:
-    targets: all
+    targets: dotnet
 
 - import_playbook: ../roles/nodejs.yml
   tags: [nodejs, dev]
   vars:
-    targets: all
+    targets: nodejs
 
 - import_playbook: ../roles/libav.yml
   tags: [libav, dev]
   vars:
-    targets: all
+    targets: libraries
 
 - import_playbook: ../roles/imagemagick.yml
   tags: [imagemagick, dev]
   vars:
-    targets: all
+    targets: libraries
 
 # services
 - import_playbook: ../roles/nginx.yml
