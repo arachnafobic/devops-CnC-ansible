@@ -1,0 +1,11 @@
+---
+
+- name:             check for pressence of froxlor
+  stat:             path=/var/www/froxlor
+  register:         froxlor_check
+  changed_when:     false
+
+- include_tasks:    install.yml
+  when:             froxlor_check.stat.exists == false
+
+- include_tasks:    config.yml

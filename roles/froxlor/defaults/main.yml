@@ -1,0 +1,21 @@
+---
+
+frox_version:     0.9.39.5
+frox_sha256sum:   1fd245d459346a43ffab1179b64b7215bc2727235fe3fcfec569a195e1345599
+
+frox_mysql_db:    froxlor
+frox_mysql_user:  froxlor
+frox_mysql_pass:  froxlor
+
+frox_admin_user:  admin
+frox_admin_pass:  admin
+
+frox_httpd:       nginx
+frox_httpd_user:  www-data
+frox_httpd_group: www-data
+
+frox_lang:        english
+
+frox_support_pkgs:
+  - libnss-mysql-bg
+  - nscd

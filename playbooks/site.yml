@@ -94,6 +94,11 @@
   vars:
     targets: phpfpm
 
+- import_playbook: ../roles/froxlor.yml
+  tags: [froxlor, services]
+  vars:
+    targets: hosting
+
 # general user setup
 - import_playbook: ../roles/setup-user.yml
   tags: [users, user-root]

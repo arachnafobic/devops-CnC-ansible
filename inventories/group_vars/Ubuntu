@@ -69,6 +69,7 @@ pkgs_nginx:
 pkgs_mariadb:
   - mariadb-server
   - python-mysqldb
+  - apparmor-profiles
 pkgs_phpfpm:
   - php7.2-cli
   - php7.2-fpm

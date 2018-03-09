@@ -1,0 +1,12 @@
+---
+
+- name:             restart nginx
+  service:          name=nginx state=restarted enabled=yes
+
+- name:             restart nscd
+  listen:           restart nscd
+  service:          name=nscd state=restarted enabled=yes
+
+- name:             invalidate groups with nscd
+  listen:           restart nscd
+  shell:            nscd --invalidate=group

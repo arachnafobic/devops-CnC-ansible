@@ -1,0 +1,104 @@
+---
+
+- name:             install some support packages
+  apt:              name={{ item }} state=present install_recommends=no
+  with_items:       '{{ frox_support_pkgs }}'
+
+- name:             create froxlocal group
+  group:
+    name:           froxlocal
+    gid:            9999
+    state:          present
+
+- name:             create froxlocal user
+  user:
+    name:           froxlocal
+    uid:            9999
+    createhome:     no
+    group:          froxlocal
+    shell:          /bin/false
+    state:          present
+
+- name:             add www-data user to the froxlocal group
+  user:
+    name:           www-data
+    groups:         froxlocal
+    append:         yes
+
+- name:             create directories
+  file:
+    path:  "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode:  "{{ item.mode }}"
+  with_items:
+    - { owner: "www-data", group: "www-data", path: "/var/www/froxlor", mode: "0750" }
+    - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/webs", mode: "0750" }
+    - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/logs", mode: "0750" }
+    - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/tmp", mode: "1777" }
+
+- name:            "download froxlor {{ frox_version }} tarball"
+  get_url:
+    url:       "http://files.froxlor.org/releases/froxlor-{{ frox_version }}.tar.gz"
+    dest:      "/tmp/froxlor.tar.gz"
+    mode:      0644
+    sha256sum: "{{ frox_sha256sum }}"
+
+- name:            "unpack froxlor {{ frox_version }}"
+  unarchive:
+    src:        "/tmp/froxlor.tar.gz"
+    dest:       "/var/www/froxlor/"
+    owner:      www-data
+    group:      www-data
+    extra_opts: "--strip-components=1"
+    remote_src: yes
+    creates:    "/var/www/froxlor/index.php"
+
+- name:            remove downloaded tarball
+  file:
+    path:  "/tmp/froxlor.tar.gz"
+    state: absent
+
+- name:             setup temp vhost to continue install on, we're not running on our own fpm pool, yet.
+  copy:
+    src:   "_froxlor.nginx.conf"
+    dest:  "/etc/nginx/sites-enabled/_froxlor.conf"
+    owner: www-data
+    group: www-data
+    mode:  0644
+  notify:           restart nginx
+
+- name:             run handlers now
+  meta:             flush_handlers
+
+# This should produce *1* IP, excluding localhosts, broadcasts and 10.* range
+# Adjust if needed
+#
+# Doing it with an ipconfig instead of ansible facts since we don't know if we're running live
+# or on the testing vm setup which will have vagrant's 10.0.2.15 IP and device names can differ between the 2
+- name:             fetch server IP
+  shell:            ifconfig | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|10|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
+  register:         frox_ip
+  failed_when:      false
+
+- name:             run froxlor installer
+  no_log:           true
+  shell:           "wget -q -O /dev/null --post-data \"&mysql_host=127.0.0.1&\
+                                 mysql_database={{ frox_mysql_db }}&\
+                                 mysql_unpriv_user={{ frox_mysql_user }}&\
+                                 mysql_unpriv_pass={{ frox_mysql_pass }}&\
+                                 mysql_root_user=root&\
+                                 mysql_root_pass={{ mariadb_root_password }}&\
+                                 admin_user={{ frox_admin_user }}&\
+                                 admin_pass1={{ frox_admin_pass }}&\
+                                 admin_pass2={{ frox_admin_pass }}&\
+                                 servername=froxlor.*&\
+                                 serverip={{ frox_ip.stdout }}&\
+                                 webserver={{ frox_httpd }}&\
+                                 httpuser={{ frox_httpd_user }}&\
+                                 httpgroup={{ frox_httpd_group }}&\
+                                 check=1&\
+                                 language={{ frox_lang }}&\
+                                 installstep=1&\
+                                 submitbutton=Next\" http://froxlor.{{ frox_ip.stdout }}.xip.io/install/install.php?check=1"
