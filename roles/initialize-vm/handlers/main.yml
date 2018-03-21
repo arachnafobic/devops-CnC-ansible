@@ -1,4 +1,11 @@
 ---
 
-- name: restart ssh
-  action: service name=ssh state=restarted enabled=yes
+- name:             restart ssh
+  listen:           restart ssh server
+  service:          name=ssh state=restarted enabled=yes
+  when:             ansible_distribution == "Ubuntu"
+
+- name:             restart sshd
+  listen:           restart ssh server
+  service:          name=sshd state=restarted enabled=yes
+  when:             ansible_distribution == "CloudLinux"
