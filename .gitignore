@@ -9,3 +9,4 @@
 
 # Generated Dynamicly
 inventories/hosts.vm/hosts
+inventories/hosts.vm/groups
