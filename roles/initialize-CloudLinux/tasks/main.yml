@@ -1,0 +1,33 @@
+---
+
+- name:             touch status file
+  file:             path=/root/._ansible state=touch
+  changed_when:     false
+
+# Currently broken in ansible 2.4.x, registers server but fails regardless due to user/pass trying to be used with key
+#- name:             register license with cloudlinux servers
+#  rhn_register:     state=present activationkey="{{ cloudlinux_license }}" channels=cloudlinux-base
+
+# Workaround for the above
+- name:             enable repo cloudlinux-base
+  shell:            yum install rhn-setup --enablerepo=cloudlinux-base
+
+- name:             register license with cloudlinux servers
+  shell:           "rhnreg_ks --activationkey={{ cloudlinux_license }} --force"
+
+- name:             add default non root user called cloudlinux
+  user:             name=cloudlinux shell=/bin/bash
+
+#- name:             set cloudlinux user password
+#  shell:            usermod -p '{{ my_password2 }}' cloudlinux
+#  when:             my_password2 is defined and my_password2_vm is not defined
+
+#- name:             set cloudlinux user password
+#  shell:            usermod -p `mkpasswd -m sha-512 {{ my_password2 }}` cloudlinux
+#  when:             my_password2 is defined and my_password2_vm is defined
+
+- name:             set sudo passwd_tries to 1 (default=3)
+  copy:             src=passwd_tries dest=/etc/sudoers.d/passwd_tries mode=0440 validate='visudo -cf %s'
+
+#- name:             install squid-deb-proxy-client
+#  apt:              name=squid-deb-proxy-client state=present

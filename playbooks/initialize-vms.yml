@@ -13,6 +13,8 @@
        changed_when: false
      - group_by:     key={{ ansible_distribution }}_{{ ansible_distribution_release }}
        changed_when: false
+     - group_by:     key={{ inventory_hostname }}_secrets
+       changed_when: false
 
 # go time
 - name:             Running Plays now
@@ -30,5 +32,12 @@
   tags: [initialize-Ubuntu, init]
   vars:
     targets: Ubuntu
+    my_password2: "foo"
+    my_password2_vm: "yes"
+
+- import_playbook: ../roles/initialize-CloudLinux.yml
+  tags: [initialize-CloudLinux, init]
+  vars:
+    targets: CloudLinux
     my_password2: "foo"
     my_password2_vm: "yes"

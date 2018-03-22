@@ -7,6 +7,10 @@
 /.vagrant
 /shared
 
+# Variable files containing secrets, keys, etc
+# see <file>.example
+inventories/group_vars/*_secrets
+
 # Generated Dynamicly
 inventories/hosts.vm/hosts
 inventories/hosts.vm/groups
