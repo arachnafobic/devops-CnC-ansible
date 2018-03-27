@@ -13,8 +13,8 @@
   shell:            yum install rhn-setup --enablerepo=cloudlinux-base
 
 - name:             register license with cloudlinux servers
-  shell:           "rhnreg_ks --activationkey={{ cloudlinux_license }} --force"
-                    creates=/etc/sysconfig/rhn/systemid
+  shell:           "rhnreg_ks --activationkey={{ cloudlinux_license }} --force
+                    creates=/etc/sysconfig/rhn/systemid"
 # /Workaround
 
 - name:             add default non root user called cloudlinux
