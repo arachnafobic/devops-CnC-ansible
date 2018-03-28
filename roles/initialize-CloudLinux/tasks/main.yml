@@ -11,14 +11,15 @@
 # Workaround for the above
 - name:             enable repo cloudlinux-base
   shell:            yum install rhn-setup --enablerepo=cloudlinux-base
+  changed_when:     false
 
 - name:             register license with cloudlinux servers
   shell:           "rhnreg_ks --activationkey={{ cloudlinux_license }} --force
                     creates=/etc/sysconfig/rhn/systemid"
 # /Workaround
 
-- name:             enable repositories
-  yum_repository:   name={{ item }}
+- name:             enable predefined repositories
+  shell:            yum-config-manager --enable {{ item }}
   with_items:       '{{ enable_repos }}'
 
 - name:             install some tools
