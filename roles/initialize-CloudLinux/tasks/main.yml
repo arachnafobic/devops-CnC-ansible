@@ -17,16 +17,28 @@
                     creates=/etc/sysconfig/rhn/systemid"
 # /Workaround
 
+- name:             enable repositories
+  yum_repository:   name={{ item }}
+  with_items:       '{{ enable_repos }}'
+
+- name:             install some tools
+  yum:              name={{ item }} state=present
+  with_items:       '{{ install_init }}'
+
+- name:             install some python tools with pip
+  pip:              name={{ item }} state=present
+  with_items:       '{{ install_pip_init }}'
+
 - name:             add default non root user called cloudlinux
   user:             name=cloudlinux shell=/bin/bash
 
-#- name:             set cloudlinux user password
-#  shell:            usermod -p '{{ my_password2 }}' cloudlinux
-#  when:             my_password2 is defined and my_password2_vm is not defined
+- name:             set cloudlinux user password
+  shell:            usermod -p '{{ my_password2 }}' cloudlinux
+  when:             my_password2 is defined and my_password2_vm is not defined
 
-#- name:             set cloudlinux user password
-#  shell:            usermod -p `mkpasswd -m sha-512 {{ my_password2 }}` cloudlinux
-#  when:             my_password2 is defined and my_password2_vm is defined
+- name:             set cloudlinux user password
+  shell:            usermod -p `python -c "from passlib.hash import sha512_crypt; import getpass; print(sha512_crypt.using(rounds=5000).hash('{{ my_password2 }}'))"` cloudlinux
+  when:             my_password2 is defined and my_password2_vm is defined
 
 - name:             set sudo passwd_tries to 1 (default=3)
   copy:             src=passwd_tries dest=/etc/sudoers.d/passwd_tries mode=0440 validate='visudo -cf %s'

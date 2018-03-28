@@ -1,3 +1,13 @@
 ---
 
 cloudlinux_var_test: foo
+
+enable_repos:
+  - epel
+
+install_init:
+  - python-pip
+  - nano
+
+install_pip_init:
+  - passlib
