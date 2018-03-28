@@ -1,4 +1,4 @@
 ---
 
 - name:             restart ssh
-  service:          name=ssh enabled=yes state=restarted
+  service:          name={{ service_ssh_name }} state=restarted enabled=yes

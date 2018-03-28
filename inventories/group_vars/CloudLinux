@@ -1,6 +1,9 @@
 ---
 
-cloudlinux_var_test: foo
+alt:
+  editor:       /usr/bin/nano
+
+service_ssh_name: sshd
 
 enable_repos:
   - epel
@@ -8,6 +11,9 @@ enable_repos:
 install_init:
   - python-pip
   - nano
-
 install_pip_init:
   - passlib
+
+pkgs_etckeeper:
+  - etckeeper
+  - git

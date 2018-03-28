@@ -1,5 +1,10 @@
 ---
 
+alt:
+  editor:       /bin/nano
+
+service_ssh_name: ssh
+
 install_tools:
   - ack-grep
   - byobu

@@ -6,8 +6,6 @@ gems:
   - pry
   - localconfig
   - bcrypt
-alt:
-  editor:       /bin/nano
 root_folders:
   - tmp
   - stat_services.d
@@ -38,3 +36,5 @@ gh_links:
     src:  /opt/src/taskmaster/taskmaster
   - path: /usr/local/bin/venv
     src:  /opt/src/venv/venv
+
+service_ssh_name: ssh

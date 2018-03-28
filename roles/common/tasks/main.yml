@@ -4,11 +4,13 @@
   copy:             src=apt-wrapper
                     dest=/usr/local/sbin/apt
                     owner=root group=root mode=0755
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
 - name:             place apt-get wrapper
   copy:             src=apt-get-wrapper
                     dest=/usr/local/sbin/apt-get
                     owner=root group=root mode=0755
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
 - name:             create 700 directories in ~root
   file:             path=/root/{{ item }} state=directory mode=0700
@@ -33,10 +35,17 @@
 - name:             remove any leftover 127.0.1.1 entries from post-netdata
   lineinfile:       dest=/etc/hosts state=absent regexp='^127\.0\.1\.1 {{ ansible_hostname }} {{ ansible_hostname }} netdata.me'
 
-- name:             set default editor
+- name:             set default editor (debian based)
   command:          update-alternatives --set editor {{ alt.editor }}
   register:         common_alt_editor
   changed_when:     '"using" in common_alt_editor.stdout'
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+- name:             set default editor (redhat based)
+  copy:             src=nano.sh
+                    dest=/etc/profile.d/nano.sh
+                    owner=root group=root mode=0644
+  when:             ansible_distribution == "CloudLinux"
 
 - name:             link ack to ack-grep
   file:             path=/usr/local/bin/ack src=/usr/bin/ack-grep state=link force=yes
@@ -46,6 +55,7 @@
 
 - name:             place /etc/checkrestart.blacklist
   copy:             dest=/etc/checkrestart.blacklist src=checkrestart.blacklist mode=0644
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
 - name:             fix stock sshd_config in trusty (add EOF..)
   shell:            'test "$( tail -c1 /etc/ssh/sshd_config )" = "" || echo >> /etc/ssh/sshd_config'
@@ -72,6 +82,8 @@
     - ssh
     - http
     - https
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
 - name:             Deny everything and enable UFW
   ufw:              state=enabled policy=deny
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
