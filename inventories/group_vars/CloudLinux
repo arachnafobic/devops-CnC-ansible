@@ -4,16 +4,54 @@ alt:
   editor:       /usr/bin/nano
 
 service_ssh_name: sshd
+service_ntp_name: ntpd
 
 enable_repos:
   - epel
 
+# Used during initialize play
 install_init:
   - python-pip
   - nano
 install_pip_init:
   - passlib
 
+# Used during main play
+install_tools:
+# - ack-grep
+  - byobu
+  - curl
+  - git
+# - grc
+  - htop
+  - tree
+  - vim-enhanced
+  - mc
+  - tig
+  - apg
+# - debian-goodies
+# - python-software-properties
+install_dev:
+# - build-essential
+# - zlib1g-dev
+# - libssl-dev
+# - libreadline-gplv2-dev
+  - libxml2-devel
+# - libxslt1-dev
+  - python2-pip
+  - python-psycopg2
+  - python-pyasn1
+# - libmagic-dev
+  - freetds-devel
+install_dev_pip:
+  - urllib3
+  - ndg-httpsclient
+uninstall_unwanted:
+  - nothing_yet
+
+
 pkgs_etckeeper:
   - etckeeper
   - git
+pkgs_ntp:
+  - ntp

@@ -1,6 +1,24 @@
 ---
 
-- name: upgrade all packages
-  yum:
-    name: '*'
-    state: latest
+- name:             install some tools
+  yum:              name={{ item }} state=present
+  with_items:       '{{ install_tools }}'
+
+- name:             install development packages
+  yum:              name={{ item }} state=present
+  with_items:       '{{ install_dev }}'
+
+- name:             install python packages thru pip
+  pip:              name={{ item }} state=present umask=0022
+  with_items:       '{{ install_dev_pip }}'
+
+- name:             install mongodb specific packages
+  yum:              name=python-pymongo state=present
+  when:             inventory_hostname in groups['mongodb']|default([])
+
+- name:             remove unwanted packages
+  yum:              name={{ item }} state=absent
+  with_items:       '{{ uninstall_unwanted }}'
+
+- name:             upgrade all packages
+  yum:              name='*' state=latest

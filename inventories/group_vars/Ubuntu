@@ -4,6 +4,7 @@ alt:
   editor:       /bin/nano
 
 service_ssh_name: ssh
+service_ntp_name: ntp
 
 install_tools:
   - ack-grep

@@ -1,5 +1,4 @@
 ---
 
 - name:             restart ntp
-  service:          name=ntp enabled=yes state=restarted
-
+  service:          name={{ service_ntp_name }} enabled=yes state=restarted
