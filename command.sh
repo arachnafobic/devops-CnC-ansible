@@ -136,7 +136,7 @@ then
 fi
 
 # Check if target hosts file exists
-if [[ ! -f inventories/hosts.$TARGET ]]
+if [[ ! -f inventories/hosts.$TARGET ]] && [[ ! -d inventories/hosts.$TARGET ]]
 then
      echo "hosts file for $TARGET does not exist!"
      exit 1
