@@ -119,9 +119,17 @@
     keygen: false
 
 - import_playbook: ../roles/setup-user.yml
+  tags: [users, user-cloudlinux]
+  vars:
+    targets:  CloudLinux
+    user:   cloudlinux
+    home:   /home/cloudlinux
+    keygen: false
+
+- import_playbook: ../roles/setup-user.yml
   tags: [users, user-vagrant]
   vars:
-    targets:  vm-ubuntu
+    targets:  vm-ubuntu, vm-clinux
     user:   vagrant
     home:   /home/vagrant
     keygen: false

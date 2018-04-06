@@ -1,5 +1,113 @@
 ---
 
-- include_tasks:    setup-user.yml
+- name: env check
+  shell: env
+
+- name: whoami check
+  shell: whoami
+
+- name: var check
+  debug: var=home
+
+- name:             create 755 directories in ~"{{ user }}"
+  file:             path={{ home }}/{{ item }} state=directory mode=0755
+  with_items:
+    - bin
+    - .node/bin
+    - .gem/ruby/{{ ruby_version }}/bin
+
+- name:             create 700 directories in ~"{{ user }}"
+  file:             path={{ home }}/{{ item }} state=directory mode=0700
+  with_items:
+    - .ssh
+    - tmp
+
+- name:             symlinks for {{ user }}
+  file:             path={{ item.path }} src={{ item.src }} state=link
+  with_items:       '{{ links.user }}'
+  when:             links is defined and links.user is defined
+
+- name:             ~{{ user }}/.bashrc
   become:           yes
-  become_user:      "{{ user }}"
+  become_user:      root
+  copy:             dest={{ home }}/.bashrc src=bashrc.{{ ansible_distribution }}
+                    mode=0644 backup=yes owner={{ user }} group={{ user }}
+
+- name:             ~{{ user }}/.profile
+  become:           yes
+  become_user:      root
+  copy:             dest={{ home }}/.profile src=profile
+                    mode=0644 backup=yes owner={{ user }} group={{ user }}
+
+- name:             ~{{ user }}/.gemrc
+  become:           yes
+  become_user:      root
+  copy:             dest={{ home }}/.gemrc src=gemrc mode=0644 owner={{ user }} group={{ user }}
+
+- name:             ~{{ user }}/.npmrc
+  become:           yes
+  become_user:      root
+  template:         dest={{ home }}/.npmrc src=npmrc mode=0644 owner={{ user }} group={{ user }}
+
+- name:             ~{{ user }}/.lesskey
+  become:           yes
+  become_user:      root
+  copy:             dest={{ home }}/.lesskey src=lesskey mode=0644 owner={{ user }} group={{ user }}
+
+- name:             generate ~/.less
+  shell:            lesskey
+                    creates=~/.less
+
+- name:             check for .byobu folder
+  stat:             path={{ home }}/.byobu
+  register:         byobu_check
+  failed_when:      false
+  changed_when:     false
+
+- name:             byobu w/ screen
+  command:          byobu-select-backend screen
+  when:             hostvars[inventory_hostname]['byobu_check'].stat.exists == false
+
+- name:             byobu w/ ctrl-a
+  command:          byobu-ctrl-a screen
+  when:             hostvars[inventory_hostname]['byobu_check'].stat.exists == false
+
+- name:             check for .gitconfig
+  stat:             path={{ home }}/.gitconfig
+  register:         gitconfig_check
+  failed_when:      false
+  changed_when:     false
+
+- name:             set git user.name
+  command:          git config --global user.name {{ user }}
+  when:             hostvars[inventory_hostname]['gitconfig_check'].stat.exists == false
+
+- name:             set git user.email
+  command:          git config --global user.email {{ user }}@{{ ansible_hostname }}
+  when:             hostvars[inventory_hostname]['gitconfig_check'].stat.exists == false
+
+- name:             set git color.ui
+  command:          git config --global color.ui auto
+  when:             hostvars[inventory_hostname]['gitconfig_check'].stat.exists == false
+
+- name:             gems for {{ user }}
+  gem:              name={{ item }} state=latest executable={{ gem_exec }}
+  with_items:       '{{ gems }}'
+
+#- name:             npms for {{ user }}
+#  npm:              name={{ item }} state=present global=yes
+#  with_items:       '{{ npms }}'
+
+#- name:             npms for {{ user }}
+#  npm:              name={{ item }} state=latest global=yes
+#  with_items:       '{{ npms }}'
+
+- name:             check if user has a default ssh key
+  stat:             path={{ home }}/.ssh/id_rsa
+  register:         sshkey_check
+  failed_when:      false
+  changed_when:     false
+
+- name:             generate ssh key
+  command:          /usr/bin/ssh-keygen -C {{ user }} -f {{ home }}/.ssh/id_rsa -P ''
+  when:             keygen == true and hostvars[inventory_hostname]['sshkey_check'].stat.exists == false

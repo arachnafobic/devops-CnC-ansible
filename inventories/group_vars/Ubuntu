@@ -6,6 +6,9 @@ alt:
 service_ssh_name: ssh
 service_ntp_name: ntp
 
+default_ruby_version: "1.9"
+ruby_version:   1.9.3
+
 install_tools:
   - ack-grep
   - byobu
