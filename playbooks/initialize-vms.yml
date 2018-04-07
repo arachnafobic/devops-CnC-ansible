@@ -35,6 +35,13 @@
     my_password2: "foo"
     my_password2_vm: "yes"
 
+- import_playbook: ../roles/initialize-CentOS.yml
+  tags: [initialize-CentOS, init]
+  vars:
+    targets: CentOS
+    my_password2: "foo"
+    my_password2_vm: "yes"
+
 - import_playbook: ../roles/initialize-CloudLinux.yml
   tags: [initialize-CloudLinux, init]
   vars:

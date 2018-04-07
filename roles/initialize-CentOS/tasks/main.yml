@@ -1,0 +1,32 @@
+---
+
+- name:             touch status file
+  file:             path=/root/._ansible state=touch
+  changed_when:     false
+
+- name:             enable predefined repositories
+  shell:            yum-config-manager --enable {{ item }}
+  with_items:       '{{ enable_repos }}'
+  when:             enable_repos is defined
+
+- name:             install some tools
+  yum:              name={{ item }} state=present
+  with_items:       '{{ install_init }}'
+
+- name:             install some python tools with pip
+  pip:              name={{ item }} state=present
+  with_items:       '{{ install_pip_init }}'
+
+- name:             add default non root user called centos
+  user:             name=centos shell=/bin/bash
+
+- name:             set centos user password
+  shell:            usermod -p '{{ my_password2 }}' centos
+  when:             my_password2 is defined and my_password2_vm is not defined
+
+- name:             set centos user password
+  shell:            usermod -p `python -c "from passlib.hash import sha512_crypt; import getpass; print(sha512_crypt.using(rounds=5000).hash('{{ my_password2 }}'))"` centos
+  when:             my_password2 is defined and my_password2_vm is defined
+
+- name:             set sudo passwd_tries to 1 (default=3)
+  copy:             src=passwd_tries dest=/etc/sudoers.d/passwd_tries mode=0440 validate='visudo -cf %s'

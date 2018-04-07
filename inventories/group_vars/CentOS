@@ -1,0 +1,12 @@
+---
+
+service_ssh_name: sshd
+service_ntp_name: ntpd
+
+# Used during initialize play
+install_init:
+  - python-pip
+  - nano
+install_pip_init:
+  - passlib
+
