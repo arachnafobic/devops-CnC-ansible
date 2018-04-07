@@ -4,6 +4,8 @@ service_ssh_name: sshd
 service_ntp_name: ntpd
 
 # Used during initialize play
+install_epel:
+  - epel-release
 install_init:
   - python-pip
   - nano
