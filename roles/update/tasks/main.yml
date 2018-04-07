@@ -9,5 +9,4 @@
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
 - include_tasks:    redhat-based.yml
-  when:             ansible_distribution == "CloudLinux"
-
+  when:             ansible_distribution == "CloudLinux" or ansible_distribution == "CentOS"

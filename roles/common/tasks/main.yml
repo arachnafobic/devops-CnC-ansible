@@ -45,7 +45,7 @@
   copy:             src=nano.sh
                     dest=/etc/profile.d/nano.sh
                     owner=root group=root mode=0644
-  when:             ansible_distribution == "CloudLinux"
+  when:             ansible_distribution == "CloudLinux" or ansible_distribution == "CentOS"
 
 - name:             link ack to ack-grep
   file:             path=/usr/local/bin/ack src=/usr/bin/ack-grep state=link force=yes

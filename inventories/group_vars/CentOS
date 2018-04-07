@@ -1,7 +1,14 @@
 ---
 
+alt:
+  editor:       /usr/bin/nano
+
 service_ssh_name: sshd
 service_ntp_name: ntpd
+
+default_ruby_version: "2.0"
+ruby_version:   2.0.0
+gem_exec:       /usr/bin/gem
 
 # Used during initialize play
 install_epel:
@@ -12,3 +19,55 @@ install_init:
 install_pip_init:
   - passlib
 
+# Used during main play
+install_tools:
+# - ack-grep
+  - byobu
+  - curl
+  - git
+# - grc
+  - htop
+  - tree
+  - vim-enhanced
+  - mc
+  - tig
+  - apg
+# - debian-goodies
+# - python-software-properties
+install_dev:
+# - build-essential
+# - zlib1g-dev
+# - libssl-dev
+# - libreadline-gplv2-dev
+  - libxml2-devel
+# - libxslt1-dev
+  - python2-pip
+  - python-psycopg2
+  - python-pyasn1
+# - libmagic-dev
+  - freetds-devel
+install_dev_pip:
+  - urllib3
+  - ndg-httpsclient
+uninstall_unwanted:
+  - nothing_yet
+
+
+pkgs_etckeeper:
+  - etckeeper
+  - git
+pkgs_ntp:
+  - ntp
+pkgs_python:
+  - python-virtualenv
+  - python-devel
+pkgs_ruby20:
+  - ruby
+  - ruby-devel
+pkgs_imagemagick:
+  - ImageMagick
+  - ImageMagick-devel
+  - ghostscript
+  - ghostscript-devel
+  - netpbm
+  - netpbm-devel
