@@ -1,8 +1,0 @@
-#command
-! invalid
-| invalid
-v invalid
-s invalid
-:e invalid
-#env
-LESSOPEN=|/bin/lesspipe %s

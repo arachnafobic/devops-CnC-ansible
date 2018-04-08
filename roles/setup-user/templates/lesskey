@@ -1,0 +1,12 @@
+#command
+! invalid
+| invalid
+v invalid
+s invalid
+:e invalid
+#env
+{% if ansible_distribution == "CentOS" %}
+LESSOPEN=|/bin/lesspipe.sh %s
+{% else %}
+LESSOPEN=|/bin/lesspipe %s
+{% endif %}

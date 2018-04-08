@@ -27,8 +27,16 @@
 - name:             ~{{ user }}/.profile
   become:           yes
   become_user:      root
-  copy:             dest={{ home }}/.profile src=profile
+  template:         dest={{ home }}/.profile src=profile
                     mode=0644 backup=yes owner={{ user }} group={{ user }}
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+- name:             ~{{ user }}/.bash_profile
+  become:           yes
+  become_user:      root
+  template:         dest={{ home }}/.bash_profile src=profile
+                    mode=0644 backup=yes owner={{ user }} group={{ user }}
+  when:             ansible_distribution == "CloudLinux" or ansible_distribution == "CentOS"
 
 - name:             ~{{ user }}/.gemrc
   become:           yes
@@ -43,7 +51,7 @@
 - name:             ~{{ user }}/.lesskey
   become:           yes
   become_user:      root
-  copy:             dest={{ home }}/.lesskey src=lesskey mode=0644 owner={{ user }} group={{ user }}
+  template:         dest={{ home }}/.lesskey src=lesskey mode=0644 owner={{ user }} group={{ user }}
 
 - name:             generate ~/.less
   shell:            lesskey
