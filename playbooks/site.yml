@@ -111,6 +111,15 @@
     keygen: false
 
 - import_playbook: ../roles/setup-user.yml
+  tags: [users, user-vagrant]
+  vars:
+    targets:  vm-ubuntu, vm-clinux, vm-centos
+    user:   vagrant
+    home:   /home/vagrant
+    keygen: false
+
+# distro specific user setup
+- import_playbook: ../roles/setup-user.yml
   tags: [users, user-ubuntu]
   vars:
     targets:  Ubuntu
@@ -127,10 +136,9 @@
     keygen: false
 
 - import_playbook: ../roles/setup-user.yml
-  tags: [users, user-vagrant]
+  tags: [users, user-centos]
   vars:
-    targets:  vm-ubuntu, vm-clinux
-    user:   vagrant
-    home:   /home/vagrant
+    targets:  CentOS
+    user:   centos
+    home:   /home/centos
     keygen: false
-

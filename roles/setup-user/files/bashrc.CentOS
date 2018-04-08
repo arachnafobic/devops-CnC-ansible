@@ -1,0 +1,20 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+# MODIFIED {
+if [ -f /etc/prompt.bash ]; then
+  . /etc/prompt.bash
+fi
+if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
+  . /usr/share/git-core/contrib/completion/git-prompt.sh
+fi
+# } MODIFIED
+
