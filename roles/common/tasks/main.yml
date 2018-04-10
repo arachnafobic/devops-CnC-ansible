@@ -15,10 +15,12 @@
 - name:             create 700 directories in ~root
   file:             path=/root/{{ item }} state=directory mode=0700
   with_items:       '{{ root_folders }}'
+  when:             root_folders is defined
 
 - name:             create directories in /opt + /root/cache
   file:             path={{ item }} state=directory mode=0755
   with_items:       '{{ default_folders }}'
+  when:             default_folders is defined
 
 - name:             set FQDN - localhost
   lineinfile:       dest=/etc/hosts regexp='^127\.0\.0\.1' line='127.0.0.1 localhost' owner=root group=root mode=0644

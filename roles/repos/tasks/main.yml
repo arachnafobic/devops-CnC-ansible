@@ -5,8 +5,10 @@
                     dest=/opt/src/{{ item|basename }}
   with_items:
     - "{{ gh_repos }}"
+  when:             gh_repos is defined
 
 - name:             github repo related symlinks
   file:             path={{ item.path }} src={{ item.src }} state=link
   with_items:
     - "{{ gh_links }}"
+  when:             gh_links is defined

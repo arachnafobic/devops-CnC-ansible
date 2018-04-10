@@ -4,11 +4,17 @@ default_ruby_version: "2.0"
 
 ruby_version:   2.0.0
 gem_exec:       /usr/bin/gem2.0
-npms:
-  - uglify-js
-  - coffee-script
-links:
-  user:
+
+user_defaults:
+  gems:
+    - bundler
+    - pry
+    - localconfig
+    - bcrypt
+  npms:
+    - uglify-js
+    - coffee-script
+  links:
     - path:     ~/bin/erb
       src:      /usr/bin/erb2.0
     - path:     ~/bin/gem

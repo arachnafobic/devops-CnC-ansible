@@ -1,0 +1,21 @@
+---
+
+# Add the PPA off the maintainer of Debian's PHP packages, Ond?ej Sur?.
+# This allows multiple php versions to be installed in tandem
+# See more : https://deb.sury.org/
+
+
+- name:             add ppa:ondrej/php
+  apt_repository:   repo='ppa:ondrej/php'
+                    state=present
+                    update_cache=yes
+  register:         phpfpm_ppa
+
+- name:             update system
+  apt:              upgrade=safe
+  when:             phpfpm_ppa.changed
+
+- name:             install php-fpm
+  apt:              name={{ item }} state=present install_recommends=no
+  with_items:
+    - "{{ pkgs_phpfpm }}"

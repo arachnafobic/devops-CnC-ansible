@@ -15,8 +15,8 @@
 
 - name:             symlinks for {{ user }}
   file:             path={{ item.path }} src={{ item.src }} state=link
-  with_items:       '{{ links.user }}'
-  when:             links is defined and links.user is defined
+  with_items:       '{{ user_defaults.links }}'
+  when:             user_defaults.links is defined
 
 - name:             ~{{ user }}/.bashrc
   become:           yes
@@ -91,15 +91,18 @@
 
 - name:             gems for {{ user }}
   gem:              name={{ item }} state=latest executable={{ gem_exec }}
-  with_items:       '{{ gems }}'
+  with_items:       '{{ user_defaults.gems }}'
+  when:             user_defaults.gems is defined
 
-#- name:             npms for {{ user }}
-#  npm:              name={{ item }} state=present global=yes
-#  with_items:       '{{ npms }}'
+- name:             npms for {{ user }}
+  npm:              name={{ item }} state=present global=yes
+  with_items:       '{{ user_defaults.npms }}'
+  when:             user_defaults.npms is defined
 
-#- name:             npms for {{ user }}
-#  npm:              name={{ item }} state=latest global=yes
-#  with_items:       '{{ npms }}'
+- name:             npms for {{ user }}
+  npm:              name={{ item }} state=latest global=yes
+  with_items:       '{{ user_defaults.npms }}'
+  when:             user_defaults.npms is defined
 
 - name:             check if user has a default ssh key
   stat:             path={{ home }}/.ssh/id_rsa

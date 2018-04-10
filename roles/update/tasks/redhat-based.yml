@@ -3,14 +3,17 @@
 - name:             install some tools
   yum:              name={{ item }} state=present
   with_items:       '{{ install_tools }}'
+  when:             install_tools is defined
 
 - name:             install development packages
   yum:              name={{ item }} state=present
   with_items:       '{{ install_dev }}'
+  when:             install_dev is defined
 
 - name:             install python packages thru pip
   pip:              name={{ item }} state=present umask=0022
   with_items:       '{{ install_dev_pip }}'
+  when:             install_dev_pip is defined
 
 - name:             install mongodb specific packages
   yum:              name=python-pymongo state=present
@@ -19,6 +22,7 @@
 - name:             remove unwanted packages
   yum:              name={{ item }} state=absent
   with_items:       '{{ uninstall_unwanted }}'
+  when:             uninstall_unwanted is defined
 
 - name:             upgrade all packages
   yum:              name='*' state=latest

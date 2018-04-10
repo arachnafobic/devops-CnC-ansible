@@ -4,3 +4,4 @@
   package:          name={{ item }} state=present
   with_items:
     - "{{ pkgs_imagemagick }}"
+  when:             pkgs_imagemagick is defined

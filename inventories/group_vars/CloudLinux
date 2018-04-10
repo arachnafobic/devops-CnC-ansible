@@ -13,6 +13,16 @@ gem_exec:       /usr/bin/gem
 enable_repos:
   - epel
 
+user_defaults:
+  gems:
+    - bundler
+    - pry
+    - localconfig
+    - bcrypt
+#  npms:
+#    - uglify-js
+#    - coffee-script
+
 # Used during initialize play
 install_init:
   - python-pip
@@ -52,7 +62,6 @@ install_dev_pip:
   - ndg-httpsclient
 uninstall_unwanted:
   - nothing_yet
-
 
 pkgs_etckeeper:
   - etckeeper

@@ -4,3 +4,4 @@
   package:          name={{ item }} state=present
   with_items:
     - "{{ pkgs_python }}"
+  when:             pkgs_python is defined

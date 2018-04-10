@@ -10,6 +10,16 @@ default_ruby_version: "2.0"
 ruby_version:   2.0.0
 gem_exec:       /usr/bin/gem
 
+user_defaults:
+  gems:
+    - bundler
+    - pry
+    - localconfig
+    - bcrypt
+#  npms:
+#    - uglify-js
+#    - coffee-script
+
 # Used during initialize play
 install_epel:
   - epel-release
@@ -51,7 +61,6 @@ install_dev_pip:
   - ndg-httpsclient
 uninstall_unwanted:
   - nothing_yet
-
 
 pkgs_etckeeper:
   - etckeeper

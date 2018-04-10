@@ -24,11 +24,6 @@
                     line='Acquire::https::Proxy-Auto-Detect "/usr/share/squid-deb-proxy-client/apt-avahi-discover-https";'
                     state=present
 
-#- name:             get stat into of status file
-#  stat:             path=/root/._ansible
-#  register:         update_statuscheck
-#  changed_when:     false
-
 - name:             update packages list
   apt:              update_cache=yes
   when:             ansible_date_time.epoch|int - update_statuscheck.stat.mtime|int > 3600
@@ -36,14 +31,17 @@
 - name:             install some tools
   apt:              name={{ item }} state=present
   with_items:       '{{ install_tools }}'
+  when:             install_tools is defined
 
 - name:             install development packages
   apt:              name={{ item }} state=present
   with_items:       '{{ install_dev }}'
+  when:             install_dev is defined
 
 - name:             install python packages thru pip
   pip:              name={{ item }} state=present umask=0022
   with_items:       '{{ install_dev_pip }}'
+  when:             install_dev_pip is defined
 
 - name:             install mongodb specific packages
   apt:              name=python-pymongo state=present
@@ -56,6 +54,7 @@
 - name:             remove unwanted packages
   apt:              name={{ item }} state=absent
   with_items:       '{{ uninstall_unwanted }}'
+  when:             uninstall_unwanted is defined
 
 - name:             list packages to upgrade (1/2)
   shell:            aptitude -q -F%p --disable-columns search "~U"

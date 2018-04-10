@@ -1,13 +1,4 @@
 ---
 
-- name:             install ntp packages
-  package:          name={{ item }} state=present
-  with_items:
-    - "{{ pkgs_ntp }}"
-
-- name:             create directory /var/lib/ntp
-  file:             path=/var/lib/ntp state=directory owner=ntp group=ntp mode=0755
-
-- name:             place initial drift file
-  copy:             dest=/var/lib/ntp/ntp.drift src=ntp.drift owner=ntp group=ntp mode=0644 force=no
-  notify:           restart ntp
+- include_tasks:    ntp.yml
+  when:             pkgs_ntp is defined
