@@ -48,6 +48,11 @@
   vars:
     targets: all
 
+- import_playbook: ../roles/nodejs.yml
+  tags: [nodejs, dev]
+  vars:
+    targets: all
+
 # general user setup
 - import_playbook: ../roles/setup-user.yml
   tags: [users, user-root]
