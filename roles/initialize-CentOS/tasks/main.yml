@@ -4,6 +4,9 @@
   file:             path=/root/._ansible state=touch
   changed_when:     false
 
+- name:             fix perl locales
+  copy:             src=enviroment dest=/etc/enviroment mode=0644 owner=root group=root
+
 - name:             enable predefined repositories
   shell:            yum-config-manager --enable {{ item }}
   with_items:       '{{ enable_repos }}'
