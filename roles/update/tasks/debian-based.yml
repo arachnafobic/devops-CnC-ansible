@@ -73,7 +73,7 @@
   when:             updates.stdout_lines
 
 - name:             update packages
-  apt:              upgrade=safe
+  apt:              upgrade=safe force_apt_get=yes
 #  when:             ansible_date_time.epoch|int - update_statuscheck.stat.mtime|int > 3600
 #  ^ uncomment to only run updates once an hour at minimum
 

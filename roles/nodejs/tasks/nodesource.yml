@@ -18,7 +18,7 @@
 
 - name:             update apt cache
   apt:              update_cache=yes
-  when:             nodesource_sources|changed
+  when:             nodesource_sources is changed
 
 - name:             ensure distribution nodejs packages are not installed
   apt:              name={{ item }} state=absent
