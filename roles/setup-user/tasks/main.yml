@@ -14,7 +14,7 @@
     - tmp
 
 - name:             symlinks for {{ user }}
-  file:             path={{ item.path }} src={{ item.src }} state=link
+  file:             path={{ item.path }} src={{ item.src }} state=link force=yes
   with_items:       '{{ user_defaults.links }}'
   when:             user_defaults.links is defined
 
@@ -92,17 +92,17 @@
 - name:             gems for {{ user }}
   gem:              name={{ item }} state=latest executable={{ gem_exec }}
   with_items:       '{{ user_defaults.gems }}'
-  when:             user_defaults.gems is defined
+  when:             user_defaults.gems is defined and 'ruby' in group_names
 
 - name:             npms for {{ user }}
   npm:              name={{ item }} state=present global=yes
   with_items:       '{{ user_defaults.npms }}'
-  when:             user_defaults.npms is defined
+  when:             user_defaults.npms is defined and 'nodejs' in group_names
 
 - name:             npms for {{ user }}
   npm:              name={{ item }} state=latest global=yes
   with_items:       '{{ user_defaults.npms }}'
-  when:             user_defaults.npms is defined
+  when:             user_defaults.npms is defined and 'nodejs' in group_names
 
 - name:             check if user has a default ssh key
   stat:             path={{ home }}/.ssh/id_rsa
