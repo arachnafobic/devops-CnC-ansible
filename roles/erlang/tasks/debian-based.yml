@@ -1,0 +1,27 @@
+---
+
+- name:             get apt key for erlang solutions
+  get_url:          url=https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc dest=/root/cache/A14F4FCA.asc
+                    sha256sum=86232086a4dec44a5a505544d30822987a23a892db418f9e8e17dfff21eb0c23
+
+- name:             install apt key for erlang solutions
+  apt_key:          id=A14F4FCA file=/root/cache/A14F4FCA.asc state=present
+
+- name:             sources.list.d for erlang solutions
+  template:         dest=/etc/apt/sources.list.d/erlang-solutions.list src=erlang-solutions.list
+                    owner=root group=root mode=0644
+  register:         erlang_sources
+
+- name:             preferences.d for erlang solutions
+  copy:             dest=/etc/apt/preferences.d/erlang-solutions.pref src=erlang-solutions.pref
+                    owner=root group=root mode=0644
+
+- name:             update apt cache
+  apt:              update_cache=yes
+  when:             erlang_sources is changed
+
+- name:             install erlang from erlang solutions
+  apt:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_erlang }}"
+

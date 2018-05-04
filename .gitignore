@@ -14,3 +14,9 @@ inventories/group_vars/*_secrets
 # Generated Dynamicly
 inventories/hosts.vm/hosts
 inventories/hosts.vm/groups
+
+# certificates
+roles/sensu/files/ssl/client/
+roles/sensu/files/ssl/server/
+roles/sensu/files/ssl/sensu_ca/*
+!roles/sensu/files/ssl/sensu_ca/openssl.cnf

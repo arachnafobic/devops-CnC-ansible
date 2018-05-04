@@ -5,6 +5,8 @@ alt:
 
 service_ssh_name: ssh
 service_ntp_name: ntp
+service_redis_name: redis-server
+service_rabbitmq_name: rabbitmq-server
 
 default_ruby_version: "1.9"
 ruby_version:   1.9.3
@@ -68,11 +70,17 @@ pkgs_nodejs:
   - nodejs-legacy
   - nodejs-dev
   - npm
+pkgs_erlang:
+  - erlang
 pkgs_imagemagick:
   - imagemagick
   - libmagickwand-dev
   - ghostscript
   - netpbm
+pkgs_redis:
+  - redis-server
+pkgs_rabbitmq:
+  - rabbitmq-server
 pkgs_nginx:
   - nginx
 pkgs_mariadb:

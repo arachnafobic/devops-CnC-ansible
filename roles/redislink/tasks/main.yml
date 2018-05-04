@@ -1,0 +1,31 @@
+---
+
+- name:             fetch stat info for /var/lib/redis
+  stat:             path=/var/lib/redis
+  register:         redislink_check
+
+- name:             fetch stat info for /__data/db/redis
+  stat:             path=/__data/db/redis
+  register:         redislink_data_check
+
+- name:             Safeguard - stop here when there are 2 folders found
+  fail:             msg="both /var/lib/redis and /__data/db/redis are folders, please fix"
+  when:             redislink_check.stat.isdir is defined and redislink_check.stat.isdir == true and
+                    redislink_data_check.stat.isdir is defined and redislink_data_check.stat.isdir == true
+
+- name:             create /__data/db if missing
+  file:             path=/__data/db state=directory
+
+- name:             stop redis service
+  service:          name={{ service_redis_name }} state=stopped
+  when:             redislink_check.stat.isdir is defined and redislink_check.stat.isdir == true and redislink_data_check.stat.exists == false
+
+- name:             move /var/lib/redis to /__data/db
+  command:          mv /var/lib/redis/ /__data/db/
+                    creates=/__data/db/redis
+  when:             redislink_check.stat.isdir is defined and redislink_check.stat.isdir == true and redislink_data_check.stat.exists == false
+
+- name:             symlink /__data/db/redis back to /var/lib
+  file:             src=/__data/db/redis dest=/var/lib/redis state=link
+  when:             redislink_check.stat.isdir is defined and redislink_check.stat.isdir == true and redislink_data_check.stat.exists == false
+  notify:           restart redis

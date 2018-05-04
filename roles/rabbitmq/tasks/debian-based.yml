@@ -1,0 +1,27 @@
+---
+
+- name:             get apt key for rabbitmq
+  get_url:          url=https://www.rabbitmq.com/rabbitmq-release-signing-key.asc dest=/root/cache/6026DFCA.asc
+                    sha256sum=bf3d770e522b9436d9c6bee1b1206cba6800fc64d754b1293471038eb9529138
+
+- name:             install apt key for rabbitmq
+  apt_key:          id=6026DFCA file=/root/cache/6026DFCA.asc state=present
+
+- name:             sources.list.d for rabbitmq
+  template:         dest=/etc/apt/sources.list.d/rabbitmq.list src=rabbitmq.list
+                    owner=root group=root mode=0644
+  register:         rabbitmq_sources
+
+- name:             update apt cache
+  apt:              update_cache=yes
+  when:             rabbitmq_sources is changed
+
+- name:             install rabbitmq package
+  apt:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_rabbitmq }}"
+  register:         rabbitmq_install
+
+- name:             touch rabbitmq-server in /root/stat_services.d
+  file:             path=/root/stat_services.d/rabbitmq-server state=touch
+  changed_when:     false

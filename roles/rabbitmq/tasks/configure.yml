@@ -1,0 +1,55 @@
+---
+
+- name:             create 700 ssl directory in /etc/rabbitmq
+  file:             path=/etc/rabbitmq/ssl state=directory owner=rabbitmq group=rabbitmq mode=0700
+
+- name:             copy cacert.pem to /etc/rabbitmq/ssl
+  copy:             src=ssl/sensu_ca/cacert.pem dest=/etc/rabbitmq/ssl/cacert.pem
+                    owner=rabbitmq group=rabbitmq mode=0600
+
+- name:             copy cert.pem to /etc/rabbitmq/ssl
+  copy:             src=ssl/server/cert.pem dest=/etc/rabbitmq/ssl/cert.pem
+                    owner=rabbitmq group=rabbitmq mode=0600
+
+- name:             copy key.pem to /etc/rabbitmq/ssl
+  copy:             src=ssl/server/key.pem dest=/etc/rabbitmq/ssl/key.pem
+                    owner=rabbitmq group=rabbitmq mode=0600
+
+- name:             copy rabbitmq.config to /etc/rabbitmq
+  copy:             src=rabbitmq.config dest=/etc/rabbitmq/rabbitmq.config
+                    owner=rabbitmq group=rabbitmq mode=0600
+
+- name:             enable + start rabbitmq
+  service:          name={{ service_rabbitmq_name }} enabled=yes state=restarted
+  when:             rabbitmq_install is changed
+
+- name:             add sensu vhost
+  shell:            LC_ALL=en_US.utf8 rabbitmqctl add_vhost /sensu
+  when:             rabbitmq_install is changed
+
+- name:             add sensu user
+  shell:            LC_ALL=en_US.utf8 rabbitmqctl add_user sensu {{ rabbitmq_sensu_pass }}
+  when:             rabbitmq_install is changed
+
+- name:             set sensu permissions
+  shell:            LC_ALL=en_US.utf8 rabbitmqctl set_permissions -p /sensu sensu ".*" ".*" ".*"
+  when:             rabbitmq_install is changed
+
+- name:             add admin user
+  shell:            LC_ALL=en_US.utf8 rabbitmqctl add_user admin {{ rabbitmq_admin_pass }}
+  when:             rabbitmq_web == true and rabbitmq_install is changed
+
+- name:             set admin usertag
+  shell:            LC_ALL=en_US.utf8 rabbitmqctl set_user_tags admin administrator
+  when:             rabbitmq_web == true and rabbitmq_install is changed
+
+- name:             enable webgui
+  shell:            LC_ALL=en_US.utf8 rabbitmq-plugins enable rabbitmq_management
+  when:             rabbitmq_web == true and rabbitmq_install is changed
+  notify:           restart rabbitmq
+
+
+#
+# not setting ulimit yet, tho as hint for systemd, this would be done with a lineinfile on
+# /lib/systemd/system/rabbitmq-server.service
+#

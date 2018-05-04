@@ -70,6 +70,11 @@
   vars:
     targets: nodejs
 
+- import_playbook: ../roles/erlang.yml
+  tags: [erlang, dev]
+  vars:
+    targets: erlang
+
 - import_playbook: ../roles/libav.yml
   tags: [libav, dev]
   vars:
@@ -81,6 +86,21 @@
     targets: libraries
 
 # services
+- import_playbook: ../roles/redis.yml
+  tags: [redis, services]
+  vars:
+    targets: redis
+
+- import_playbook: ../roles/redislink.yml
+  tags: [redis, services]
+  vars:
+    targets: redis
+
+- import_playbook: ../roles/rabbitmq.yml
+  tags: [rabbitmq, services]
+  vars:
+    targets: rabbitmq
+
 - import_playbook: ../roles/nginx.yml
   tags: [nginx, services]
   vars:
@@ -96,6 +116,7 @@
   vars:
     targets: phpfpm
 
+# hosting dashboard
 - import_playbook: ../roles/froxlor.yml
   tags: [froxlor, services]
   vars:

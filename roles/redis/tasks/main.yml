@@ -1,0 +1,10 @@
+---
+
+- name:             install redis packages
+  package:          name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_redis }}"
+
+- name:             touch redis-server in /root/stat_services.d
+  file:             path=/root/stat_services.d/redis-server state=touch
+  changed_when:     false

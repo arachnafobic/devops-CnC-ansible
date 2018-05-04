@@ -1,5 +1,12 @@
 ---
 
+# defaults, overwrite in distribution or host specific var files
+
+# CHANGE THESE IN PRODUCTION
+rabbitmq_admin_pass:   adminpass
+rabbitmq_sensu_pass:   sensupass
+rabbitmq_web:          true
+
 release:        "{{ ansible_distribution_release }}"
 gems:
   - bundler

@@ -1,0 +1,4 @@
+---
+
+- include_tasks:    debian-based.yml
+  when:             pkgs_erlang is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")

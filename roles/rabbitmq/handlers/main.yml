@@ -1,0 +1,4 @@
+---
+
+- name:             restart rabbitmq
+  service:          name={{ service_rabbitmq_name }} enabled=yes state=restarted

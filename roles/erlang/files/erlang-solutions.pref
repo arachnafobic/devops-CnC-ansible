@@ -1,0 +1,7 @@
+Package: erlang*
+Pin: origin packages.erlang-solutions.com
+Pin-Priority: 750
+
+Package: *
+Pin: origin packages.erlang-solutions.com
+Pin-Priority: 250
