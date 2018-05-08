@@ -1,0 +1,23 @@
+---
+
+- name:             install | Clone netdata to /usr/local/src
+  git:              repo="https://github.com/firehol/netdata"
+                    dest="/usr/local/src/netdata"
+                    depth=1
+
+- name:             install | Run netdata installer
+  shell:            ./netdata-installer.sh --dont-wait
+                    chdir=/usr/local/src/netdata
+                    creates=/usr/sbin/netdata
+  notify:
+    - restart netdata
+
+#- name:             config | Configuring Netdata
+#  notify
+#    - restart netdata
+# todo: lineinfile bind ip to 127.0.0.1
+
+- name:             config | Setup auto-update cronjob
+  file:             path=/etc/cron.daily/netdata-updater
+                    src=/usr/local/src/netdata/netdata-updater.sh
+                    state=link

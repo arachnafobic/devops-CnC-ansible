@@ -44,6 +44,11 @@
   vars:
     targets: all
 
+- import_playbook: ../roles/netdata.yml
+  tags: [netdata, init]
+  vars:
+    targets: all
+
 - import_playbook: ../roles/repos.yml
   tags: [repos, init]
   vars:

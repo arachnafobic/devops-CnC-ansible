@@ -25,6 +25,8 @@ install_tools:
   - apg
   - debian-goodies
   - python-software-properties
+  - lm-sensors
+  - netcat
 install_dev:
   - build-essential
   - zlib1g-dev
@@ -32,11 +34,25 @@ install_dev:
   - libreadline-gplv2-dev
   - libxml2-dev
   - libxslt1-dev
+  - libmnl-dev
+  - libmnl0
+  - libuuid1
   - python-pip
   - python-psycopg2
   - python-pyasn1
+  - python-mysqldb
+  - python-pymongo
+  - python-yaml
   - libmagic-dev
   - freetds-dev
+  - autoconf-archive
+  - autoconf
+  - autogen
+  - automake
+  - build-essential
+  - uuid
+  - uuid-dev
+  - pkg-config
 install_dev_pip:
   - urllib3
   - ndg-httpsclient
