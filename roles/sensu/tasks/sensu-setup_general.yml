@@ -1,0 +1,19 @@
+---
+
+- name:             create 700 ssl directory in /etc/sensu
+  file:             path=/etc/sensu/ssl state=directory owner=sensu group=sensu mode=0700
+
+- name:             copy client/cert.pem to /etc/sensu/ssl
+  copy:             src=ssl/client/cert.pem dest=/etc/sensu/ssl/cert.pem
+                    owner=sensu group=sensu mode=0600
+
+- name:             copy client/key.pem to /etc/sensu/ssl
+  copy:             src=ssl/client/key.pem dest=/etc/sensu/ssl/key.pem
+                    owner=sensu group=sensu mode=0600
+
+- name:             (re)create conf.d/rabbitmq.json
+  template:         dest=/etc/sensu/conf.d/rabbitmq.json src=rabbitmq.json
+                    owner=sensu group=sensu mode=0600
+
+- name:             create handlers directory in /etc/sensu/extensions
+  file:             path=/etc/sensu/extensions/handlers state=directory owner=sensu group=sensu mode=0755

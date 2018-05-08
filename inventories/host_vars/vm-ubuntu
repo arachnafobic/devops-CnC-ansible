@@ -1,5 +1,6 @@
 ---
 
+monitor_ip: 127.0.0.1
 nodesource_use: true
 nodesource_version: 6.x
 

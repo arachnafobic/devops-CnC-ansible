@@ -1,0 +1,1 @@
+deb     https://sensu.global.ssl.fastly.net/apt {{ ansible_distribution_release }} main

@@ -7,6 +7,10 @@ service_ssh_name: ssh
 service_ntp_name: ntp
 service_redis_name: redis-server
 service_rabbitmq_name: rabbitmq-server
+service_sensu_api: sensu-api
+service_sensu_client: sensu-client
+service_sensu_server: sensu-server
+service_sensu_uchiwa: uchiwa
 
 default_ruby_version: "1.9"
 ruby_version:   1.9.3
@@ -97,6 +101,10 @@ pkgs_redis:
   - redis-server
 pkgs_rabbitmq:
   - rabbitmq-server
+pkgs_sensu:
+  - sensu
+pkgs_uchiwa:
+  - uchiwa
 pkgs_nginx:
   - nginx
 pkgs_mariadb:

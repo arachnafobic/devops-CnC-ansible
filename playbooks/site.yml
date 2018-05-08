@@ -121,6 +121,17 @@
   vars:
     targets: phpfpm
 
+# monitoring systems and clients
+- import_playbook: ../roles/sensu.yml
+  tags: [sensu, services]
+  vars:
+    targets: all
+
+- import_playbook: ../roles/monitor-configs.yml
+  tags: [monitor-configs, services]
+  vars:
+    targets: all
+
 # hosting dashboard
 - import_playbook: ../roles/froxlor.yml
   tags: [froxlor, services]

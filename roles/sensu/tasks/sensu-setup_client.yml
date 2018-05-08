@@ -1,0 +1,11 @@
+---
+
+- name:             (re)create initial conf.d/client.json
+  template:         dest=/etc/sensu/conf.d/client.json src=client.json
+                    owner=sensu group=sensu mode=0600
+  when:             sensu_install is changed
+
+- name:             enable + start sensu-client
+  service:          name={{ service_sensu_client }} enabled=yes state=started
+  when:             sensu_install is changed
+

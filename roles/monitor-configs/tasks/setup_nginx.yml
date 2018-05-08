@@ -1,0 +1,18 @@
+---
+
+- name:             copy nginx.monitor to /etc/nginx/sites-available/monitor.conf
+  copy:             src=nginx.monitor dest=/etc/nginx/sites-available/monitor.conf
+                    owner=root group=root mode=0644
+  notify:           reload nginx
+
+- name:             (re)create symlink to for monitor host
+  file:             src=/etc/nginx/sites-available/monitor.conf dest=/etc/nginx/sites-enabled/monitor.conf state=link
+  notify:           reload nginx
+
+- name:             (re)create www folder
+  file:             path=/etc/devops/www.monitor/ state=directory
+                    owner=root group=root mode=0755
+
+- name:             (re)upload monitor index.html
+  template:         src=index.html.j2 dest=/etc/devops/www.monitor/index.html
+                    owner=root group=root mode=0644

@@ -1,0 +1,28 @@
+---
+
+- name:             get apt key for sensu
+  get_url:          url=https://sensu.global.ssl.fastly.net/apt/pubkey.gpg dest=/root/cache/EB9C94BB.asc
+                    sha256sum=4ac9977ee541161851221d767a6ea8650d628e5210907f5ee8768c278b36c2bd
+
+- name:             install apt key for sensu
+  apt_key:          id=EB9C94BB file=/root/cache/EB9C94BB.asc state=present
+
+- name:             sources.list.d for sensu
+  template:         dest=/etc/apt/sources.list.d/sensu.list src=sensu.list
+                    owner=root group=root mode=0644
+  register:         sensu_sources
+
+- name:             update apt cache
+  apt:              update_cache=yes
+  when:             sensu_sources is changed
+
+- name:             install sensu package if missing
+  apt:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_sensu }}"
+  register:         sensu_install
+
+- name:             clone sensu-community-plugins at specific HEAD (workaround)
+  git:              repo=https://github.com/sensu/sensu-community-plugins.git
+                    dest=/opt/src/sensu-community-plugins
+                    version=d7f987a23699bf18cb923ed68a4a434f035751d2

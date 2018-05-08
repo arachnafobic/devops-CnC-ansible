@@ -1,0 +1,14 @@
+---
+
+- include_tasks:    sensu-install_debian-based.yml
+  when:             pkgs_sensu is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+
+- include_tasks:    sensu-setup_general.yml
+
+- include_tasks:    sensu-setup_server.yml
+  when:             inventory_hostname in groups['monitor']
+
+- include_tasks:    sensu-setup_client.yml
+
+- include_tasks:    uchiwa-install_debian-based.yml
+  when:             pkgs_uchiwa is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian") and inventory_hostname in groups['monitor']

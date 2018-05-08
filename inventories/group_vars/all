@@ -6,6 +6,7 @@
 rabbitmq_admin_pass:   adminpass
 rabbitmq_sensu_pass:   sensupass
 rabbitmq_web:          true
+sensu_api_pass:        adminpass
 
 release:        "{{ ansible_distribution_release }}"
 gems:
@@ -23,6 +24,7 @@ default_folders:
   - /opt/pkg
   - /root/cache
   - /__data
+  - /etc/devops
 gh_repos:
   - kchmck/vim-coffee-script
   - plasticboy/vim-markdown

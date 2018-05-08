@@ -1,0 +1,24 @@
+{
+  "client": {
+    "name": "{{ ansible_hostname }}",
+    "address": "{{ ansible_default_ipv4["address"] }}",
+    "subscriptions": [ "all", "{{ ansible_hostname }}" ],
+    "http_socket": {
+      "bind": "127.0.0.1",
+      "port": 3032,
+      "user": "sensu",
+      "password": "2add9fabd07fad431bf47c5a76dd3adaf551c4564235400ec0fae6d73566f17e"
+    },
+    "keepalive": {
+      "high_flap_threshold": 20,
+      "low_flap_threshold": 5,
+      "refresh": 14400,
+      "handlers": ["flapjack"],
+      "type": "metric",
+      "thresholds": {
+        "critical": 120,
+        "warning": 90
+      }
+    }
+  }
+}

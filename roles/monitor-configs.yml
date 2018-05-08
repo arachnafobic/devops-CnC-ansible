@@ -1,0 +1,11 @@
+---
+# monitor-configs.yml
+
+- name:             monitor-configs
+  hosts:            "{{ targets }}"
+  gather_facts:     no
+  become:           true
+  become_user:      root
+
+  roles:
+    - monitor-configs
