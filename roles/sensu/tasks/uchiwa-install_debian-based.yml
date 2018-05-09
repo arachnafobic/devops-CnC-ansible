@@ -9,10 +9,11 @@
 - name:             (re)create uchiwa.json
   template:         dest=/etc/sensu/uchiwa.json src=uchiwa.json
                     owner=uchiwa group=uchiwa mode=0600
+  register:         uchiwa_config
 
 - name:             enable + start uchiwa
-  service:          name={{ service_sensu_uchiwa }} enabled=yes state=started
-  when:             uchiwa_install is changed
+  service:          name={{ service_sensu_uchiwa }} state=restarted enabled=yes
+  when:             (uchiwa_install is changed) or (uchiwa_config is changed)
 
 - name:             touch uchiwa in /root/stat_services.d
   file:             path=/root/stat_services.d/uchiwa state=touch

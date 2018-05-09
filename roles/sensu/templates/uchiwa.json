@@ -1,21 +1,30 @@
 {
-    "sensu": [
+  "sensu": [
+    {
+      "name": "datacenter",
+      "host": "127.0.0.1",
+      "ssl": false,
+      "port": 4567,
+      "user": "admin",
+      "pass": "{{ sensu_api_pass }}",
+      "path": "",
+      "timeout": 5
+    }
+  ],
+  "uchiwa":
+    {
+      "host": "127.0.0.1",
+      "user": "",
+      "pass": "",
+      "port": 3000,
+      "refresh": 15,
+      "usersOptions":
         {
-            "name": "NoXqs",
-            "host": "127.0.0.1",
-            "ssl": false,
-            "port": 4567,
-            "user": "admin",
-            "pass": "{{ sensu_api_pass }}",
-            "path": "",
-            "timeout": 5
+          "dateFormat": "DD-MM-YYYY HH:mm:ss",
+          "defaultTheme": "uchiwa-dark",
+          "disableNoExpiration": false,
+          "requireSilencingReason": false,
+          "silenceDurations": [ 0.25, 0.5, 1, 2 ]
         }
-    ],
-    "uchiwa": {
-        "user": "",
-        "pass": "",
-        "port": 3000,
-        "stats": 10,
-        "refresh": 15
     }
 }
