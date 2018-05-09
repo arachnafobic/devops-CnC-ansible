@@ -8,6 +8,11 @@
   template:         dest=/etc/sensu/conf.d/api.json src=api.json
                     owner=sensu group=sensu mode=0600
 
+- name:             (re)create default system checks
+  copy:             dest=/etc/sensu/conf.d/ src={{ item }}
+                    owner=sensu group=sensu mode=0600
+  with_fileglob:    check_*.json
+
 - name:             enable + start sensu-server
   service:          name={{ service_sensu_server }} enabled=yes state=started
   when:             sensu_install is changed

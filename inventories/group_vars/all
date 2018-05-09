@@ -8,6 +8,15 @@ rabbitmq_sensu_pass:   sensupass
 rabbitmq_web:          true
 sensu_api_pass:        adminpass
 
+sensu_default_plugins:
+  - cpu-checks
+  - disk-checks
+  - memory-checks
+  - process-checks
+  - load-checks
+  - vmstats
+  - mailer
+
 release:        "{{ ansible_distribution_release }}"
 gems:
   - bundler
