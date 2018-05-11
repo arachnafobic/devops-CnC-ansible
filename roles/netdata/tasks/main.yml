@@ -6,7 +6,7 @@
                     depth=1
 
 - name:             install | Run netdata installer
-  shell:            ./netdata-installer.sh --dont-wait
+  shell:            ./netdata-installer.sh --dont-wait 1>~/tmp/netdata-installer.log
                     chdir=/usr/local/src/netdata
                     creates=/usr/sbin/netdata
   notify:
