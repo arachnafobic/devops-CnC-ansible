@@ -1,0 +1,11 @@
+---
+
+- name:             install graphite through pip
+  pip:              name={{ item }} state=present umask=0022
+  extra_args:       "--no-binary=:all: --install-option='--prefix=/opt'"
+  with_items:
+    - https://github.com/graphite-project/whisper/tarball/master
+    - https://github.com/graphite-project/carbon/tarball/master
+    - https://github.com/graphite-project/graphite-web/tarball/master
+  enviroment:
+    PYTHONPATH:     "/opt/graphite/lib/:/opt/graphite/webapp/"

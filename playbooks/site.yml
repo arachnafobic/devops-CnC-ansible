@@ -127,6 +127,11 @@
   vars:
     targets: all
 
+- import_playbook: ../roles/graphite.yml
+  tags: [graphite, services]
+  vars:
+    targets: monitor
+
 - import_playbook: ../roles/monitor-configs.yml
   tags: [monitor-configs, services]
   vars:

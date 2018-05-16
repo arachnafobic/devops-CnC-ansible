@@ -1,5 +1,7 @@
 ---
 
+- include_tasks:    graphite-install_general.yml
+
 - include_tasks:    graphite-install_debian-based.yml
   when:             pkgs_graphite is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
 
