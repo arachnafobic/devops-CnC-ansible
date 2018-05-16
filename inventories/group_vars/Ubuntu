@@ -41,6 +41,7 @@ install_dev:
   - libmnl-dev
   - libmnl0
   - libuuid1
+  - libffi-dev
   - python-pip
   - python-psycopg2
   - python-pyasn1

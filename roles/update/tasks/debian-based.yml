@@ -38,10 +38,22 @@
   with_items:       '{{ install_dev }}'
   when:             install_dev is defined
 
+- name:             check for python pip
+  shell:            which pip
+  changed_when:     false
+  register:         check_pip
+
+- name:             ensure pip is the latest version
+  pip:              name={{ item }} state=latest
+  when:             check_pip.rc == 0
+  with_items:
+    - pip
+    - setuptools
+
 - name:             install python packages thru pip
   pip:              name={{ item }} state=present umask=0022
   with_items:       '{{ install_dev_pip }}'
-  when:             install_dev_pip is defined
+  when:             install_dev_pip is defined and check_pip.rc == 0
 
 - name:             install mongodb specific packages
   apt:              name=python-pymongo state=present
