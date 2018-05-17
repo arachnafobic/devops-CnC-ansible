@@ -1,2 +1,60 @@
 ---
 
+- name:             create graphite user
+  user:             name=_graphite system=yes createhome=no comment="Graphite user" state=present
+
+- name:             (re)create webapp/graphite/local_settings.py
+  template:         dest=/opt/graphite/webapp/graphite/local_settings.py src=local_settings.py.j2
+                    owner=_graphite group=_graphite mode=0644
+  notify:           restart uwsgi
+
+- name:             move graphite.wsgi.example to graphite.wsgi
+  shell:            mv graphite.wsgi.example graphite.wsgi
+  args:
+   chdir:           /opt/graphite/conf/
+   creates:         /opt/graphite/conf/graphite.wsgi
+   removes:         /opt/graphite/conf/graphite.wsgi.example
+  notify:           restart uwsgi
+
+- name:             remove graphite example configs
+  file:             path="/opt/graphite/conf/{{ item }}.example" state=absent
+  with_items:
+    - "{{ graphite_configs }}"
+
+- name:             (re)create our graphite configs
+  copy:             src="{{ item }}" dest="/opt/graphite/conf/{{ item }}"
+  with_items:
+    - "{{ graphite_configs }}"
+  notify:           restart carbon-cache
+
+- name:             (re)create uwsgi config for graphite
+  copy:             src=graphite.ini dest=/etc/uwsgi/apps-enabled/graphite.ini
+  notify:           restart uwsgi
+
+- name:             setup initial django database
+  shell:            django-admin.py migrate --settings=graphite.settings --run-syncdb
+  args:
+    chdir:          /opt/graphite
+    creates:        /opt/graphite/storage/graphite.db
+  environment:
+    PYTHONPATH:     "/opt/graphite/lib/:/opt/graphite/webapp/"
+
+- name:             create static django assets
+  shell:            django-admin.py collectstatic --noinput --settings=graphite.settings
+  args:
+    chdir:          /opt/graphite
+    creates:        /opt/graphite/static/js/dashboard.js
+  environment:
+    PYTHONPATH:     "/opt/graphite/lib/:/opt/graphite/webapp/"
+
+- name:             make graphite user owner off /opt/graphite, recursivly
+  file:             dest=/opt/graphite owner=_graphite group=_graphite mode=u=rwX,g=rX,o=rX recurse=yes
+  changed_when:     false
+
+- name:             add carbon-cache to systemd
+  copy:             src=graphite_carbon_cache.service dest=/etc/systemd/system/graphite_carbon_cache.service
+                    owner=root group=root mode=0644
+
+- name:             (re)create relay.json config for sensu
+  copy:             src=relay.json dest=/etc/sensu/conf.d/relay.json
+                    owner=sensu group=sensu mode=0600

@@ -28,3 +28,13 @@
 - name:             touch sensu-api in /root/stat_services.d
   file:             path=/root/stat_services.d/sensu-api state=touch
   changed_when:     false
+
+- name:             clone wizardvan (graphite handler)
+  git:              repo=https://github.com/grepory/wizardvan
+                    dest=/tmp/wizardvan
+
+- name:             copy graphite handler and mutator
+  shell:            cp -R lib/sensu/extensions/* /etc/sensu/extensions
+  args:
+    chdir:          /tmp/wizardvan/
+    creates:        /etc/sensu/extensions/mutators/metrics.rb

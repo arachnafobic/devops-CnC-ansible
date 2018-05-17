@@ -49,6 +49,7 @@ server {
   add_header          X-Content-Type-Options nosniff;
 
   satisfy any;
+  allow   127.0.0.1/32;
   allow   172.28.128.0/24;
   deny    all;
 
@@ -223,93 +224,8 @@ server {
     uwsgi_pass graphite;
   }
 
-  location /content {
-    alias /usr/share/graphite-web/static;
-    add_header Access-Control-Allow-Origin "*";
-    add_header Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE";
-    add_header Access-Control-Allow-Headers "X-Requested-With, X-Requested-By, Origin, Authorization, Accept, Content-Type, Pragma";
-    add_header Access-Control-Allow-Credentials "true";
-
-    gzip       off;
-    include    uwsgi_params;
-    uwsgi_pass graphite;
-  }
-
-  location /metrics {
-    add_header Access-Control-Allow-Origin "*";
-    add_header Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE";
-    add_header Access-Control-Allow-Headers "X-Requested-With, X-Requested-By, Origin, Authorization, Accept, Content-Type, Pragma";
-    add_header Access-Control-Allow-Credentials "true";
-
-    gzip       off;
-    include    uwsgi_params;
-    uwsgi_pass graphite;
-  }
-
-  location /dashboard {
-    add_header Access-Control-Allow-Origin "*";
-    add_header Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE";
-    add_header Access-Control-Allow-Headers "X-Requested-With, X-Requested-By, Origin, Authorization, Accept, Content-Type, Pragma";
-    add_header Access-Control-Allow-Credentials "true";
-
-    gzip       off;
-    include    uwsgi_params;
-    uwsgi_pass graphite;
-  }
-
-  location /render {
-    add_header Access-Control-Allow-Origin "*";
-    add_header Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE";
-    add_header Access-Control-Allow-Headers "X-Requested-With, X-Requested-By, Origin, Authorization, Accept, Content-Type, Pragma";
-    add_header Access-Control-Allow-Credentials "true";
-
-    gzip       off;
-    include    uwsgi_params;
-    uwsgi_pass graphite;
-  }
-
-  location /graphlot {
-    add_header Access-Control-Allow-Origin "*";
-    add_header Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE";
-    add_header Access-Control-Allow-Headers "X-Requested-With, X-Requested-By, Origin, Authorization, Accept, Content-Type, Pragma";
-    add_header Access-Control-Allow-Credentials "true";
-
-    gzip       off;
-    include    uwsgi_params;
-    uwsgi_pass graphite;
-  }
-
-  location /browser {
-    add_header Access-Control-Allow-Origin "*";
-    add_header Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE";
-    add_header Access-Control-Allow-Headers "X-Requested-With, X-Requested-By, Origin, Authorization, Accept, Content-Type, Pragma";
-    add_header Access-Control-Allow-Credentials "true";
-
-    gzip       off;
-    include    uwsgi_params;
-    uwsgi_pass graphite;
-  }
-
-  location /composer {
-    add_header Access-Control-Allow-Origin "*";
-    add_header Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE";
-    add_header Access-Control-Allow-Headers "X-Requested-With, X-Requested-By, Origin, Authorization, Accept, Content-Type, Pragma";
-    add_header Access-Control-Allow-Credentials "true";
-
-    gzip       off;
-    include    uwsgi_params;
-    uwsgi_pass graphite;
-  }
-
-  location /events {
-    add_header Access-Control-Allow-Origin "*";
-    add_header Access-Control-Allow-Methods "GET, OPTIONS, POST, HEAD, PUT, DELETE";
-    add_header Access-Control-Allow-Headers "X-Requested-With, X-Requested-By, Origin, Authorization, Accept, Content-Type, Pragma";
-    add_header Access-Control-Allow-Credentials "true";
-
-    gzip       off;
-    include    uwsgi_params;
-    uwsgi_pass graphite;
+  location /graphite/static {
+    alias /opt/graphite/static/;
   }
 
   location /netdata/monitor {

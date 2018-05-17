@@ -1,0 +1,18 @@
+---
+
+# Change this or overwrite it in group_vars or host_vars
+graphite_secret_key:   ATLEAST_ITS_DIFFERENT
+
+graphite_configs:
+  - aggregation-rules.conf
+  - blacklist.conf
+  - carbon.amqp.conf
+  - carbon.conf
+  - dashboard.conf
+  - graphTemplates.conf
+  - relay-rules.conf
+  - rewrite-rules.conf
+  - storage-aggregation.conf
+  - storage-schemas.conf
+  - whitelist.conf
+

@@ -1,0 +1,13 @@
+{
+  "checks":
+    {
+      "metric-vmstat":
+        {
+          "type": "metric",
+          "command": "/opt/sensu/embedded/bin/metrics-vmstat.rb",
+          "subscribers": [ "all" ],
+          "interval": 20,
+          "handlers": [ "relay" ]
+        }
+    }
+}

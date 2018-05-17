@@ -1,0 +1,9 @@
+{
+  "relay": {
+    "graphite": {
+        "host": "127.0.0.1",
+        "port": 2003,
+        "max_queue_size": 16384
+    }
+  }
+}

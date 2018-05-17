@@ -1,0 +1,6 @@
+---
+
+- name:             (re)create metrics "check"
+  copy:             src=metrics_vmstat.json dest=/etc/sensu/conf.d/metrics_vmstat.json
+                    owner=sensu group=sensu mode=0600
+  notify:           restart sensu-client

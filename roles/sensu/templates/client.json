@@ -13,7 +13,6 @@
       "high_flap_threshold": 20,
       "low_flap_threshold": 5,
       "refresh": 14400,
-      "handlers": ["flapjack"],
       "type": "metric",
       "thresholds": {
         "critical": 120,

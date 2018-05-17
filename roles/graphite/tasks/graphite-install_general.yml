@@ -1,11 +1,42 @@
 ---
 
-- name:             install graphite through pip
-  pip:              name={{ item }} state=present umask=0022
-  extra_args:       "--no-binary=:all: --install-option='--prefix=/opt'"
+#- name:             install graphite through pip
+#  pip:              name={{ item }} state=present umask=0022
+#  extra_args:       "--no-binary=:all: --install-option='--prefix=/opt'"
+#  with_items:
+#    - https://github.com/graphite-project/whisper/tarball/master
+#    - https://github.com/graphite-project/carbon/tarball/master
+#    - https://github.com/graphite-project/graphite-web/tarball/master
+#  environment:
+#    PYTHONPATH:     "/opt/graphite/lib/:/opt/graphite/webapp/"
+
+# The commented above pip module task installs graphite into /usr/local no matter what.
+# As workaround using shell to evoke pip instead, this installs into /opt/graphite.
+# This does mean 3 tasks, to use creates= to make it somewhat idempotent
+#
+- name:             install whisper through pip
+  shell:           "pip install --no-binary=:all: {{ item }}"
+  args:
+    creates:        /usr/local/bin/whisper-info.py
   with_items:
     - https://github.com/graphite-project/whisper/tarball/master
+  environment:
+    PYTHONPATH:     "/opt/graphite/lib/:/opt/graphite/webapp/"
+
+- name:             install graphite-carbon through pip
+  shell:           "pip install --no-binary=:all: {{ item }}"
+  args:
+    creates:        /opt/graphite/bin/carbon-cache.py
+  with_items:
     - https://github.com/graphite-project/carbon/tarball/master
+  environment:
+    PYTHONPATH:     "/opt/graphite/lib/:/opt/graphite/webapp/"
+
+- name:             install graphite-web through pip
+  shell:           "pip install --no-binary=:all: {{ item }}"
+  args:
+    creates:        /opt/graphite/webapp/graphite/__init__.py
+  with_items:
     - https://github.com/graphite-project/graphite-web/tarball/master
-  enviroment:
+  environment:
     PYTHONPATH:     "/opt/graphite/lib/:/opt/graphite/webapp/"

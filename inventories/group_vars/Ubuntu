@@ -31,6 +31,7 @@ install_tools:
   - python-software-properties
   - lm-sensors
   - netcat
+  - sqlite3
 install_dev:
   - build-essential
   - zlib1g-dev
@@ -106,6 +107,9 @@ pkgs_sensu:
   - sensu
 pkgs_uchiwa:
   - uchiwa
+pkgs_uwsgi:
+  - uwsgi
+  - uwsgi-plugin-python
 pkgs_nginx:
   - nginx
 pkgs_mariadb:
