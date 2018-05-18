@@ -1,7 +1,7 @@
 ---
 
 - name:             reload nginx
-  service:          name=nginx enabled=yes state=restarted
+  service:          name=nginx state=reloaded
 
 - name:             restart sensu-client
   service:          name=sensu-client enabled=yes state=restarted

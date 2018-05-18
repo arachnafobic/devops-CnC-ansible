@@ -13,3 +13,9 @@
   notify:
     - restart grafana
     - reload nginx
+
+- name:             setup datasource provisioning for graphite
+  copy:             src=datasource.yaml dest=/etc/grafana/provisioning/datasources/datasource.yaml
+                    owner=root group=grafana mode=0640
+  notify:
+    - restart grafana
