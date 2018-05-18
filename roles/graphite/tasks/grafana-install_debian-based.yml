@@ -1,0 +1,24 @@
+---
+
+- name:             get apt key for package cloud
+  get_url:          url=https://packagecloud.io/gpg.key dest=/root/cache/D59097AB.asc
+                    sha256sum=e42d7eb66290ac070ac66d056ca9fbc65bee202fad915a1f595b643558c5fd4a
+
+- name:             install apt key for package cloud
+  apt_key:          id=D59097AB file=/root/cache/D59097AB.asc state=present
+
+- name:             sources.list.d for grafana
+  template:         dest=/etc/apt/sources.list.d/grafana.list src=grafana.list
+                    owner=root group=root mode=0644
+  register:         grafana_sources
+
+- name:             update apt cache
+  apt:              update_cache=yes
+  when:             grafana_sources is changed
+
+- name:             install grafana package if missing
+  apt:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_grafana }}"
+  register:         grafana_install
+

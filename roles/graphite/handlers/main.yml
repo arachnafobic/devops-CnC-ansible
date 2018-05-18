@@ -6,3 +6,8 @@
 - name:             restart uwsgi
   service:          name=uwsgi state=restarted enabled=yes
 
+- name:             restart grafana
+  service:          name=grafana-server state=restarted enabled=yes
+
+- name:             reload nginx
+  service:          name=nginx state=reloaded

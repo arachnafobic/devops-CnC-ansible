@@ -1,0 +1,15 @@
+---
+
+- name:             update grafana config
+  lineinfile:       dest=/etc/grafana/grafana.ini
+                    state=present
+                    regexp=^;{{ item.key }}
+                    line="{{ item.key }} = {{ item.value }}"
+                    insertafter=EOF
+  with_items:
+    - { key: 'http_addr', value: '127.0.0.1' }
+    - { key: 'http_port', value: '3100' }
+    - { key: 'root_url', value: 'http://monitor.172.28.128.3.xip.io/grafana' }
+  notify:
+    - restart grafana
+    - reload nginx

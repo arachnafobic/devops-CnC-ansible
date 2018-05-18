@@ -6,3 +6,8 @@
   when:             pkgs_uwsgi is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
 
 - include_tasks:    graphite-setup_general.yml
+
+- include_tasks:    grafana-install_debian-based.yml
+  when:             pkgs_grafana is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+
+- include_tasks:    grafana-setup_general.yml

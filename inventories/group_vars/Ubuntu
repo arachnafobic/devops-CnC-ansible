@@ -107,6 +107,8 @@ pkgs_sensu:
   - sensu
 pkgs_uchiwa:
   - uchiwa
+pkgs_grafana:
+  - grafana
 pkgs_uwsgi:
   - uwsgi
   - uwsgi-plugin-python
