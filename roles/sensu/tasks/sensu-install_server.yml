@@ -1,0 +1,11 @@
+---
+
+- name:             clone wizardvan (graphite handler)
+  git:              repo=https://github.com/grepory/wizardvan
+                    dest=/tmp/wizardvan
+
+- name:             copy graphite handler and mutator
+  shell:            cp -R lib/sensu/extensions/* /etc/sensu/extensions
+  args:
+    chdir:          /tmp/wizardvan/
+    creates:        /etc/sensu/extensions/mutators/metrics.rb

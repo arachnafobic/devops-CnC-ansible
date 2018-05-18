@@ -1,14 +1,35 @@
 ---
 
+# Install omnibus sensu package
+#
 - include_tasks:    sensu-install_debian-based.yml
   when:             pkgs_sensu is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
 
+# Install extra handlers and extensions on the server
+#
+- include_tasks:    sensu-install_server.yml
+
+# Copy tls keys and configure rabbitmq
+#
 - include_tasks:    sensu-setup_general.yml
 
+# Copy general server configs and base checks
+# Start/Enable server and api
+#
 - include_tasks:    sensu-setup_server.yml
   when:             inventory_hostname in groups['monitor']
 
+# Install base plugins for checks used on all servers
+#
 - include_tasks:    sensu-setup_client.yml
 
+# Install uchiwa package
+#
 - include_tasks:    uchiwa-install_debian-based.yml
   when:             pkgs_uchiwa is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian") and inventory_hostname in groups['monitor']
+
+# Config uchiwa
+# Start/Enable uchiwa
+#
+- include_tasks:    uchiwa-setup_server.yml
+  when:             inventory_hostname in groups['monitor']

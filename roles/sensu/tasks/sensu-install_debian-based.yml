@@ -22,7 +22,8 @@
     - "{{ pkgs_sensu }}"
   register:         sensu_install
 
-- name:             clone sensu-community-plugins at specific HEAD (workaround)
-  git:              repo=https://github.com/sensu/sensu-community-plugins.git
-                    dest=/opt/src/sensu-community-plugins
-                    version=d7f987a23699bf18cb923ed68a4a434f035751d2
+# legacy 0.2x task, haven't needed this repo since sensu's new plugin manager was added
+#- name:             clone sensu-community-plugins at specific HEAD (workaround)
+#  git:              repo=https://github.com/sensu/sensu-community-plugins.git
+#                    dest=/opt/src/sensu-community-plugins
+#                    version=d7f987a23699bf18cb923ed68a4a434f035751d2

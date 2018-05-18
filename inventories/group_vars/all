@@ -14,8 +14,9 @@ sensu_default_plugins:
   - memory-checks
   - process-checks
   - load-checks
+
+sensu_client_plugins:
   - vmstats
-  - mailer
 
 release:        "{{ ansible_distribution_release }}"
 gems:

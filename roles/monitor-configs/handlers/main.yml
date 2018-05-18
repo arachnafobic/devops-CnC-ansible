@@ -5,3 +5,9 @@
 
 - name:             restart sensu-client
   service:          name=sensu-client enabled=yes state=restarted
+
+- name:             restart sensu-server
+  service:          name=sensu-server enabled=yes state=restarted
+
+- name:             restart sensu-api
+  service:          name=sensu-api enabled=yes state=restarted
