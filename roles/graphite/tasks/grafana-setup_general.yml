@@ -3,9 +3,8 @@
 - name:             update grafana config
   lineinfile:       dest=/etc/grafana/grafana.ini
                     state=present
-                    regexp=^;{{ item.key }}
+                    regexp=^(.*){{ item.key }}
                     line="{{ item.key }} = {{ item.value }}"
-                    insertafter=EOF
   with_items:
     - { key: 'http_addr', value: '127.0.0.1' }
     - { key: 'http_port', value: '3100' }
