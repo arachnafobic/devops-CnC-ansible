@@ -112,6 +112,9 @@ pkgs_grafana:
 pkgs_uwsgi:
   - uwsgi
   - uwsgi-plugin-python
+pkgs_elasticsearch:
+  - openjdk-8-jre-headless
+  - elasticsearch
 pkgs_nginx:
   - nginx
 pkgs_mariadb:

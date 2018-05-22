@@ -1,0 +1,27 @@
+---
+
+- name:             get apt key for elasticsearch
+  get_url:          url=https://artifacts.elastic.co/GPG-KEY-elasticsearch dest=/root/cache/D88E42B4.asc
+                    sha256sum=10e406ba504706f44fbfa57a8daba5cec2678b31c1722e262ebecb5102d07659
+
+- name:             install apt key for elasticsearch
+  apt_key:          id=D88E42B4 file=/root/cache/D88E42B4.asc state=present
+
+- name:             sources.list.d for elasticsearch
+  template:         dest=/etc/apt/sources.list.d/elasticsearch.list src=elasticsearch.list
+                    owner=root group=root mode=0644
+  register:         elasticsearch_sources
+
+- name:             update apt cache
+  apt:              update_cache=yes
+  when:             elasticsearch_sources is changed
+
+- name:             install elasticsearch package
+  apt:              name={{ item }} state=present install_recommends=no
+  with_items:
+    - "{{ pkgs_elasticsearch }}"
+  register:         elasticsearch_install
+
+- name:             touch elasticsearch in /root/stat_services.d
+  file:             path=/root/stat_services.d/elasticsearch state=touch
+  changed_when:     false

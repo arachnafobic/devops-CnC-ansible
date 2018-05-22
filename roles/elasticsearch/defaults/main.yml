@@ -1,0 +1,4 @@
+---
+
+elasticsearch_curator: true
+elasticsearch_head: true

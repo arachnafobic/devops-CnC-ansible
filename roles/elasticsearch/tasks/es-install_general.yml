@@ -1,0 +1,41 @@
+---
+
+- name:             install curator tool
+  pip:              name=elasticsearch-curator state=present
+  when:             elasticsearch_curator == true
+
+- name:             create keystore
+  shell:            bin/elasticsearch-keystore create
+                    chdir=/usr/share/elasticsearch
+                    creates=/etc/elasticsearch/elasticsearch.keystore
+
+- name:             get stat into of status file
+  stat:             path=/opt/elasticsearch-head/package.json
+  register:         eshead_check
+  when:             elasticsearch_head == true
+  changed_when:     false
+
+- name:             clone head tool
+  git:              repo=git://github.com/mobz/elasticsearch-head.git
+                    dest=/opt/elasticsearch-head
+  when:             elasticsearch_head == true and eshead_check.stat.exists == false
+
+- name:             install head tool
+  shell:            npm install
+                    chdir=/opt/elasticsearch-head
+                    creates=/opt/elasticsearch-head/node_modules/grunt/bin/grunt
+  when:             elasticsearch_head == true and eshead_check.stat.exists == false
+
+- name:             chown head to elasticsearch
+  file:             dest=/opt/elasticsearch-head owner=elasticsearch group=elasticsearch mode=u=rwX,g=rX,o=rX recurse=yes
+  changed_when:     false
+
+- name:             (re)create service file for head
+  copy:             src=elasticsearch-head.service dest=/usr/lib/systemd/system/elasticsearch-head.service
+                    owner=root group=root mode=0644
+
+- name:             start and enable elasticsearch
+  service:          name=elasticsearch state=started enabled=yes
+
+- name:             start and enable elasticsearch-head
+  service:          name=elasticsearch-head state=started enabled=yes

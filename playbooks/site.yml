@@ -132,6 +132,11 @@
   vars:
     targets: monitor
 
+- import_playbook: ../roles/elasticsearch.yml
+  tags: [elasticsearch, services]
+  vars:
+    targets: monitor
+
 - import_playbook: ../roles/monitor-configs.yml
   tags: [monitor-configs, services]
   vars:
