@@ -9,6 +9,17 @@
                     chdir=/usr/share/elasticsearch
                     creates=/etc/elasticsearch/elasticsearch.keystore
 
+- name:             force java to ipv4 and setup jmx profiling
+  lineinfile:       dest=/etc/default/elasticsearch
+                    state=present
+                    line="{{ item.key }}={{ item.value }}"
+  with_items:
+    - { key: 'ES_JAVA_OPTS', value: '"-Djava.net.preferIPv4Stack=true"' }
+    - { key: 'ES_JAVA_OPTS', value: '"$ES_JAVA_OPTS -Dcom.sun.management.jmxremote.port=6789"' }
+    - { key: 'ES_JAVA_OPTS', value: '"$ES_JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"' }
+    - { key: 'ES_JAVA_OPTS', value: '"$ES_JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false"' }
+    - { key: 'ES_JAVA_OPTS', value: '"$ES_JAVA_OPTS -Djava.rmi.server.hostname=172.28.128.3"' }
+
 - name:             get stat into of status file
   stat:             path=/opt/elasticsearch-head/package.json
   register:         eshead_check
@@ -39,3 +50,8 @@
 
 - name:             start and enable elasticsearch-head
   service:          name=elasticsearch-head state=started enabled=yes
+
+
+#
+#                    regexp=^(.*){{ item.key }}
+#
