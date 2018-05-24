@@ -86,6 +86,12 @@
     - https
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
+- name:             Allow internal network on VMs
+  ufw:              rule=allow src={{ item }}
+  with_items:
+    - 172.28.128.0/24
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian" and ansible_virtualization_role == "guest"
+
 - name:             Deny everything and enable UFW
   ufw:              state=enabled policy=deny
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
