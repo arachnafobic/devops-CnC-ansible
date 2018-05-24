@@ -115,6 +115,9 @@ pkgs_uwsgi:
 pkgs_elasticsearch:
   - openjdk-8-jre-headless
   - elasticsearch
+pkgs_logstash:
+  - openjdk-8-jre-headless
+  - logstash
 pkgs_nginx:
   - nginx
 pkgs_mariadb:

@@ -1,0 +1,27 @@
+---
+
+- name:             get apt key for elastic.co
+  get_url:          url=https://artifacts.elastic.co/GPG-KEY-elasticsearch dest=/root/cache/D88E42B4.asc
+                    sha256sum=10e406ba504706f44fbfa57a8daba5cec2678b31c1722e262ebecb5102d07659
+
+- name:             install apt key for elastic.co
+  apt_key:          id=D88E42B4 file=/root/cache/D88E42B4.asc state=present
+
+- name:             sources.list.d for elastic.co
+  template:         dest=/etc/apt/sources.list.d/elastic.list src=elastic.list
+                    owner=root group=root mode=0644
+  register:         logstash_sources
+
+- name:             update apt cache
+  apt:              update_cache=yes
+  when:             logstash_sources is changed
+
+- name:             install logstash package
+  apt:              name={{ item }} state=present install_recommends=no
+  with_items:
+    - "{{ pkgs_logstash }}"
+  register:         logstash_install
+
+- name:             touch logstash in /root/stat_services.d
+  file:             path=/root/stat_services.d/logstash state=touch
+  changed_when:     false

@@ -121,7 +121,7 @@
   vars:
     targets: phpfpm
 
-# monitoring systems and clients
+# monitoring/logging systems and clients
 - import_playbook: ../roles/sensu.yml
   tags: [sensu, services]
   vars:
@@ -134,6 +134,11 @@
 
 - import_playbook: ../roles/elasticsearch.yml
   tags: [elasticsearch, services]
+  vars:
+    targets: monitor
+
+- import_playbook: ../roles/logstash.yml
+  tags: [logstash, services]
   vars:
     targets: monitor
 

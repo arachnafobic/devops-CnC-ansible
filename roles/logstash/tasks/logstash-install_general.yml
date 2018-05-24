@@ -1,0 +1,23 @@
+---
+
+- name:             force java to ipv4 and setup jmx profiling
+  lineinfile:       dest=/etc/logstash/jvm.options
+                    state=present
+                    line="{{ item }}"
+  with_items:
+    - "-Djava.net.preferIPv4Stack=true"
+    - "-Dcom.sun.management.jmxremote.port=6790"
+    - "-Dcom.sun.management.jmxremote.ssl=false"
+    - "-Dcom.sun.management.jmxremote.authenticate=false"
+    - "-Djava.rmi.server.hostname=172.28.128.3"
+  notify:
+    - restart logstash
+
+- name:             (re)create default pipelines
+  copy:             src={{ item }} dest=/etc/logstash/conf.d/{{ item }}
+                    owner=root group=root mode=0644
+  with_items:
+    - 00-syslog.conf
+
+- name:             start and enable logstash
+  service:          name=logstash state=started enabled=yes
