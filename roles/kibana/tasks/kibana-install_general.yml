@@ -1,0 +1,14 @@
+---
+
+- name:             update kibana config
+  lineinfile:       dest=/etc/kibana/kibana.yml
+                    state=present
+                    regexp=^{{ item.search }}
+                    line="{{ item.replace }}"
+                    insertafter=EOF
+  with_items:
+    - { search: '#server.basePath: ""', replace: 'server.basePath: "/kibana"' }
+
+- name:             start and enable kibana
+  service:          name=kibana state=started enabled=yes
+

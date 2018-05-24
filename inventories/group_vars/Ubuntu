@@ -118,6 +118,10 @@ pkgs_elasticsearch:
 pkgs_logstash:
   - openjdk-8-jre-headless
   - logstash
+pkgs_kibana:
+  - kibana
+pkgs_beats:
+  - filebeat
 pkgs_nginx:
   - nginx
 pkgs_mariadb:

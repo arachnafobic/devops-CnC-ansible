@@ -1,0 +1,14 @@
+---
+
+- name:             update filebeat config
+  lineinfile:       dest=/etc/filebeat/filebeat.yml
+                    state=present
+                    regexp=^{{ item.search }}
+                    line="{{ item.replace }}"
+                    insertafter=EOF
+  with_items:
+    - { search: 'output.elasticsearch:', replace: '#output.elasticsearch:' }
+    - { search: '  hosts: \["localhost:9200"\]', replace: '  #hosts: ["localhost:9200"]' }
+    - { search: '#output.logstash:', replace: 'output.logstash:' }
+    - { search: '  #hosts: \["localhost:5044"\]', replace: '  hosts: ["localhost:5044"]' }
+

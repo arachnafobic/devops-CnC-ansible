@@ -137,10 +137,20 @@
   vars:
     targets: monitor
 
+- import_playbook: ../roles/kibana.yml
+  tags: [kibana, services]
+  vars:
+    targets: monitor
+
 - import_playbook: ../roles/logstash.yml
   tags: [logstash, services]
   vars:
     targets: monitor
+
+- import_playbook: ../roles/beats.yml
+  tags: [beats, services]
+  vars:
+    targets: all
 
 - import_playbook: ../roles/monitor-configs.yml
   tags: [monitor-configs, services]
