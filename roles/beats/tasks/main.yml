@@ -5,3 +5,4 @@
 
 - include_tasks:    beats-install_general.yml
 
+- include_tasks:    beats-modules_setup.yml

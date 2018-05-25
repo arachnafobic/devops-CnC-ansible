@@ -1,0 +1,7 @@
+---
+
+- name:             restart filebeat
+  service:          name=filebeat state=restarted enabled=yes
+
+- name:             restart metricbeat
+  service:          name=metricbeat state=restarted enabled=yes

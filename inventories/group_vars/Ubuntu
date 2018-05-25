@@ -122,6 +122,7 @@ pkgs_kibana:
   - kibana
 pkgs_beats:
   - filebeat
+  - metricbeat
 pkgs_nginx:
   - nginx
 pkgs_mariadb:

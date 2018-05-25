@@ -6,9 +6,24 @@
                     regexp=^{{ item.search }}
                     line="{{ item.replace }}"
                     insertafter=EOF backrefs=yes
+  register:         filebeat_config_update
   with_items:
     - { search: 'output.elasticsearch:', replace: '#output.elasticsearch:' }
     - { search: '  hosts: \["localhost:9200"\]', replace: '  #hosts: ["localhost:9200"]' }
     - { search: '#output.logstash:', replace: 'output.logstash:' }
     - { search: '  #hosts: \["localhost:5044"\]', replace: '  hosts: ["localhost:5044"]' }
+    - { search: '  index.number_of_shards: 3', replace: '  index.number_of_shards: 1\n  index.number_of_replicas: 0' }
 
+- name:             update metricbeat config
+  lineinfile:       dest=/etc/metricbeat/metricbeat.yml
+                    state=present
+                    regexp=^{{ item.search }}
+                    line="{{ item.replace }}"
+                    insertafter=EOF backrefs=yes
+  register:         metricbeat_config_update
+  with_items:
+    - { search: 'output.elasticsearch:', replace: '#output.elasticsearch:' }
+    - { search: '  hosts: \["localhost:9200"\]', replace: '  #hosts: ["localhost:9200"]' }
+    - { search: '#output.logstash:', replace: 'output.logstash:' }
+    - { search: '  #hosts: \["localhost:5044"\]', replace: '  hosts: ["localhost:5044"]' }
+    - { search: '  index.number_of_shards: 1', replace: '  index.number_of_shards: 1\n  index.number_of_replicas: 0' }
