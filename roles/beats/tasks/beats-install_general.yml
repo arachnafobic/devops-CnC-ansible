@@ -5,7 +5,7 @@
                     state=present
                     regexp=^{{ item.search }}
                     line="{{ item.replace }}"
-                    insertafter=EOF
+                    insertafter=EOF backrefs=yes
   with_items:
     - { search: 'output.elasticsearch:', replace: '#output.elasticsearch:' }
     - { search: '  hosts: \["localhost:9200"\]', replace: '  #hosts: ["localhost:9200"]' }

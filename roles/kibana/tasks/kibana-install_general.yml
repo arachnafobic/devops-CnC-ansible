@@ -5,7 +5,7 @@
                     state=present
                     regexp=^{{ item.search }}
                     line="{{ item.replace }}"
-                    insertafter=EOF
+                    insertafter=EOF backrefs=yes
   with_items:
     - { search: '#server.basePath: ""', replace: 'server.basePath: "/kibana"' }
 
