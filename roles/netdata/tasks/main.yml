@@ -4,11 +4,23 @@
   git:              repo="https://github.com/firehol/netdata"
                     dest="/usr/local/src/netdata"
                     depth=1
+  register:         netdata_clone
 
 - name:             install | Run netdata installer
   shell:            ./netdata-installer.sh --dont-wait 1>~/tmp/netdata-installer.log
                     chdir=/usr/local/src/netdata
                     creates=/usr/sbin/netdata
+  register:         netdata_install
+  notify:
+    - restart netdata
+
+- name:             update | Run netdata updater
+  shell:            ./netdata-updater.sh 1>~/tmp/netdata-updater.log
+                    chdir=/usr/local/src/netdata
+  register:         netdata_update
+  when:
+    - netdata_clone is changed
+    - netdata_install is not changed
   notify:
     - restart netdata
 
