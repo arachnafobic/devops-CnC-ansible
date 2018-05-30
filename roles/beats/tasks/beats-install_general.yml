@@ -15,11 +15,9 @@
     - { search: '  index.number_of_shards: 3', replace: '  index.number_of_shards: 1\n  index.number_of_replicas: 0' }
 
 - name:             update metricbeat config
-  lineinfile:       dest=/etc/metricbeat/metricbeat.yml
-                    state=present
+  replace:          dest=/etc/metricbeat/metricbeat.yml
                     regexp=^{{ item.search }}
-                    line="{{ item.replace }}"
-                    insertafter=EOF backrefs=yes
+                    replace="{{ item.replace }}"
   register:         metricbeat_config_update
   with_items:
     - { search: 'output.elasticsearch:', replace: '#output.elasticsearch:' }
@@ -27,3 +25,34 @@
     - { search: '#output.logstash:', replace: 'output.logstash:' }
     - { search: '  #hosts: \["localhost:5044"\]', replace: '  hosts: ["localhost:5044"]' }
     - { search: '  index.number_of_shards: 1\n  index.codec: best_compression', replace: '  index.number_of_shards: 1\n  index.number_of_replicas: 0\n  index.codec: best_compression' }
+
+- name:             update auditbeat config
+  lineinfile:       dest=/etc/auditbeat/auditbeat.yml
+                    state=present
+                    regexp=^{{ item.search }}
+                    line="{{ item.replace }}"
+                    insertafter=EOF backrefs=yes
+  register:         auditbeat_config_update
+  with_items:
+    - { search: 'output.elasticsearch:', replace: '#output.elasticsearch:' }
+    - { search: '  hosts: \["localhost:9200"\]', replace: '  #hosts: ["localhost:9200"]' }
+    - { search: '#output.logstash:', replace: 'output.logstash:' }
+    - { search: '  #hosts: \["localhost:5044"\]', replace: '  hosts: ["localhost:5044"]' }
+    - { search: '  index.number_of_shards: 3', replace: '  index.number_of_shards: 1\n  index.number_of_replicas: 0' }
+
+- name:             update packetbeat config
+  lineinfile:       dest=/etc/packetbeat/packetbeat.yml
+                    state=present
+                    regexp=^{{ item.search }}
+                    line="{{ item.replace }}"
+                    insertafter=EOF backrefs=yes
+  register:         packetbeat_config_update
+  with_items:
+    - { search: 'output.elasticsearch:', replace: '#output.elasticsearch:' }
+    - { search: '  hosts: \["localhost:9200"\]', replace: '  #hosts: ["localhost:9200"]' }
+    - { search: '#output.logstash:', replace: 'output.logstash:' }
+    - { search: '  #hosts: \["localhost:5044"\]', replace: '  hosts: ["localhost:5044"]' }
+    - { search: '  index.number_of_shards: 3', replace: '  index.number_of_shards: 1\n  index.number_of_replicas: 0' }
+    - { search: '  ports: \[9042\]', replace: '  #ports: [9042]' }
+    - { search: '  ports: \[9090\]', replace: '  #ports: [9090]' }
+    - { search: '  ports: \[2049\]', replace: '  #ports: [2049]' }

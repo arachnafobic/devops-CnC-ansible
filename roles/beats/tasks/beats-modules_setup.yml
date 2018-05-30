@@ -20,3 +20,17 @@
   when:
     - "'monitor' in group_names"
     - metricbeat_config_update is changed
+
+- name:             (re)run auditbeat setup if required
+  shell:            auditbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]'
+  notify:           restart auditbeat
+  when:
+    - "'monitor' in group_names"
+    - auditbeat_config_update is changed
+
+- name:             (re)run packetbeat setup if required
+  shell:            packetbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]'
+  notify:           restart packetbeat
+  when:
+    - "'monitor' in group_names"
+    - packetbeat_config_update is changed

@@ -5,3 +5,9 @@
 
 - name:             restart metricbeat
   service:          name=metricbeat state=restarted enabled=yes
+
+- name:             restart auditbeat
+  service:          name=auditbeat state=restarted enabled=yes
+
+- name:             restart packetbeat
+  service:          name=packetbeat state=restarted enabled=yes
