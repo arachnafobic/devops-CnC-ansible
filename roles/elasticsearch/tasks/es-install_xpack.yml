@@ -1,0 +1,38 @@
+---
+
+- name:             check if xpack was installed allready
+  stat:             path=/usr/share/elasticsearch/bin/x-pack/x-pack-env
+  register:         es_xpack_check
+  changed_when:     false
+
+- name:             ensure elasticsearch is stopped before installing xpack
+  service:          name=elasticsearch state=stopped enabled=yes
+  when:             es_xpack_check.stat.exists == false
+
+- name:             install xpack plugin for elasticsearch
+  shell:            bin/elasticsearch-plugin install --batch x-pack
+                    chdir=/usr/share/elasticsearch
+                    creates=/usr/share/elasticsearch/bin/x-pack/x-pack-env
+  register:         es_xpack_install
+
+- name:             ensure elasticsearch is started again for the next step
+  service:          name=elasticsearch state=started enabled=yes
+  when:             es_xpack_install is changed
+
+- name:             wait for elasticsearch to finish starting
+  wait_for:         port={{item}} delay=10 connect_timeout=10
+  with_items:
+    - 9200
+    - 9300
+
+- name:             generate system passwords if xpack is newly installed
+  shell:            bin/x-pack/setup-passwords auto --batch
+                    chdir=/usr/share/elasticsearch
+  register:         es_xpack_passwds
+  when:             es_xpack_install is changed
+
+- name:             place generated passwords into facts
+  set_fact:
+    xpack_passwd_kibana:   "{{ es_xpack_passwds.stdout_lines[1].split()[3] }}"
+    xpack_passwd_logstash: "{{ es_xpack_passwds.stdout_lines[4].split()[3] }}"
+    xpack_passwd_elastic:  "{{ es_xpack_passwds.stdout_lines[7].split()[3] }}"

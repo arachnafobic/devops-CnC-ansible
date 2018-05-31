@@ -1,5 +1,7 @@
 ---
 
+release:        "{{ ansible_distribution_release }}"
+
 # defaults, overwrite in distribution or host specific var files
 
 # CHANGE THESE IN PRODUCTION
@@ -18,7 +20,8 @@ sensu_default_plugins:
 sensu_client_plugins:
   - vmstats
 
-release:        "{{ ansible_distribution_release }}"
+elk_stack_use_xpack: true
+
 gems:
   - bundler
   - pry

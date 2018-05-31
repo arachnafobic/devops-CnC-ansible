@@ -8,7 +8,10 @@
                     insertafter=EOF backrefs=yes
   with_items:
     - { search: '#server.basePath: ""', replace: 'server.basePath: "/kibana"' }
+    - { search: '#elasticsearch.username: "user"', replace: 'elasticsearch.username: "kibana"' }
+    - { search: '#elasticsearch.password: "pass"', replace: 'elasticsearch.password: "{{ xpack_passwd_kibana }}"' }
+  notify:
+    - restart kibana
 
 - name:             start and enable kibana
   service:          name=kibana state=started enabled=yes
-

@@ -1,0 +1,17 @@
+---
+
+#- name:             check if xpack was installed allready
+#  stat:             path=/usr/share/kibana/plugins/x-pack/package.json
+#  register:         kibana_xpack_check
+#  changed_when:     false
+
+#- name:             ensure kibana is stopped before installing xpack
+#  service:          name=kibana state=stopped enabled=yes
+#  when:             kibana_xpack_check.stat.exists == false
+
+- name:             install xpack plugin for kibana
+  become_user:      kibana
+  shell:            bin/kibana-plugin install x-pack
+                    chdir=/usr/share/kibana
+                    creates=/usr/share/kibana/plugins/x-pack/package.json
+  register:         kibana_xpack_install

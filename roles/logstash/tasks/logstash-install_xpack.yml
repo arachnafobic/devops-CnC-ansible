@@ -1,0 +1,16 @@
+---
+
+#- name:             check if xpack was installed allready
+#  stat:             path=
+#  register:         logstash_xpack_check
+#  changed_when:     false
+
+#- name:             ensure logstash is stopped before installing xpack
+#  service:          name=logstash state=stopped enabled=yes
+#  when:             logstash_xpack_check.stat.exists == false
+
+- name:             install xpack plugin for logstash
+  shell:            bin/logstash-plugin install x-pack
+                    chdir=/usr/share/logstash
+  register:         logstash_xpack_install
+

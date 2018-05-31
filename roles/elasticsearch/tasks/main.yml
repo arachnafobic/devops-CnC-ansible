@@ -4,3 +4,8 @@
   when:             pkgs_elasticsearch is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
 
 - include_tasks:    es-install_general.yml
+
+- include_tasks:    es-install_xpack.yml
+  when:             elk_stack_use_xpack
+
+- include_tasks:    es-configure.yml
