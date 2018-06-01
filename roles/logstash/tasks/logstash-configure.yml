@@ -13,8 +13,19 @@
   notify:
     - restart logstash
 
+- name:             add xpack's authentication results to logstash's config
+  lineinfile:       dest=/etc/logstash/logstash.yml
+                    state=present
+                    line="{{ item }}"
+  with_items:
+    - "xpack.monitoring.elasticsearch.username: logstash_system"
+    - "xpack.monitoring.elasticsearch.password: {{ xpack_passwd_logstash }}"
+  when:             elk_stack_use_xpack
+  notify:
+    - restart logstash
+
 - name:             (re)create default pipelines
-  copy:             src={{ item }} dest=/etc/logstash/conf.d/{{ item }}
+  template:         src={{ item }} dest=/etc/logstash/conf.d/{{ item }}
                     owner=root group=root mode=0644
   with_items:
     - 00-syslog.conf

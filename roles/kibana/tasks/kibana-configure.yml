@@ -8,8 +8,19 @@
                     insertafter=EOF backrefs=yes
   with_items:
     - { search: '#server.basePath: ""', replace: 'server.basePath: "/kibana"' }
+  notify:
+    - restart kibana
+
+- name:             update kibana config -- xpack
+  lineinfile:       dest=/etc/kibana/kibana.yml
+                    state=present
+                    regexp=^{{ item.search }}
+                    line="{{ item.replace }}"
+                    insertafter=EOF backrefs=yes
+  with_items:
     - { search: '#elasticsearch.username: "user"', replace: 'elasticsearch.username: "kibana"' }
     - { search: '#elasticsearch.password: "pass"', replace: 'elasticsearch.password: "{{ xpack_passwd_kibana }}"' }
+  when:             elk_stack_use_xpack
   notify:
     - restart kibana
 

@@ -1,0 +1,38 @@
+---
+
+- name:             update filebeat config for xpack
+  replace:          dest=/etc/filebeat/filebeat.yml
+                    regexp=^{{ item.search }}
+                    replace="{{ item.replace }}"
+  register:         filebeat_config_xpack
+  with_items:
+    - { search: '#xpack.monitoring.enabled: false', replace: 'xpack.monitoring.enabled: true' }
+    - { search: '#xpack.monitoring.elasticsearch:', replace: 'xpack.monitoring.elasticsearch:\n   hosts: ["localhost:9200"]\n   username: "elastic"\n   password: "{{ xpack_passwd_elastic }}"' }
+
+- name:             update metricbeat config for xpack
+  replace:          dest=/etc/metricbeat/metricbeat.yml
+                    regexp=^{{ item.search }}
+                    replace="{{ item.replace }}"
+  register:         metricbeat_config_xpack
+  with_items:
+    - { search: '#xpack.monitoring.enabled: false', replace: 'xpack.monitoring.enabled: true' }
+    - { search: '#xpack.monitoring.elasticsearch:', replace: 'xpack.monitoring.elasticsearch:\n   hosts: ["localhost:9200"]\n   username: "elastic"\n   password: "{{ xpack_passwd_elastic }}"' }
+
+- name:             update auditbeat config for xpack
+  replace:          dest=/etc/auditbeat/auditbeat.yml
+                    regexp=^{{ item.search }}
+                    replace="{{ item.replace }}"
+  register:         auditbeat_config_xpack
+  with_items:
+    - { search: '#xpack.monitoring.enabled: false', replace: 'xpack.monitoring.enabled: true' }
+    - { search: '#xpack.monitoring.elasticsearch:', replace: 'xpack.monitoring.elasticsearch:\n   hosts: ["localhost:9200"]\n   username: "elastic"\n   password: "{{ xpack_passwd_elastic }}"' }
+
+- name:             update packetbeat config for xpack
+  replace:          dest=/etc/packetbeat/packetbeat.yml
+                    regexp=^{{ item.search }}
+                    replace="{{ item.replace }}"
+  register:         packetbeat_config_xpack
+  with_items:
+    - { search: '#xpack.monitoring.enabled: false', replace: 'xpack.monitoring.enabled: true' }
+    - { search: '#xpack.monitoring.elasticsearch:', replace: 'xpack.monitoring.elasticsearch:\n   hosts: ["localhost:9200"]\n   username: "elastic"\n   password: "{{ xpack_passwd_elastic }}"' }
+

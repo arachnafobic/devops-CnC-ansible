@@ -1,7 +1,7 @@
 ---
 
 #- name:             check if xpack was installed allready
-#  stat:             path=
+#  stat:             path=/usr/share/logstash/vendor/bundle/jruby/2.3.0/gems/x-pack-6.2.4-java/x-pack.gemspec
 #  register:         logstash_xpack_check
 #  changed_when:     false
 
@@ -10,7 +10,8 @@
 #  when:             logstash_xpack_check.stat.exists == false
 
 - name:             install xpack plugin for logstash
+  become_user:      logstash
   shell:            bin/logstash-plugin install x-pack
                     chdir=/usr/share/logstash
+                    creates=/usr/share/logstash/vendor/bundle/jruby/2.3.0/gems/x-pack-6.2.4-java/x-pack.gemspec
   register:         logstash_xpack_install
-
