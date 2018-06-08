@@ -1,5 +1,19 @@
 ---
 
+- name:             fetch xpack auth
+  shell:            cat /root/.xpack.auth
+  no_log:           true
+  register:         es_xpack_passwds
+  when:             elk_stack_use_xpack
+
+- name:             place pre-generated passwords into facts
+  set_fact:
+    xpack_passwd_kibana:   "{{ es_xpack_passwds.stdout_lines[1].split()[3] }}"
+    xpack_passwd_logstash: "{{ es_xpack_passwds.stdout_lines[4].split()[3] }}"
+    xpack_passwd_elastic:  "{{ es_xpack_passwds.stdout_lines[7].split()[3] }}"
+  no_log:           true
+  when:             elk_stack_use_xpack
+
 - name:             update filebeat config for xpack
   replace:          dest=/etc/filebeat/filebeat.yml
                     regexp=^{{ item.search }}

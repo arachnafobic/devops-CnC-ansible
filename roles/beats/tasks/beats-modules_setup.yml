@@ -12,7 +12,7 @@
   notify:           restart filebeat
 
 - name:             (re)run filebeat setup if required
-  shell:           "filebeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]' {{ xpack_args | default([]) }}"
+  shell:           "filebeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=[\"localhost:9200\"]' {{ xpack_args | default('') }}"
   notify:           restart filebeat
   when:
     - filebeat_system.stdout == "Enabled system"
@@ -21,7 +21,7 @@
     - filebeat_config_xpack is changed
 
 - name:             (re)run metricbeat setup if required
-  shell:           "metricbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]' {{ xpack_args | default([]) }}"
+  shell:           "metricbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=[\"localhost:9200\"]' {{ xpack_args | default('') }}"
   notify:           restart metricbeat
   when:
     - "'monitor' in group_names"
@@ -29,7 +29,7 @@
     - metricbeat_config_xpack is changed
 
 - name:             (re)run auditbeat setup if required
-  shell:           "auditbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]' {{ xpack_args | default([]) }}"
+  shell:           "auditbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=[\"localhost:9200\"]' {{ xpack_args | default('') }}"
   notify:           restart auditbeat
   when:
     - "'monitor' in group_names"
@@ -37,7 +37,7 @@
     - auditbeat_config_xpack is changed
 
 - name:             (re)run packetbeat setup if required
-  shell:           "packetbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]' {{ xpack_args | default([]) }}"
+  shell:           "packetbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=[\"localhost:9200\"]' {{ xpack_args | default('') }}"
   notify:           restart packetbeat
   when:
     - "'monitor' in group_names"

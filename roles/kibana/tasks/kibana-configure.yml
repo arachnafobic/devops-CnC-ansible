@@ -1,5 +1,9 @@
 ---
 
+- name:             (re)create /var/log/kibana folder
+  file:             path=/var/log/kibana state=directory
+                    owner=kibana group=kibana mode=0755
+
 - name:             update kibana config
   lineinfile:       dest=/etc/kibana/kibana.yml
                     state=present
@@ -8,8 +12,23 @@
                     insertafter=EOF backrefs=yes
   with_items:
     - { search: '#server.basePath: ""', replace: 'server.basePath: "/kibana"' }
+    - { search: '#logging.dest: stdout', replace: 'logging.dest: /var/log/kibana/kibana.log' }
   notify:
     - restart kibana
+
+- name:             fetch xpack auth
+  shell:            cat /root/.xpack.auth
+  no_log:           true
+  register:         es_xpack_passwds
+  when:             elk_stack_use_xpack
+
+- name:             place pre-generated passwords into facts
+  set_fact:
+    xpack_passwd_kibana:   "{{ es_xpack_passwds.stdout_lines[1].split()[3] }}"
+    xpack_passwd_logstash: "{{ es_xpack_passwds.stdout_lines[4].split()[3] }}"
+    xpack_passwd_elastic:  "{{ es_xpack_passwds.stdout_lines[7].split()[3] }}"
+  no_log:           true
+  when:             elk_stack_use_xpack
 
 - name:             update kibana config -- xpack
   lineinfile:       dest=/etc/kibana/kibana.yml

@@ -1,0 +1,27 @@
+input {
+    graphite {
+        port => 2033
+        id => "graphite"
+    }
+}
+
+filter {
+  grok {
+    match => [ "message", "%{DATA:metric_name} %{NUMBER:metric_value:float} %{POSINT:timestamp}" ]
+  }
+}
+
+output {
+  if "_grokparsefailure" not in [tags] {
+    elasticsearch {
+      hosts => localhost
+      user => elastic
+      password => "{{ xpack_passwd_elastic }}"
+      manage_template => false
+      index => "netdata-%{+YYYY.MM.dd}"
+    }
+  }
+  if "_grokparsefailure" in [tags] {
+    file { path => "/var/log/logstash/failed-%{+YYYY-MM-dd}.log" }
+  }
+}

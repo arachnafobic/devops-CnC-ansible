@@ -2,8 +2,10 @@ input {
   beats {
     port => 5044
     host => "0.0.0.0"
+    id => "beats"
   }
 }
+
 filter {
   if [fileset][module] == "system" {
     if [fileset][name] == "auth" {
@@ -40,14 +42,18 @@ filter {
     }
   }
 }
+
 output {
-  elasticsearch {
-    hosts => localhost
-{% if elk_stack_use_xpack == true %}
-    user => elastic
-    password => {{ xpack_passwd_elastic }}
-{% endif %}
-    manage_template => false
-    index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+  if "_grokparsefailure" not in [tags] {
+    elasticsearch {
+      hosts => localhost
+      user => elastic
+      password => "{{ xpack_passwd_elastic }}"
+      manage_template => false
+      index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+    }
+  }
+  if "_grokparsefailure" in [tags] {
+    file { path => "/var/log/logstash/failed-%{+YYYY-MM-dd}.log" }
   }
 }
