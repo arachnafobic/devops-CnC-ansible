@@ -1,9 +1,9 @@
 ---
 
-- name:             Setup authentication variable if xpack is active
-  set_fact:
-    xpack_args:     -E 'output.elasticsearch.username="elastic"' -E 'output.elasticsearch.password="{{ xpack_passwd_elastic }}"'
-  when:             elk_stack_use_xpack
+#- name:             Setup authentication variable if xpack is active
+#  set_fact:
+#    xpack_args:     -E 'output.elasticsearch.username="elastic"' -E 'output.elasticsearch.password="{{ xpack_passwd_elastic }}"'
+#  when:             elk_stack_use_xpack
 
 - name:            "enable filebeat module: system (default)"
   shell:            filebeat modules enable system
@@ -18,7 +18,7 @@
     - filebeat_system.stdout == "Enabled system"
     - "'monitor' in group_names"
     - filebeat_config_update is changed
-    - filebeat_config_xpack is changed
+#    - filebeat_config_xpack is changed
 
 - name:             (re)run metricbeat setup if required
   shell:           "metricbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=[\"localhost:9200\"]' {{ xpack_args | default('') }}"
@@ -26,7 +26,7 @@
   when:
     - "'monitor' in group_names"
     - metricbeat_config_update is changed
-    - metricbeat_config_xpack is changed
+#    - metricbeat_config_xpack is changed
 
 - name:             (re)run auditbeat setup if required
   shell:           "auditbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=[\"localhost:9200\"]' {{ xpack_args | default('') }}"
@@ -34,7 +34,7 @@
   when:
     - "'monitor' in group_names"
     - auditbeat_config_update is changed
-    - auditbeat_config_xpack is changed
+#    - auditbeat_config_xpack is changed
 
 - name:             (re)run packetbeat setup if required
   shell:           "packetbeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=[\"localhost:9200\"]' {{ xpack_args | default('') }}"
@@ -42,4 +42,4 @@
   when:
     - "'monitor' in group_names"
     - packetbeat_config_update is changed
-    - packetbeat_config_xpack is changed
+#    - packetbeat_config_xpack is changed

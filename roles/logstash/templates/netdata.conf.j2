@@ -15,8 +15,6 @@ output {
   if "_grokparsefailure" not in [tags] {
     elasticsearch {
       hosts => localhost
-      user => elastic
-      password => "{{ xpack_passwd_elastic }}"
       manage_template => false
       index => "netdata-%{+YYYY.MM.dd}"
     }

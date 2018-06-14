@@ -18,3 +18,9 @@
 
 - name:             start and enable elasticsearch-head
   service:          name=elasticsearch-head state=started enabled=yes
+
+- name:             wait for elasticsearch to finish starting
+  wait_for:         port={{item}} delay=10 connect_timeout=10
+  with_items:
+    - 9200
+    - 9300

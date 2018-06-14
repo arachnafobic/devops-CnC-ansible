@@ -13,29 +13,41 @@
   notify:
     - restart logstash
 
-- name:             fetch xpack auth
-  shell:            cat /root/.xpack.auth
-  no_log:           true
-  register:         es_xpack_passwds
-  when:             elk_stack_use_xpack
+#- name:             fetch xpack auth
+#  shell:            cat /root/.xpack.auth
+#  no_log:           true
+#  register:         es_xpack_passwds
+#  when:             elk_stack_use_xpack
 
-- name:             place pre-generated passwords into facts
-  set_fact:
-    xpack_passwd_kibana:   "{{ es_xpack_passwds.stdout_lines[1].split()[3] }}"
-    xpack_passwd_logstash: "{{ es_xpack_passwds.stdout_lines[4].split()[3] }}"
-    xpack_passwd_elastic:  "{{ es_xpack_passwds.stdout_lines[7].split()[3] }}"
-  no_log:           true
-  when:             elk_stack_use_xpack
+#- name:             place pre-generated passwords into facts
+#  set_fact:
+#    xpack_passwd_kibana:   "{{ es_xpack_passwds.stdout_lines[1].split()[3] }}"
+#    xpack_passwd_logstash: "{{ es_xpack_passwds.stdout_lines[4].split()[3] }}"
+#    xpack_passwd_elastic:  "{{ es_xpack_passwds.stdout_lines[7].split()[3] }}"
+#  no_log:           true
+#  when:             elk_stack_use_xpack
+#
+#    - "xpack.monitoring.elasticsearch.username: logstash_system"
+#    - "xpack.monitoring.elasticsearch.password: {{ xpack_passwd_logstash }}"
+#  when:             elk_stack_use_xpack
 
-- name:             add xpack's authentication results to logstash's config
+- name:             set up logstash's config
   lineinfile:       dest=/etc/logstash/logstash.yml
                     state=present
                     line="{{ item }}"
   with_items:
-    - "xpack.monitoring.elasticsearch.username: logstash_system"
-    - "xpack.monitoring.elasticsearch.password: {{ xpack_passwd_logstash }}"
     - "config.reload.automatic: true"
-  when:             elk_stack_use_xpack
+  notify:
+    - restart logstash
+
+- name:             update logstash's config
+  lineinfile:       dest=/etc/logstash/logstash.yml
+                    state=present
+                    regexp=^{{ item.search }}
+                    line="{{ item.replace }}"
+                    insertafter=EOF backrefs=yes
+  with_items:
+    - { search: '#xpack.monitoring.enabled: false', replace: 'xpack.monitoring.enabled: true' }
   notify:
     - restart logstash
 

@@ -5,7 +5,7 @@
 
 - include_tasks:    beats-configure_general.yml
 
-- include_tasks:    beats-configure_xpack.yml
-  when:             elk_stack_use_xpack
+#- include_tasks:    beats-configure_xpack.yml
+#  when:             elk_stack_use_xpack
 
 - include_tasks:    beats-modules_setup.yml

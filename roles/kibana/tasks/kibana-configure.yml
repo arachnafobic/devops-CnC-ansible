@@ -16,32 +16,32 @@
   notify:
     - restart kibana
 
-- name:             fetch xpack auth
-  shell:            cat /root/.xpack.auth
-  no_log:           true
-  register:         es_xpack_passwds
-  when:             elk_stack_use_xpack
+#- name:             fetch xpack auth
+#  shell:            cat /root/.xpack.auth
+#  no_log:           true
+#  register:         es_xpack_passwds
+#  when:             elk_stack_use_xpack
 
-- name:             place pre-generated passwords into facts
-  set_fact:
-    xpack_passwd_kibana:   "{{ es_xpack_passwds.stdout_lines[1].split()[3] }}"
-    xpack_passwd_logstash: "{{ es_xpack_passwds.stdout_lines[4].split()[3] }}"
-    xpack_passwd_elastic:  "{{ es_xpack_passwds.stdout_lines[7].split()[3] }}"
-  no_log:           true
-  when:             elk_stack_use_xpack
+#- name:             place pre-generated passwords into facts
+#  set_fact:
+#    xpack_passwd_kibana:   "{{ es_xpack_passwds.stdout_lines[1].split()[3] }}"
+#    xpack_passwd_logstash: "{{ es_xpack_passwds.stdout_lines[4].split()[3] }}"
+#    xpack_passwd_elastic:  "{{ es_xpack_passwds.stdout_lines[7].split()[3] }}"
+#  no_log:           true
+#  when:             elk_stack_use_xpack
 
-- name:             update kibana config -- xpack
-  lineinfile:       dest=/etc/kibana/kibana.yml
-                    state=present
-                    regexp=^{{ item.search }}
-                    line="{{ item.replace }}"
-                    insertafter=EOF backrefs=yes
-  with_items:
-    - { search: '#elasticsearch.username: "user"', replace: 'elasticsearch.username: "kibana"' }
-    - { search: '#elasticsearch.password: "pass"', replace: 'elasticsearch.password: "{{ xpack_passwd_kibana }}"' }
-  when:             elk_stack_use_xpack
-  notify:
-    - restart kibana
+#- name:             update kibana config -- xpack
+#  lineinfile:       dest=/etc/kibana/kibana.yml
+#                    state=present
+#                    regexp=^{{ item.search }}
+#                    line="{{ item.replace }}"
+#                    insertafter=EOF backrefs=yes
+#  with_items:
+#    - { search: '#elasticsearch.username: "user"', replace: 'elasticsearch.username: "kibana"' }
+#    - { search: '#elasticsearch.password: "pass"', replace: 'elasticsearch.password: "{{ xpack_passwd_kibana }}"' }
+#  when:             elk_stack_use_xpack
+#  notify:
+#    - restart kibana
 
 - name:             start and enable kibana
   service:          name=kibana state=started enabled=yes

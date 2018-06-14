@@ -5,7 +5,8 @@
 
 - include_tasks:    es-install_general.yml
 
-- include_tasks:    es-install_xpack.yml
-  when:             elk_stack_use_xpack
+# X-Pack is buildin startin elasticsearch 6.3, these steps can be used for 6.2 and lower
+#- include_tasks:    es-install_xpack.yml
+#  when:             elk_stack_use_xpack
 
 - include_tasks:    es-configure.yml
