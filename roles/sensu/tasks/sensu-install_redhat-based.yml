@@ -1,0 +1,12 @@
+---
+
+- name:             yum.repos.d for sensu
+  template:         dest=/etc/yum.repos.d/sensu.repo src=sensu.repo
+                    owner=root group=root mode=0644
+  register:         sensu_sources
+
+- name:             install sensu package if missing
+  yum:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_sensu }}"
+  register:         sensu_install

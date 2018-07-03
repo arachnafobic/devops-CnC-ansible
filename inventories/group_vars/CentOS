@@ -5,6 +5,7 @@ alt:
 
 service_ssh_name: sshd
 service_ntp_name: ntpd
+service_sensu_client: sensu-client
 
 default_ruby_version: "2.0"
 ruby_version:   2.0.0
@@ -31,30 +32,23 @@ install_pip_init:
 
 # Used during main play
 install_tools:
-# - ack-grep
   - byobu
   - curl
   - git
-# - grc
   - htop
   - tree
   - vim-enhanced
   - mc
   - tig
   - apg
-# - debian-goodies
-# - python-software-properties
 install_dev:
-# - build-essential
-# - zlib1g-dev
-# - libssl-dev
-# - libreadline-gplv2-dev
+  - autoconf
+  - automake
+  - libuuid-devel
   - libxml2-devel
-# - libxslt1-dev
   - python2-pip
   - python-psycopg2
   - python-pyasn1
-# - libmagic-dev
   - freetds-devel
 install_dev_pip:
   - urllib3
@@ -80,3 +74,5 @@ pkgs_imagemagick:
   - ghostscript-devel
   - netpbm
   - netpbm-devel
+pkgs_sensu:
+  - sensu
