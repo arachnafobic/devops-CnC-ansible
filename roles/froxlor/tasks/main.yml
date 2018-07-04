@@ -6,7 +6,6 @@
   changed_when:     false
 
 - include_tasks:    install.yml
-  when:             frox_support_pkgs is defined and froxlor_check.stat.exists == false
+  when:             froxlor_check.stat.exists == false
 
 - include_tasks:    config.yml
-  when:             frox_support_pkgs is defined

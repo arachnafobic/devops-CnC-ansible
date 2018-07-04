@@ -1,0 +1,9 @@
+---
+
+- name:             install remi-php repo
+  yum:              name=http://rpms.remirepo.net/enterprise/remi-release-7.rpm state=present
+
+- name:             install php-fpm
+  yum:              name={{ item }} state=present enablerepo="remi-php72"
+  with_items:
+    - "{{ pkgs_phpfpm }}"

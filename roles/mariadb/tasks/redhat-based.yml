@@ -1,0 +1,10 @@
+---
+
+- name:             install software collection repo
+  yum:              name=centos-release-scl state=present
+
+- name:             install mariadb packages
+  yum:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_mariadb }}"
+  register:         deb_mariadb_install_packages

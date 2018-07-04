@@ -76,3 +76,18 @@ pkgs_imagemagick:
   - netpbm-devel
 pkgs_sensu:
   - sensu
+pkgs_beats:
+  - filebeat
+  - metricbeat
+  - auditbeat
+  - packetbeat
+pkgs_nginx:
+  - nginx
+pkgs_phpfpm:
+  - php72
+  - php72-php-fpm
+  - php72-php-mbstring
+  - php72-php-mysqlnd
+  - php72-php-xml
+pkgs_mariadb:
+  - rh-mariadb102-mariadb-server

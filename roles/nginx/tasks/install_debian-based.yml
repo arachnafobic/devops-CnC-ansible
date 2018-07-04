@@ -1,0 +1,20 @@
+---
+
+# Add the PPA off the maintainer of Debian's PHP packages, Ond?ej Sur?.
+# This allows nginx 1.12 to be installed
+# See more : https://deb.sury.org/
+
+- name:             add ppa:ondrej/nginx
+  apt_repository:   repo='ppa:ondrej/nginx'
+                    state=present
+                    update_cache=yes
+  register:         nginx_ppa
+
+- name:             update system
+  apt:              upgrade=safe
+  when:             nginx_ppa.changed
+
+- name:             install nginx packages
+  apt:              name={{ item }} state=present install_recommends=no
+  with_items:
+    - "{{ pkgs_nginx }}"

@@ -3,6 +3,9 @@
 - include_tasks:    beats-install_debian-based.yml
   when:             pkgs_beats is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
 
+- include_tasks:    beats-install_redhat-based.yml
+  when:             pkgs_beats is defined and (ansible_distribution == "CentOS" or ansible_distribution == "RedHat")
+
 - include_tasks:    beats-configure_general.yml
 
 #- include_tasks:    beats-configure_xpack.yml

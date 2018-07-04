@@ -1,0 +1,20 @@
+---
+
+- name:             get rpm key for elastic.co
+  get_url:          url=https://artifacts.elastic.co/GPG-KEY-elasticsearch dest=/root/cache/D88E42B4.asc
+                    sha256sum=10e406ba504706f44fbfa57a8daba5cec2678b31c1722e262ebecb5102d07659
+
+- name:             install rpm key for elastic.co
+  rpm_key:          state=present key=/root/cache/D88E42B4.asc
+
+- name:             sources.list.d for elastic.co
+  template:         dest=/etc/yum.repos.d/elastic.repo src=elastic.repo
+                    owner=root group=root mode=0644
+  register:         beats_sources
+
+- name:             install *beats package
+  yum:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_beats }}"
+  register:         beats_install
+

@@ -1,0 +1,45 @@
+---
+
+- name:             touch nginx in /root/stat_services.d
+  file:             path=/root/stat_services.d/nginx state=touch
+  changed_when:     false
+
+- name:             disable default nginx site
+  file:             path=/etc/nginx/sites-enabled/default state=absent
+  notify:           restart nginx
+
+- name:             fix nginx.conf
+  copy:             dest=/etc/nginx/nginx.conf src=nginx.conf.redhat-based mode=0644
+  notify:           restart nginx
+
+- name:             create directory /etc/devops/www
+  file:             path=/etc/devops/www state=directory mode=0755
+
+- name:             ensure /etc/devops/ssl exists and is secure
+  file:             path=/etc/devops/ssl state=directory owner=root group=root mode=0700
+
+- name:             place /etc/devops/www/index.html
+  copy:             dest=/etc/devops/www/index.html src=index.html mode=0644
+
+- name:             place /etc/devops/www/502.html
+  copy:             dest=/etc/devops/www/502.html src=502.html mode=0644
+
+- name:             place /etc/devops/ssl/dhparams.pem
+  copy:             dest=/etc/devops/ssl/dhparams.pem src=dhparams.pem owner=root group=root mode=0600
+  notify:           restart nginx
+
+- name:             place /etc/devops/ssl/dhparams.4096.pem
+  copy:             dest=/etc/devops/ssl/dhparams.4096.pem src=dhparams.4096.pem owner=root group=root mode=0600
+  notify:           restart nginx
+
+- name:             place /etc/nginx/conf.d/_default.conf
+  copy:             dest=/etc/nginx/conf.d/_default.conf src=_default.conf mode=0644
+  notify:           restart nginx
+
+- name:             place /etc/nginx/conf.d/_logformats.conf
+  copy:             dest=/etc/nginx/conf.d/_logformats.conf src=_logformats.conf mode=0644
+  notify:           restart nginx
+
+- name:             place /etc/nginx/conf.d/_ssl.conf
+  copy:             dest=/etc/nginx/conf.d/_ssl.conf src=_ssl.conf mode=0644
+  notify:           restart nginx

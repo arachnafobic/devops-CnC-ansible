@@ -16,6 +16,10 @@ frox_httpd_group: www-data
 
 frox_lang:        english
 
-frox_support_pkgs:
+frox_support_pkgs_debian:
   - libnss-mysql-bg
+  - nscd
+
+frox_support_pkgs_redhat:
+  - libnss-mysql
   - nscd

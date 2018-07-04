@@ -2,3 +2,6 @@
 
 - include_tasks:    debian-based.yml
   when:             pkgs_phpfpm is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+
+- include_tasks:    redhat-based.yml
+  when:             pkgs_phpfpm is defined and (ansible_distribution == "CentOS" or ansible_distribution == "RedHat")

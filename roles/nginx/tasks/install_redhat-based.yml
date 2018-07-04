@@ -1,0 +1,6 @@
+---
+
+- name:             install nginx packages
+  yum:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_nginx }}"
