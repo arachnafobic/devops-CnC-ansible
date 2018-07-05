@@ -8,3 +8,20 @@
   with_items:
     - "{{ pkgs_mariadb }}"
   register:         deb_mariadb_install_packages
+
+- name:             enable mariadb in the software collection
+  shell:            scl enable rh-mariadb102 bash
+  when:             deb_mariadb_install_packages is changed
+  notify:           restart mariadb
+
+- name:             add mariadb to user profiles
+  template:         dest=/etc/profile.d/rh-mariadb102.sh src=rh-mariadb102.sh mode=0755
+  when:             deb_mariadb_install_packages is changed
+
+- name:             run handlers now
+  meta:             flush_handlers
+
+- name:             set fact to prepend for shell commands during configure
+  set_fact:
+    scl_mariadb:   "scl enable rh-mariadb102"
+

@@ -6,6 +6,7 @@ alt:
 service_ssh_name: sshd
 service_ntp_name: ntpd
 service_sensu_client: sensu-client
+service_mariadb_server: rh-mariadb102-mariadb
 
 default_ruby_version: "2.0"
 ruby_version:   2.0.0
@@ -90,4 +91,6 @@ pkgs_phpfpm:
   - php72-php-mysqlnd
   - php72-php-xml
 pkgs_mariadb:
+  - rh-mariadb102
   - rh-mariadb102-mariadb-server
+  - MySQL-python

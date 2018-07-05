@@ -13,13 +13,14 @@
   mysql_db:         name='test' state=absent
 
 - name:             Disallow root login remotely
-  command:          'mysql -NBe "{{ item }}"'
+  command:          "{{ scl_mariadb }} \"mysql -NBe {{ item }}\""
   with_items:
     - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1','::1')
+    - SELECT * FROM mysql.user
   changed_when:     false
 
 - name:             Get list of hosts for the root user.
-  command:          mysql -NBe 'SELECT Host FROM mysql.user WHERE User = "root" ORDER BY (Host="localhost") ASC'
+  command:         "{{ scl_mariadb }} mysql -NBe 'SELECT Host FROM mysql.user WHERE User = \"root\" ORDER BY (Host=\"localhost\") ASC'"
   register:         mysql_root_hosts
   changed_when:     false
 
@@ -31,8 +32,9 @@
 #
 - name:             Update MariaDB root password for localhost root account.
   shell: >
+   "{{ scl_mariadb }}
     mysql -u root -NBe
-    'SET PASSWORD FOR root@"{{ item }}" = PASSWORD("{{ mariadb_root_password }}");'
+    'SET PASSWORD FOR root@\"{{ item }}\" = PASSWORD(\"{{ mariadb_root_password }}\");'"
   with_items:
     - "{{ mysql_root_hosts.stdout_lines }}"
   when:             deb_mariadb_install_packages is defined and deb_mariadb_install_packages.changed
@@ -40,8 +42,9 @@
 
 - name:             Allow root to login on localhost
   shell: >
+   "{{ scl_mariadb }}
     mysql -u root -NBe
-    'GRANT ALL PRIVILEGES on *.* to "root"@"localhost" IDENTIFIED BY "{{ mariadb_root_password}}"; FLUSH PRIVILEGES;'
+    'GRANT ALL PRIVILEGES on *.* to \"root\"@\"localhost\" IDENTIFIED BY \"{{ mariadb_root_password}}\"; FLUSH PRIVILEGES;'"
   when:             deb_mariadb_install_packages is defined and deb_mariadb_install_packages.changed
   no_log:           true
 
