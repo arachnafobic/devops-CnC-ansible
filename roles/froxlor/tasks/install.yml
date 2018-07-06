@@ -1,13 +1,19 @@
 ---
 
 - name:             install some support packages
-  apt:              name={{ item }} state=present install_recommends=no
-  with_items:       '{{ frox_support_pkgs_debian }}'
+  apt:              name="{{ item }}" state=present install_recommends=no
+  with_items:       "{{ frox_support_pkgs_debian }}"
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
 - name:             install some support packages
-  yum:              name={{ item }} state=present
-  with_items:       '{{ frox_support_pkgs_redhat }}'
+  yum:              name="{{ item }}" state=present
+  with_items:       "{{ frox_support_pkgs_redhat }}"
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
+- name:             set user/group for nginx if default is not www-data
+  set_fact:
+    frox_httpd_user:  nginx
+    frox_httpd_group: nginx
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
 
 - name:             create froxlocal group
@@ -25,9 +31,9 @@
     shell:          /bin/false
     state:          present
 
-- name:             add www-data user to the froxlocal group
+- name:            "add {{ frox_httpd_user }} user to the froxlocal group"
   user:
-    name:           www-data
+    name:          "{{ frox_httpd_user }}"
     groups:         froxlocal
     append:         yes
 
@@ -39,7 +45,7 @@
     group: "{{ item.group }}"
     mode:  "{{ item.mode }}"
   with_items:
-    - { owner: "www-data", group: "www-data", path: "/var/www/froxlor", mode: "0750" }
+    - { owner: "{{ frox_httpd_user }}", group: "{{ frox_httpd_group }}", path: "/var/www/froxlor", mode: "0750" }
     - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/webs", mode: "0750" }
     - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/logs", mode: "0750" }
     - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/tmp", mode: "1777" }
@@ -55,8 +61,8 @@
   unarchive:
     src:        "/tmp/froxlor.tar.gz"
     dest:       "/var/www/froxlor/"
-    owner:      www-data
-    group:      www-data
+    owner:      "{{ frox_httpd_user }}"
+    group:      "{{ frox_httpd_group }}"
     extra_opts: "--strip-components=1"
     remote_src: yes
     creates:    "/var/www/froxlor/index.php"
@@ -66,12 +72,22 @@
     path:  "/tmp/froxlor.tar.gz"
     state: absent
 
+- name:             set nginx vhost location to /etc/nginx/sites-enabled/ for debian based distros
+  set_fact:
+    frox_vhostpath: "/etc/nginx/sites-enabled"
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+- name:             set nginx vhost location to /etc/nginx/conf.d/ for redhat based distros
+  set_fact:
+    frox_vhostpath: "/etc/nginx/conf.d"
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
 - name:             setup temp vhost to continue install on, we're not running on our own fpm pool, yet.
   copy:
     src:   "_froxlor.nginx.conf"
-    dest:  "/etc/nginx/sites-enabled/_froxlor.conf"
-    owner: www-data
-    group: www-data
+    dest:  "{{ frox_vhostpath }}/_froxlor.conf"
+    owner: "{{ frox_httpd_user }}"
+    group: "{{ frox_httpd_group }}"
     mode:  0644
   notify:           restart nginx
 
@@ -89,7 +105,7 @@
   failed_when:      false
 
 - name:             run froxlor installer
-  no_log:           true
+#  no_log:           true
   shell:           "wget -q -O /dev/null --post-data \"&mysql_host=127.0.0.1&\
                                  mysql_database={{ frox_mysql_db }}&\
                                  mysql_unpriv_user={{ frox_mysql_user }}&\

@@ -23,5 +23,4 @@
 
 - name:             set fact to prepend for shell commands during configure
   set_fact:
-    scl_mariadb:   "scl enable rh-mariadb102"
-
+    scl_mariadb:   "scl enable rh-mariadb102 --"
