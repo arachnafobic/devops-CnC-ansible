@@ -10,6 +10,9 @@
   with_items:       "{{ frox_support_pkgs_redhat }}"
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
 
+- name:             enable nscd
+  service:          name=nscd state=restarted enabled=yes
+
 - name:             set user/group for nginx if default is not www-data
   set_fact:
     frox_httpd_user:  nginx

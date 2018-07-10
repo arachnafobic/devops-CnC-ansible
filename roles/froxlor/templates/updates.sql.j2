@@ -3,8 +3,8 @@
 DROP USER froxlor@{{ frox_ip.stdout }};
 
 # Update config to switch to PHP-FPM
-UPDATE panel_fpmdaemons SET reload_cmd = 'service php7.2-fpm restart' WHERE id = 1;
-UPDATE panel_fpmdaemons SET config_dir = '/etc/php/7.2/fpm/pool.d/' WHERE id = 1;
+UPDATE panel_fpmdaemons SET reload_cmd = 'service php72-php-fpm restart' WHERE id = 1;
+UPDATE panel_fpmdaemons SET config_dir = '/etc/opt/remi/php72/php-fpm.d/' WHERE id = 1;
 
 UPDATE panel_settings SET value = 1 WHERE settinggroup = 'phpfpm' AND varname = 'enabled';
 UPDATE panel_settings SET value = 1 WHERE settinggroup = 'phpfpm' AND varname = 'enabled_ownvhost';
@@ -12,6 +12,9 @@ UPDATE panel_settings SET value = 'froxlocal' WHERE settinggroup = 'phpfpm' AND 
 UPDATE panel_settings SET value = 'froxlocal' WHERE settinggroup = 'phpfpm' AND varname = 'vhost_httpgroup';
 UPDATE panel_settings SET value = '2' WHERE settinggroup = 'phpfpm' AND varname = 'defaultini';
 UPDATE panel_settings SET value = 1 WHERE settinggroup = 'system' AND varname = 'froxlordirectlyviahostname';
+UPDATE panel_settings SET value = 'systemctl restart php72-php-fpm.service' WHERE settinggroup = 'phpfpm' AND varname = 'reload';
+UPDATE panel_settings SET value = 'systemctl reload nginx.service' WHERE settinggroup = 'system' AND varname = 'apachereload_command';
+UPDATE panel_settings SET value = 'systemctl reload crond.service' WHERE settinggroup = 'system' AND varname = 'crondreload';
 
 # Only allow mysql access on localhost
 UPDATE panel_settings SET value = '127.0.0.1,localhost' WHERE settinggroup = 'system' AND varname = 'mysql_access_host';

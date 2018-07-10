@@ -91,6 +91,9 @@ pkgs_phpfpm:
   - php72-php-mbstring
   - php72-php-mysqlnd
   - php72-php-xml
+  - php72-php-opcache
+  - php72-php-common
+  - php72-php-process
 pkgs_mariadb:
   - rh-mariadb102
   - rh-mariadb102-mariadb-server

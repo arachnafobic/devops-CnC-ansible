@@ -95,3 +95,7 @@
 - name:             Deny everything and enable UFW
   ufw:              state=enabled policy=deny
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+- name:             Set SELinux to permissive
+  selinux:          policy=targeted state=permissive
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
