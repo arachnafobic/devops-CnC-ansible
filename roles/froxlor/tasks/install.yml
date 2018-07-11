@@ -84,6 +84,19 @@
     mode:  0644
   notify:           restart nginx
 
+- name:             fix sql_mode for mariadb on CentOS
+  lineinfile:
+    path: /etc/opt/rh/rh-mariadb102/my.cnf
+    regexp: '^[mysqld]'
+    insertafter: '^[mysqld]'
+    line: 'sql_mode=ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+  notify:           restart rh-mariadb
+
+- name:             fix /var/www permissions on CentOS
+  file:             path=/var/www state=directory owner=nginx group=nginx mode=0755
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
 - name:             run handlers now
   meta:             flush_handlers
 
@@ -98,7 +111,7 @@
   failed_when:      false
 
 - name:             run froxlor installer
-#  no_log:           true
+  no_log:           true
   shell:           "wget -q -O /dev/null --post-data \"&mysql_host=127.0.0.1&\
                                  mysql_database={{ frox_mysql_db }}&\
                                  mysql_unpriv_user={{ frox_mysql_user }}&\

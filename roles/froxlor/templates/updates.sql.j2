@@ -3,8 +3,19 @@
 DROP USER froxlor@{{ frox_ip.stdout }};
 
 # Update config to switch to PHP-FPM
+{% if ansible_distribution == "CentOS" or ansible_distribution == "RedHat" %}
 UPDATE panel_fpmdaemons SET reload_cmd = 'systemctl restart php72-php-fpm.service' WHERE id = 1;
 UPDATE panel_fpmdaemons SET config_dir = '/etc/opt/remi/php72/php-fpm.d/' WHERE id = 1;
+UPDATE panel_settings SET value = 'systemctl restart php72-php-fpm.service' WHERE settinggroup = 'phpfpm' AND varname = 'reload';
+UPDATE panel_settings SET value = 'systemctl reload nginx.service' WHERE settinggroup = 'system' AND varname = 'apachereload_command';
+UPDATE panel_settings SET value = 'systemctl reload crond.service' WHERE settinggroup = 'system' AND varname = 'crondreload';
+UPDATE panel_settings SET value = '/etc/opt/remi/php72/php-fpm.d/' WHERE settinggroup = 'phpfpm' AND varname = 'configdir';
+{% endif %}
+{% if ansible_distribution == "Ubuntu" or ansible_distribution == "Debian" %}
+UPDATE panel_fpmdaemons SET reload_cmd = 'systemctl restart php7.2-fpm.service' WHERE id = 1;
+UPDATE panel_fpmdaemons SET config_dir = '/etc/php/7.2/fpm/pool.d/' WHERE id = 1;
+UPDATE panel_settings SET value = '/etc/php/7.2/fpm/pool.d/' WHERE settinggroup = 'phpfpm' AND varname = 'configdir';
+{% endif %}
 
 UPDATE panel_settings SET value = 1 WHERE settinggroup = 'phpfpm' AND varname = 'enabled';
 UPDATE panel_settings SET value = 1 WHERE settinggroup = 'phpfpm' AND varname = 'enabled_ownvhost';
@@ -12,12 +23,6 @@ UPDATE panel_settings SET value = 'froxlocal' WHERE settinggroup = 'phpfpm' AND 
 UPDATE panel_settings SET value = 'froxlocal' WHERE settinggroup = 'phpfpm' AND varname = 'vhost_httpgroup';
 UPDATE panel_settings SET value = '2' WHERE settinggroup = 'phpfpm' AND varname = 'defaultini';
 UPDATE panel_settings SET value = 1 WHERE settinggroup = 'system' AND varname = 'froxlordirectlyviahostname';
-UPDATE panel_settings SET value = 'systemctl restart php72-php-fpm.service' WHERE settinggroup = 'phpfpm' AND varname = 'reload';
-UPDATE panel_settings SET value = 'systemctl reload nginx.service' WHERE settinggroup = 'system' AND varname = 'apachereload_command';
-UPDATE panel_settings SET value = 'systemctl reload crond.service' WHERE settinggroup = 'system' AND varname = 'crondreload';
-# UPDATE panel_settings SET value = '/etc/nginx/conf.d/' WHERE settinggroup = 'system' AND varname = 'apacheconf_vhost';
-# UPDATE panel_settings SET value = '/etc/nginx/conf.d/' WHERE settinggroup = 'system' AND varname = 'apacheconf_diroptions';
-UPDATE panel_settings SET value = '/etc/opt/remi/php72/php-fpm.d/' WHERE settinggroup = 'phpfpm' AND varname = 'configdir';
 
 # Only allow mysql access on localhost
 UPDATE panel_settings SET value = '127.0.0.1,localhost' WHERE settinggroup = 'system' AND varname = 'mysql_access_host';
