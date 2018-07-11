@@ -5,3 +5,7 @@
   with_items:
     - "{{ pkgs_mariadb }}"
   register:         deb_mariadb_install_packages
+
+- name:             set fact to prepend for shell commands during configure
+  set_fact:
+    scl_mariadb:   " "

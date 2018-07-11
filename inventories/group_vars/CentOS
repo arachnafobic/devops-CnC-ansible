@@ -35,7 +35,6 @@ install_pip_init:
 install_tools:
   - byobu
   - curl
-  - git
   - htop
   - tree
   - vim-enhanced
@@ -43,6 +42,8 @@ install_tools:
   - tig
   - apg
   - wget
+  - http://opensource.wandisco.com/centos/7/git/x86_64/git-2.7.4-1.WANdisco.293.x86_64.rpm
+  - http://opensource.wandisco.com/centos/7/git/x86_64/perl-Git-2.7.4-1.WANdisco.293.noarch.rpm
 install_dev:
   - autoconf
   - automake

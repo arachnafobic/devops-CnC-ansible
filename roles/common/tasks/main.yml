@@ -55,6 +55,10 @@
 - name:             place /etc/prompt.bash
   copy:             dest=/etc/prompt.bash src=prompt.bash mode=0644
 
+- name:             place /usr/share/git-core/contrib/git-prompt.sh
+  copy:             dest=/usr/share/git-core/contrib/git-prompt.sh src=git-prompt.sh mode=0755
+  when:             ansible_distribution == "CloudLinux" or ansible_distribution == "CentOS"
+
 - name:             place /etc/checkrestart.blacklist
   copy:             dest=/etc/checkrestart.blacklist src=checkrestart.blacklist mode=0644
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"

@@ -13,8 +13,8 @@ fi
 if [ -f /etc/prompt.bash ]; then
   . /etc/prompt.bash
 fi
-if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
-  . /usr/share/git-core/contrib/completion/git-prompt.sh
+if [ -f /usr/share/git-core/contrib/git-prompt.sh ]; then
+  . /usr/share/git-core/contrib/git-prompt.sh
 fi
 # } MODIFIED
 

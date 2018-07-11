@@ -66,6 +66,11 @@
     scl_mariadb:   "scl enable rh-mariadb102 --"
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
 
+- name:             set fact to prepend for shell commands during configure
+  set_fact:
+    scl_mariadb:   " "
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
 - name:             template updates.sql
   template:
     src:            updates.sql.j2

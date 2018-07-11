@@ -15,6 +15,9 @@ UPDATE panel_settings SET value = 1 WHERE settinggroup = 'system' AND varname = 
 UPDATE panel_settings SET value = 'systemctl restart php72-php-fpm.service' WHERE settinggroup = 'phpfpm' AND varname = 'reload';
 UPDATE panel_settings SET value = 'systemctl reload nginx.service' WHERE settinggroup = 'system' AND varname = 'apachereload_command';
 UPDATE panel_settings SET value = 'systemctl reload crond.service' WHERE settinggroup = 'system' AND varname = 'crondreload';
+UPDATE panel_settings SET value = '/etc/nginx/conf.d/' WHERE settinggroup = 'system' AND varname = 'apacheconf_vhost';
+UPDATE panel_settings SET value = '/etc/nginx/conf.d/' WHERE settinggroup = 'system' AND varname = 'apacheconf_diroptions';
+UPDATE panel_settings SET value = '/etc/opt/remi/php72/php-fpm.d/' WHERE settinggroup = 'phpfpm' AND varname = 'configdir';
 
 # Only allow mysql access on localhost
 UPDATE panel_settings SET value = '127.0.0.1,localhost' WHERE settinggroup = 'system' AND varname = 'mysql_access_host';
