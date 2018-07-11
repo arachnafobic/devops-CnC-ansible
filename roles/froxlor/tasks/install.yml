@@ -75,16 +75,6 @@
     path:  "/tmp/froxlor.tar.gz"
     state: absent
 
-- name:             set nginx vhost location to /etc/nginx/sites-enabled/ for debian based distros
-  set_fact:
-    frox_vhostpath: "/etc/nginx/sites-enabled"
-  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
-
-- name:             set nginx vhost location to /etc/nginx/conf.d/ for redhat based distros
-  set_fact:
-    frox_vhostpath: "/etc/nginx/conf.d"
-  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
-
 - name:             setup temp vhost to continue install on, we're not running on our own fpm pool, yet.
   copy:
     src:   "_froxlor.nginx.conf"

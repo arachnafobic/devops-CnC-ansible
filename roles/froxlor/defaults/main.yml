@@ -16,6 +16,8 @@ frox_httpd_group: www-data
 
 frox_lang:        english
 
+frox_vhostpath:   /etc/nginx/sites-enabled
+
 frox_support_pkgs_debian:
   - libnss-mysql-bg
   - nscd

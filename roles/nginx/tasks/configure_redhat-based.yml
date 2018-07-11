@@ -8,6 +8,17 @@
   file:             path=/etc/nginx/sites-enabled/default state=absent
   notify:           restart nginx
 
+- name:             disable default nginx site
+  file:             path=/etc/nginx/conf.d/ state=absent
+  notify:           restart nginx
+
+- name:             create nginx config folders
+  file:             path=/etc/nginx/{{ item }} state=directory mode=0755
+  notify:           restart nginx
+  with_items:
+    - sites-available
+    - sites-enabled
+
 - name:             fix nginx.conf
   copy:             dest=/etc/nginx/nginx.conf src=nginx.conf.redhat-based mode=0644
   notify:           restart nginx
@@ -32,14 +43,18 @@
   copy:             dest=/etc/devops/ssl/dhparams.4096.pem src=dhparams.4096.pem owner=root group=root mode=0600
   notify:           restart nginx
 
-- name:             place /etc/nginx/conf.d/_default.conf
-  copy:             dest=/etc/nginx/conf.d/_default.conf src=_default.conf mode=0644
+- name:             place default configs in /etc/nginx/sites-available/
+  copy:             dest=/etc/nginx/sites-available/{{ item }} src={{ item }} mode=0644
   notify:           restart nginx
+  with_items:
+    - _default.conf
+    - _logformats.conf
+    - _ssl.conf
 
-- name:             place /etc/nginx/conf.d/_logformats.conf
-  copy:             dest=/etc/nginx/conf.d/_logformats.conf src=_logformats.conf mode=0644
+- name:             link default configs to /etc/nginx/sites-enabled/
+  file:             path=/etc/nginx/sites-enabled/{{ item }} src=/etc/nginx/sites-available/{{ item }} state=link
   notify:           restart nginx
-
-- name:             place /etc/nginx/conf.d/_ssl.conf
-  copy:             dest=/etc/nginx/conf.d/_ssl.conf src=_ssl.conf mode=0644
-  notify:           restart nginx
+  with_items:
+    - _default.conf
+    - _logformats.conf
+    - _ssl.conf

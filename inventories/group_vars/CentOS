@@ -95,6 +95,7 @@ pkgs_phpfpm:
   - php72-php-opcache
   - php72-php-common
   - php72-php-process
+  - php72-php-bcmath
 pkgs_mariadb:
   - rh-mariadb102
   - rh-mariadb102-mariadb-server
