@@ -1,0 +1,74 @@
+---
+
+- name:             check for files folder
+  stat:             path=/__data/files
+  register:         data_check
+  failed_when:      false
+  changed_when:     false
+
+- name:             create and lock srvbak user on debian based systems
+  command:          /usr/sbin/adduser --system --group --shell /bin/bash --home /var/lib/srvbak --disabled-password srvbak
+                    creates=/var/lib/srvbak
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+- name:             create srvbak user on redhat based systems
+  shell:            /sbin/adduser --system --user-group --shell /bin/bash --home /var/lib/srvbak --create-home srvbak
+                    creates=/var/lib/srvbak
+  register:         srvbak_user_create
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
+- name:             lock srvbak user on redhat based systems
+  shell:            passwd -l srvbak
+  when:             srvbak_user_create is changed and (ansible_distribution == "CentOS" or ansible_distribution == "RedHat")
+
+- name:             ensure existance of /__data/srvbak
+  file:             path=/__data/srvbak owner=root group=srvbak mode=0750 state=directory
+
+- name:             ensure existance of /__data/srvbak/tmp
+  file:             path=/__data/srvbak/tmp owner=root group=srvbak mode=0750 state=directory
+
+- name:             ensure existance of /etc/cron.2am
+  file:             path=/etc/cron.2am owner=root group=root mode=0755 state=directory
+
+- name:             (re)construct srvbakrc
+  template:         src=srvbakrc.j2 dest=/etc/devops/opt/srvbakrc owner=root group=root mode=0600
+
+- name:             symlink srvbakrc
+  file:             path=/opt/src/srvbak/srvbakrc src=/etc/devops/opt/srvbakrc state=link
+
+- name:             copy /etc/cron.d/2am from sample
+  copy:             src=2am.cron dest=/etc/cron.d/2am owner=root group=root mode=0644
+
+- name:             copy /etc/cron.2am/srvbak from sample
+  copy:             src=srvbak.cron dest=/etc/cron.2am/srvbak owner=root group=root mode=0755
+
+#- name:             copy /etc/cron.2am/srvbak from sample
+#  command:          /bin/cp /opt/src/srvbak/srvbak.cron.sample /etc/cron.2am/srvbak
+#                    creates=/etc/cron.2am/srvbak
+#- name:             make /etc/cron.2am/srvbak executable
+#  file:             path=/etc/cron.2am/srvbak owner=root group=root mode=0755
+
+- name:             copy /etc/logrotate.d/srvbak from sample
+  command:          /bin/cp /opt/src/srvbak/srvbak.logrotate.sample /etc/logrotate.d/srvbak
+                    creates=/etc/logrotate.d/srvbak
+
+- name:             check for gpg key
+  command:          /usr/bin/gpg --list-keys
+  register:         srvbak_gpg_list
+  failed_when:      false
+  changed_when:     false
+
+- name:             copy key to server
+  copy:             src=cpbak_gpgkey.pub.asc dest=/root/tmp/cpbak_gpgkey.pub.asc owner=root group=root mode=0600
+  when:             '"NoXqs Servers" not in srvbak_gpg_list.stdout'
+
+- name:             import key
+  shell:            /usr/bin/gpg --import < /root/tmp/cpbak_gpgkey.pub.asc
+  when:             '"NoXqs Servers" not in srvbak_gpg_list.stdout'
+
+- name:             ultimatly trust key
+  shell:            /usr/bin/gpg --trusted-key {{ keyprint }} --update-trustdb
+  when:             '"NoXqs Servers" not in srvbak_gpg_list.stdout'
+
+- name:             remove key from tmpdir
+  file:             path=/root/tmp/cpbak_gpgkey.pub.asc state=absent

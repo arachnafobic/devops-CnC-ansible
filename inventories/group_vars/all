@@ -37,7 +37,9 @@ default_folders:
   - /opt/pkg
   - /root/cache
   - /__data
+  - /__data/files
   - /etc/devops
+  - /etc/devops/opt
 gh_repos:
   - kchmck/vim-coffee-script
   - plasticboy/vim-markdown

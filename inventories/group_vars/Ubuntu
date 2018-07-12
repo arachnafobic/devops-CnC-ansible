@@ -6,6 +6,7 @@ alt:
 service_ssh_name: ssh
 service_ntp_name: ntp
 service_redis_name: redis-server
+service_memcached_name: memcached
 service_rabbitmq_name: rabbitmq-server
 service_sensu_api: sensu-api
 service_sensu_client: sensu-client
@@ -144,6 +145,8 @@ pkgs_fail2ban:
   - fail2ban
   - python-pyinotify
   - whois
+pkgs_memcached:
+  - memcached
 
 # Defaults, change here or per host in host_vars
 nodesource_use:     false              # if false, nodejs is ubuntu's default, 0.10

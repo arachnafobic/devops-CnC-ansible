@@ -59,6 +59,11 @@
   vars:
     targets: all
 
+- import_playbook: ../roles/srvbak.yml
+  tags: [srvbak, init]
+  vars:
+    targets: all
+
 # dev
 - import_playbook: ../roles/ruby.yml
   tags: [ruby, dev]
@@ -105,6 +110,11 @@
   tags: [redis, services]
   vars:
     targets: redis
+
+- import_playbook: ../roles/memcached.yml
+  tags: [memcached, services]
+  vars:
+    targets: memcached
 
 - import_playbook: ../roles/rabbitmq.yml
   tags: [rabbitmq, services]

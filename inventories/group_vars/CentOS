@@ -5,6 +5,8 @@ alt:
 
 service_ssh_name: sshd
 service_ntp_name: ntpd
+service_redis_name: redis
+service_memcached_name: memcached
 service_sensu_client: sensu-client
 service_mariadb_server: rh-mariadb102-mariadb
 
@@ -106,3 +108,7 @@ pkgs_fail2ban:
   - fail2ban-systemd
   - python-inotify
   - whois
+pkgs_redis:
+  - redis
+pkgs_memcached:
+ - memcached

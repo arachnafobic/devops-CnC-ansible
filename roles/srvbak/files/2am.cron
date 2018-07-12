@@ -1,0 +1,4 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+5 2 * * * root  cd / && run-parts --report /etc/cron.2am

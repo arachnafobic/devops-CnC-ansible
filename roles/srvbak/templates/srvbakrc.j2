@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# DRYRUN=yes                        # set in ENV
+: ${VERBOSE:=yes}                   # override in ENV
+
+# if inventory_hostname in groups['nap']
+# before=( 'service nap stop' )      # commands to run before
+# elif inventory_hostname in groups['git']
+# before=( 'service gitlab stop' )   # commands to run before
+# else
+ before=( '' )
+# endif
+
+  after=()                          # commands to run after
+
+# if inventory_hostname in groups['nap']
+#finally=( 'service nap start' )     # commands to run after, even on
+# elif inventory_hostname in groups['git']
+#finally=( 'service gitlab start' )  # commands to run after, even on
+# else
+finally=( '' )
+# endif
+                                    # failure
+
+base_dir=/__data/srvbak             # backups in subdirs
+
+# keep last {{ srvbak_keep_last }} backups
+# keep all -> keep_last=all
+keep_last={{ srvbak_keep_last }}
+
+gpg_opts=()
+gpg_key=7A0605AC
+
+# --
+
+# fix permissions/ownership (the umask is 0077)
+chown_to=                           # change user     (if set)
+chgrp_to=srvbak                     # change group    (if set)
+chmod_dirs=750                      # set dir perms   (if set)
+chmod_files=640                     # set file perms  (if set)
+
+# --
+
+# The status (as kept in $base_dir/.var/status) should be one of:
+# 'running $$', 'ok', 'ok first-run', 'ok dryrun', or 'error'.  The
+# following will make sure not to continue if running or error; you
+# may want to change this to status_must_not_be='running*' to continue
+# even if the last run failed.
+status_must_be='ok*'
+
+# --
+
+# NB: because baktogit uses git, only the last 2 baktogit backups are
+# kept; use e.g. baktogit_keep_last=5 to change this.
+
+# export BAKTOGIT_REPO=/__data/baktogit/repo BAKTOGIT_PUSH=no
+#                                     # NB: repo not in $base_dir!
+# baktogit=/opt/src/baktogit/baktogit.bash
+#
+# # Usage: baktogit_items <baktogit-arg(s)>
+# baktogit_items --exclude='.git' /__nap/apps/.apps /__nap/cfg \
+#   /some/dir --exclude=/some/dir/not/this/file
+#   # /etc --exclude='/etc/shadow*' --exclude='/etc/ssh/ssh_host_*_key'
+#                                     # (no etckeeper -> /etc here)
+
+# --
+
+# rsync: incremental, fast
+# Usage: data_dir <dir> [<arg(s)>]
+
+{% if data_check.stat.exists %}
+data_dir /__data/files
+{% endif %}
+# if inventory_hostname in groups['nap']
+# data_dir /__nap/log
+# endif
+data_dir /var/log
+
+# --
+
+# tar + gpg: not incremental, slow, safe
+# Usage: sensitive_data_dir <dir> [<arg(s)>]
+
+sensitive_data_dir /etc
+# if inventory_hostname in groups['nap']
+#sensitive_data_dir /__nap/apps \
+#  --exclude='/__nap/apps/[^.]*' \
+#  --exclude='/__nap/apps/.gem' \
+#  --exclude='/__nap/apps/.tmp'
+# endif
+
+# --
+
+# export PGHOST=localhost PGPASSFILE=/etc/felix/opt/pgpass
+# postgresql_dbs=( $( ls /root/pg.d/ ) )
+
+# mongo_host=localhost mongo_passfile=/etc/felix/opt/mongopass
+# mongo_dbs=( $( ls /root/mongo.d/ ) )
+
+# --
+
+dpkg_selections=no                 # save dpkg selections
+
+# vim: set tw=70 sw=2 sts=2 et fdm=marker :

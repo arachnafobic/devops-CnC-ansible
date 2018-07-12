@@ -20,3 +20,6 @@ roles/sensu/files/ssl/client/
 roles/sensu/files/ssl/server/
 roles/sensu/files/ssl/sensu_ca/*
 !roles/sensu/files/ssl/sensu_ca/openssl.cnf
+
+# GPG Key(s)
+roles/srvbak/files/*asc
