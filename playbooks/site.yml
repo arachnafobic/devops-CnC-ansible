@@ -44,6 +44,11 @@
   vars:
     targets: all
 
+- import_playbook: ../roles/fail2ban.yml
+  tags: [fail2ban, init]
+  vars:
+    targets: all
+
 - import_playbook: ../roles/netdata.yml
   tags: [netdata, init]
   vars:
