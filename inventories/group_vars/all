@@ -22,6 +22,8 @@ sensu_client_plugins:
 
 elk_stack_use_xpack: true
 
+monitor_ip: 127.0.0.1
+
 gems:
   - bundler
   - pry

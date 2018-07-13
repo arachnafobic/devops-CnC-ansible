@@ -14,6 +14,8 @@ inventories/group_vars/*_secrets
 # Generated Dynamicly
 inventories/hosts.vm/hosts
 inventories/hosts.vm/groups
+inventories/hosts.live/hosts
+inventories/hosts.live/groups
 
 # certificates
 roles/sensu/files/ssl/client/

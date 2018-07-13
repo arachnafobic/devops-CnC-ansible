@@ -5,6 +5,7 @@
 
 - name:             install php-fpm
   yum:              name={{ item }} state=present enablerepo="remi-php72"
+  register:         phpfpm_install
   with_items:
     - "{{ pkgs_phpfpm }}"
 
@@ -27,6 +28,7 @@
                     regexp=^{{ item.key }}
                     line="{{ item.value }}"
                     insertafter=EOF backrefs=yes
+  when:             phpfpm_install is changed
   with_items:
     - { key: 'user = apache', value: 'user = nginx' }
     - { key: 'group = apache', value: 'group = nginx' }

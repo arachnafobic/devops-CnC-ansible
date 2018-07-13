@@ -10,18 +10,14 @@
   notify:           restart fail2ban
 
 - name:             copy jail.conf
-  copy:             src=jail.conf dest=/etc/fail2ban/jail.conf force=yes owner=root group=root mode=0644
+  copy:             src=jail.redhat.conf dest=/etc/fail2ban/jail.conf force=yes owner=root group=root mode=0644
   notify:           restart fail2ban
-
-- name:             update jail.conf parameters
-  lineinfile:       dest=/etc/fail2ban/jail.conf
-                    state=present
-                    regexp=^{{ item.search }}
-                    line="{{ item.key }} = {{ item.value }}"
-                    insertafter=EOF
-  with_items:
-    - { search: 'banaction = ufw-ssh', key: 'banaction', value: 'route' }
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
+- name:             copy jail.conf
+  copy:             src=jail.debian.conf dest=/etc/fail2ban/jail.conf force=yes owner=root group=root mode=0644
+  notify:           restart fail2ban
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
 - name:             copy action.d/ufw-ssh.conf
   copy:             src=ufw-ssh.conf dest=/etc/fail2ban/action.d/ufw-ssh.conf force=yes owner=root group=root mode=0644
