@@ -5,7 +5,14 @@
   register:         froxlor_check
   changed_when:     false
 
-- include_tasks:    install.yml
-  when:             froxlor_check.stat.exists == false
+- include_tasks:    install_debian-based.yml
+  when:             froxlor_check.stat.exists == false and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
 
-- include_tasks:    config.yml
+- include_tasks:    install_redhat-based.yml
+  when:             froxlor_check.stat.exists == false and (ansible_distribution == "CentOS" or ansible_distribution == "RedHat")
+
+- include_tasks:    config_debian-based.yml
+  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+- include_tasks:    config_redhat-based.yml
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"

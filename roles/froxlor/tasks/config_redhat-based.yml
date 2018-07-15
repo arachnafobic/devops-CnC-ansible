@@ -1,0 +1,107 @@
+---
+
+- name:             fetch server IP
+  shell:            ifconfig | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|10|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})' | head -n1
+  register:         frox_ip
+  failed_when:      false
+  changed_when:     false
+  when:             frox_ip is undefined
+
+- name:             set facts specific to redhat-based distros
+  set_fact:
+    scl_mariadb:   "scl enable rh-mariadb102 --"
+    frox_mysql_socket: "/var/lib/mysql/mysql.sock"
+    frox_httpd_user:  nginx
+    frox_httpd_group: nginx
+
+- name:             template /etc/libnss-mysql.cfg
+  template:
+    src:            libnss-mysql.cfg.j2
+    dest:           /etc/libnss-mysql.cfg
+    owner:          root
+    group:          root
+    mode:           0600
+    backup:         yes
+
+- name:             template /etc/libnss-mysql-root.cfg
+  template:
+    src:            libnss-mysql-root.cfg.j2
+    dest:           /etc/libnss-mysql-root.cfg
+    owner:          root
+    group:          root
+    mode:           0600
+    backup:         yes
+
+- name:             copy /etc/nsswitch.conf
+  copy:
+    src:            nsswitch.conf
+    dest:           /etc/nsswitch.conf
+    owner:          root
+    group:          root
+    mode:           0644
+    backup:         yes
+
+- name:             template /etc/nginx/sites-available/_default.conf
+  template:
+    src:            nginx.default.conf.j2
+    dest:           /etc/nginx/sites-available/_default.conf
+    owner:          root
+    group:          root
+    mode:           0664
+  notify:           restart nginx
+
+- name:             template /etc/opt/remi/php72/default.conf
+  template:
+    src:            php-fpm.default.conf.j2
+    dest:           /etc/opt/remi/php72/default.conf
+    owner:          root
+    group:          root
+    mode:           0664
+  notify:           restart php-fpm
+
+- name:             update /etc/opt/remi/php72/php-fpm.conf to load default.conf
+  lineinfile:       dest=/etc/opt/remi/php72/php-fpm.conf
+                    insertafter='^include=/etc/opt/remi/php72/php-fpm.d/*.conf'
+                    line='include=/etc/opt/remi/php72/default.conf'
+  notify:           restart php-fpm
+
+- name:             create systemd folder for mariadb (redhat based)
+  file:
+    path:  "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode:  "{{ item.mode }}"
+  with_items:
+    - { owner: "root", group: "root", path: "/etc/systemd/system/rh-mariadb102-mariadb.service.d", mode: "0755" }
+
+- name:             place systemd override for mariadb (redhat based)
+  template:
+    src:            rh-mariadb102-mariadb_override.conf
+    dest:           /etc/systemd/system/rh-mariadb102-mariadb.service.d/override.conf
+    owner:          root
+    group:          root
+    mode:           0644
+
+- name:             template updates.sql
+  template:
+    src:            updates.sql.j2
+    dest:           /root/tmp/updates.sql
+    owner:          root
+    group:          root
+    mode:           0600
+  when:             froxlor_check.stat.exists == false
+
+- name:             apply updates.sql
+  shell:           "{{ scl_mariadb }} mysql -BN {{ frox_mysql_db }} < /root/tmp/updates.sql"
+  when:             froxlor_check.stat.exists == false
+
+- name:             remove our froxlor vhost config
+  file:
+    path:           "{{ frox_vhostpath }}/_froxlor.conf"
+    state:          absent
+
+- name:             force run froxlor cronjob to finalize
+  shell:            php /var/www/froxlor/scripts/froxlor_master_cronjob.php --force
+  when:             froxlor_check.stat.exists == false
+  notify:           restart nginx

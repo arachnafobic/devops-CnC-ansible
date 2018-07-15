@@ -145,17 +145,17 @@ then
      checklimit=$(echo $LIMITTO | tr ":" "\n")
      for limit in $checklimit
      do
-          if [[ ! $(grep "\[$limit\]" inventories/hosts.$TARGET) ]] && [[ ! $(grep "\[$limit:children\]" inventories/hosts.$TARGET) ]]
+          if [[ ! $(grep "$limit" inventories/hosts.$TARGET) ]] && [[ ! $(grep "$limit" inventories/hosts.$TARGET/hosts) ]]
           then
                # not found
                echo "$limit is not specified as a server or group in hosts.$TARGET!"
                exit 1
           else
-               if [[ $(grep "\[$limit\]" inventories/hosts.$TARGET) ]]
+               if [[ $(grep "$limit" inventories/hosts.$TARGET) ]]
                then
-                    FOUNDLIMIT+="  `grep "\[$limit\]" inventories/hosts.$TARGET`\n"
+                    FOUNDLIMIT+="  `grep "$limit" inventories/hosts.$TARGET`\n"
                else
-                    FOUNDLIMIT+="  `grep "\[$limit:children\]" inventories/hosts.$TARGET`\n"
+                    FOUNDLIMIT+="  `grep "$limit" inventories/hosts.$TARGET/hosts`\n"
                fi
           fi
           if [[ -z $FOUNDLIMIT ]]

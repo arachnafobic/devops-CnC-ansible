@@ -3,21 +3,6 @@
 - name:             install some support packages
   apt:              name="{{ item }}" state=present install_recommends=no
   with_items:       "{{ frox_support_pkgs_debian }}"
-  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
-
-- name:             install some support packages
-  yum:              name="{{ item }}" state=present
-  with_items:       "{{ frox_support_pkgs_redhat }}"
-  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
-
-- name:             enable nscd
-  service:          name=nscd state=restarted enabled=yes
-
-- name:             set user/group for nginx if default is not www-data
-  set_fact:
-    frox_httpd_user:  nginx
-    frox_httpd_group: nginx
-  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
 
 - name:             create froxlocal group
   group:
@@ -84,19 +69,6 @@
     mode:  0644
   notify:           restart nginx
 
-- name:             fix sql_mode for mariadb on CentOS
-  lineinfile:
-    path: /etc/opt/rh/rh-mariadb102/my.cnf
-    regexp: '^[mysqld]'
-    insertafter: '^[mysqld]'
-    line: 'sql_mode=ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'
-  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
-  notify:           restart rh-mariadb
-
-- name:             fix /var/www permissions on CentOS
-  file:             path=/var/www state=directory owner=nginx group=nginx mode=0755
-  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
-
 - name:             run handlers now
   meta:             flush_handlers
 
@@ -109,6 +81,7 @@
   shell:            ifconfig | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|10|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})' | head -n1
   register:         frox_ip
   failed_when:      false
+  changed_when:     false
 
 - name:             run froxlor installer
   no_log:           true

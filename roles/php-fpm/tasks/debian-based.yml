@@ -17,5 +17,6 @@
 
 - name:             install php-fpm
   apt:              name={{ item }} state=present install_recommends=no
+  notify:           restart php-fpm
   with_items:
     - "{{ pkgs_phpfpm }}"

@@ -3,13 +3,8 @@
 - name:             restart nginx
   service:          name=nginx state=restarted enabled=yes
 
+- name:             restart php-fpm
+  service:          name="{{ service_phpfpm_name }}" state=restarted enabled=yes
+
 - name:             restart rh-mariadb
   service:          name=rh-mariadb102-mariadb state=restarted enabled=yes
-
-- name:             restart nscd
-  listen:           restart nscd
-  service:          name=nscd state=restarted enabled=yes
-
-- name:             invalidate groups with nscd
-  listen:           restart nscd
-  shell:            nscd --invalidate=group

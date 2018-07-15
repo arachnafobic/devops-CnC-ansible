@@ -24,3 +24,5 @@
   notify:           restart fail2ban
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
+- name:             remove /etc/fail2ban/jail.d/defaults-debian.conf if present
+  file:             path=/etc/fail2ban/jail.d/defaults-debian.conf state=absent

@@ -2,13 +2,10 @@
 
 - name:             install memcached packages
   package:          name={{ item }} state=present
+  notify:           restart memcached
   with_items:
     - "{{ pkgs_memcached }}"
 
 - name:             touch memcached in /root/stat_services.d
   file:             path=/root/stat_services.d/memcached state=touch
   changed_when:     false
-
-- name:             restart memcached
-  service:          name={{ service_memcached_name }} state=restarted enabled=yes
-

@@ -1,5 +1,16 @@
 ---
 
+- name:             fetch server IP
+  shell:            ifconfig | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|10|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})' | head -n1
+  register:         frox_ip
+  failed_when:      false
+  changed_when:     false
+  when:             frox_ip is undefined
+
+- name:             set facts specific to debian-based distros
+  set_fact:
+    frox_mysql_socket: "/var/run/mysqld/mysqld.sock"
+
 - name:             template /etc/libnss-mysql.cfg
   template:
     src:            libnss-mysql.cfg.j2
@@ -8,7 +19,6 @@
     group:          root
     mode:           0600
     backup:         yes
-  notify:           restart nscd
 
 - name:             template /etc/libnss-mysql-root.cfg
   template:
@@ -18,7 +28,6 @@
     group:          root
     mode:           0600
     backup:         yes
-  notify:           restart nscd
 
 - name:             copy /etc/nsswitch.conf
   copy:
@@ -28,7 +37,30 @@
     group:          root
     mode:           0644
     backup:         yes
-  notify:           restart nscd
+
+- name:             template /etc/nginx/sites-available/_default.conf
+  template:
+    src:            nginx.default.conf.j2
+    dest:           /etc/nginx/sites-available/_default.conf
+    owner:          root
+    group:          root
+    mode:           0664
+  notify:           restart nginx
+
+- name:             template /etc/php/7.2/fpm/default.conf
+  template:
+    src:            php-fpm.default.conf.j2
+    dest:           /etc/php/7.2/fpm/default.conf
+    owner:          root
+    group:          root
+    mode:           0664
+  notify:           restart php-fpm
+
+- name:             update /etc/php/7.2/fpm/php-fpm.conf to load default.conf
+  lineinfile:       dest=/etc/php/7.2/fpm/php-fpm.conf
+                    insertafter='^include=/etc/php/7.2/fpm/pool.d/*.conf'
+                    line='include=/etc/php/7.2/fpm/default.conf'
+  notify:           restart php-fpm
 
 - name:             update service startup scripts
   lineinfile:       dest="/etc/init.d/{{ item.service }}"
@@ -37,39 +69,7 @@
                     line="{{ item.key }}    {{ item.value }}"
                     insertafter=EOF backrefs=yes
   with_items:
-    - { service: 'php7.2-fpm', key: '# Required-Start:', value: '$remote_fs $network mysql nscd' }
-    - { service: 'nscd', key: '# Required-Start:', value: '$remote_fs $syslog $network mysql' }
-  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
-
-- name:             create systemd folder for mariadb (redhat based)
-  file:
-    path:  "{{ item.path }}"
-    state: directory
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
-    mode:  "{{ item.mode }}"
-  with_items:
-    - { owner: "root", group: "root", path: "/etc/systemd/system/rh-mariadb102-mariadb.service.d", mode: "0755" }
-  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
-
-- name:             place systemd override for mariadb (redhat based)
-  template:
-    src:            rh-mariadb102-mariadb_override.conf
-    dest:           /etc/systemd/system/rh-mariadb102-mariadb.service.d/override.conf
-    owner:          root
-    group:          root
-    mode:           0644
-  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
-
-- name:             set fact to prepend for shell commands during configure
-  set_fact:
-    scl_mariadb:   "scl enable rh-mariadb102 --"
-  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
-
-- name:             set fact to prepend for shell commands during configure
-  set_fact:
-    scl_mariadb:   " "
-  when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+    - { service: 'php7.2-fpm', key: '# Required-Start:', value: '$remote_fs $network mysql' }
 
 - name:             template updates.sql
   template:
@@ -81,7 +81,7 @@
   when:             froxlor_check.stat.exists == false
 
 - name:             apply updates.sql
-  shell:           "{{ scl_mariadb }} mysql -BN {{ frox_mysql_db }} < /root/tmp/updates.sql"
+  shell:           "mysql -BN {{ frox_mysql_db }} < /root/tmp/updates.sql"
   when:             froxlor_check.stat.exists == false
 
 - name:             remove our froxlor vhost config
@@ -93,4 +93,3 @@
   shell:            php /var/www/froxlor/scripts/froxlor_master_cronjob.php --force
   when:             froxlor_check.stat.exists == false
   notify:           restart nginx
-

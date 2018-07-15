@@ -6,6 +6,7 @@
 - name:             install php-fpm
   yum:              name={{ item }} state=present enablerepo="remi-php72"
   register:         phpfpm_install
+  notify:           restart php-fpm
   with_items:
     - "{{ pkgs_phpfpm }}"
 
@@ -29,6 +30,7 @@
                     line="{{ item.value }}"
                     insertafter=EOF backrefs=yes
   when:             phpfpm_install is changed
+  notify:           restart php-fpm
   with_items:
     - { key: 'user = apache', value: 'user = nginx' }
     - { key: 'group = apache', value: 'group = nginx' }
@@ -39,6 +41,3 @@
 
 - name:             link php to php72
   file:             path=/usr/bin/php src=/opt/remi/php72/root/usr/bin/php state=link
-
-- name:             ensure php-fpm service is enabled
-  service:          name=php72-php-fpm state=restarted enabled=yes
