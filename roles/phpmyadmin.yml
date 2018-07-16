@@ -1,0 +1,11 @@
+---
+# phpmyadmin.yml
+
+- name:             phpmyadmin
+  hosts:            "{{ targets }}"
+  gather_facts:     no
+  become:           true
+  become_user:      root
+
+  roles:
+    - phpmyadmin

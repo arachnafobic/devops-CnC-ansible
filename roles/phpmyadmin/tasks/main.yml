@@ -1,0 +1,42 @@
+---
+
+- name:             download phpmyadmin 4.8.2
+  get_url:          url=https://files.phpmyadmin.net/phpMyAdmin/4.8.2/phpMyAdmin-4.8.2-english.tar.gz
+                    dest=/root/tmp/phpMyAdmin-4.8.2-english.tar.gz
+  register:         myadmin_download
+
+- name:             check for /usr/local/src/phpMyAdmin
+  stat:             path=/usr/local/src/phpMyAdmin
+  register:         check_path
+
+- name:             unpack phpmyadmin to /usr/local/src
+  unarchive:        src=/root/tmp/phpMyAdmin-4.8.2-english.tar.gz
+                    dest=/usr/local/src
+                    remote_src=yes
+  when:             (myadmin_download is changed) and (check_path.stat.exists == false)
+
+- name:             check for /usr/local/src/phpMyAdmin-4.8.2-english
+  stat:             path=/usr/local/src/phpMyAdmin-4.8.2-english
+  register:         check_unpack_path
+
+- name:             rename /usr/local/src/phpMyAdmin-4.8.2-english to phpMyAdmin
+  command:          mv /usr/local/src/phpMyAdmin-4.8.2-english/ /usr/local/src/phpMyAdmin/
+                    creates=/usr/local/src/phpMyAdmin/index.php
+  when:             (myadmin_download is changed) and (check_unpack_path.stat.exists == true)
+
+- name:             copy config.sample.inc.php to config.inc.php
+  copy:             src=/usr/local/src/phpMyAdmin/config.sample.inc.php
+                    dest=/usr/local/src/phpMyAdmin/config.inc.php
+                    remote_src=yes
+  when:             myadmin_download is changed
+
+- name:             set $cfg['blowfish_secret']
+  replace:          path=/usr/local/src/phpMyAdmin/config.inc.php
+                    regexp="^\$cfg\['blowfish_secret(.*)?$"
+                    replace="$cfg['blowfish_secret'] = 'thisisalongstringthatissupposetobeasecretsoshhhhdonttell';"
+
+- name:             symlink phpMyAdmin to database
+  file:             src=/usr/local/src/phpMyAdmin
+                    dest=/usr/local/src/database
+                    state=link
+  when:             myadmin_download is changed

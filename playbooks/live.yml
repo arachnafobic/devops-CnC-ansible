@@ -136,6 +136,11 @@
   vars:
     targets: phpfpm
 
+- import_playbook: ../roles/phpmyadmin.yml
+  tags: [phpmyadmin, services]
+  vars:
+    targets: phpmyadmin
+
 # monitoring/logging systems and clients
 - import_playbook: ../roles/sensu.yml
   tags: [sensu, services]
