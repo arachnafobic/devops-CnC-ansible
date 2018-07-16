@@ -35,6 +35,19 @@
                     regexp="^\$cfg\['blowfish_secret(.*)?$"
                     replace="$cfg['blowfish_secret'] = 'thisisalongstringthatissupposetobeasecretsoshhhhdonttell';"
 
+- name:             set http user/group vars for redhat-based
+  set_fact:
+    httpd_user:  nginx
+    httpd_group: nginx
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
+- name:             create tmp folder nginx can write in
+  file:             path=/usr/local/src/phpMyAdmin/tmp
+                    state=directory
+                    mode=0700
+                    owner="{{ httpd_user }}"
+                    group="{{ httpd_group }}"
+
 - name:             symlink phpMyAdmin to database
   file:             src=/usr/local/src/phpMyAdmin
                     dest=/usr/local/src/database
