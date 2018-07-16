@@ -83,7 +83,7 @@
                     state=present
   notify:           restart php-fpm
 
-- name:             create systemd folder for mariadb (redhat based)
+- name:             create systemd folders
   file:
     path:  "{{ item.path }}"
     state: directory
@@ -92,14 +92,20 @@
     mode:  "{{ item.mode }}"
   with_items:
     - { owner: "root", group: "root", path: "/etc/systemd/system/rh-mariadb102-mariadb.service.d", mode: "0755" }
+    - { owner: "root", group: "root", path: "/etc/systemd/system/nginx.service.d", mode: "0755" }
+    - { owner: "root", group: "root", path: "/etc/systemd/system/php72-php-fpm.service.d", mode: "0755" }
 
-- name:             place systemd override for mariadb (redhat based)
+- name:             place systemd override configs
   template:
-    src:            rh-mariadb102-mariadb_override.conf
-    dest:           /etc/systemd/system/rh-mariadb102-mariadb.service.d/override.conf
+    src:           "{{ item.template }}"
+    dest:          "/etc/systemd/system/{{ item.service }}.service.d/override.conf"
     owner:          root
     group:          root
     mode:           0644
+  with_items:
+    - { service: "rh-mariadb102-mariadb", template: "systemd_redhat_rh-mariadb102-mariadb_override.conf.j2" }
+    - { service: "nginx", template: "systemd_redhat_nginx_override.conf.j2" }
+    - { service: "php72-php-fpm", template: "systemd_redhat_php72-php-fpm_override.conf.j2" }
 
 - name:             template updates.sql
   template:

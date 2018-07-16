@@ -5,9 +5,5 @@ roles:
   - remove static ufw settings, add variable to host_vars with default in group_vars instead
   - add firewalld version to complement ufw steps
 
-- proftpd or pureftpd
-  - create role
-  - needs to act as sftp server
-
 - phpmyadmin
   - create role
