@@ -66,15 +66,18 @@
 - name:             update ssh parameters
   lineinfile:       dest=/etc/ssh/sshd_config
                     state=present
-                    regexp=^{{ item.key }}
+                    regexp="^[#]?{{ item.key }}"
                     line="{{ item.key }} {{ item.value }}"
                     insertafter=EOF
+                    backrefs=yes
   with_items:
     - { key: 'PermitRootLogin', value: 'no' }
     - { key: 'LoginGraceTime', value: '120' }
     - { key: 'TCPKeepAlive', value: 'yes' }
     - { key: 'X11Forwarding', value: 'yes' }
     - { key: 'ClientAliveInterval', value: '60' }
+    - { key: 'PasswordAuthentication', value: 'yes' }
+    - { key: 'Subsystem', value: 'sftp internal-sftp' }
   notify:
     - restart ssh
 

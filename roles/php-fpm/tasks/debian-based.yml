@@ -18,5 +18,18 @@
 - name:             install php-fpm
   apt:              name={{ item }} state=present install_recommends=no
   notify:           restart php-fpm
+  register:         phpfpm_install
   with_items:
     - "{{ pkgs_phpfpm }}"
+
+- name:             update www.conf
+  lineinfile:       dest="/etc/php/7.2/fpm/pool.d/www.conf"
+                    state=present
+                    regexp=^{{ item.key }}
+                    line="{{ item.value }}"
+                    insertafter=EOF backrefs=yes
+  when:             phpfpm_install is changed
+  notify:           restart php-fpm
+  with_items:
+    - { key: 'listen = /run/php/php7.2-fpm.sock', value: 'listen = /run/php7.2-fpm.sock' }
+

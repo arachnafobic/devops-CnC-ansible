@@ -20,6 +20,8 @@ frox_vhostpath:   /etc/nginx/sites-enabled
 
 frox_support_pkgs_debian:
   - libnss-mysql-bg
+  - nscd
 
 frox_support_pkgs_redhat:
   - libnss-mysql
+  - nscd

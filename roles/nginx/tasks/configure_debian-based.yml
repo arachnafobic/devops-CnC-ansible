@@ -46,26 +46,36 @@
 - name:             place /etc/devops/ssl/dhparams.4096.pem
   copy:             dest=/etc/devops/ssl/dhparams.4096.pem src=dhparams.4096.pem owner=root group=root mode=0600
 
-- name:             place /etc/nginx/sites-available/_default.conf
-  copy:             dest=/etc/nginx/sites-available/_default.conf src=_default.conf mode=0644
-  notify:           restart nginx
+- name:             check for pressence of froxlor
+  stat:             path=/var/www/froxlor
+  register:         froxlor_check
+  changed_when:     false
 
-- name:             link _default.conf to /etc/nginx/sites-enabled/
-  file:             path=/etc/nginx/sites-enabled/_default.conf src=/etc/nginx/sites-available/_default.conf state=link
+- name:             place default vhost in /etc/nginx/sites-available/
+  copy:             dest=/etc/nginx/sites-available/{{ item }} src={{ item }} mode=0644
   notify:           restart nginx
+  when:             froxlor_check.stat.exists == false
+  with_items:
+    - _default.conf
 
-- name:             place /etc/nginx/sites-available/_logformats.conf
-  copy:             dest=/etc/nginx/sites-available/_logformats.conf src=_logformats.conf mode=0644
+- name:             link default vhost to /etc/nginx/sites-enabled/
+  file:             path=/etc/nginx/sites-enabled/{{ item }} src=/etc/nginx/sites-available/{{ item }} state=link
   notify:           restart nginx
+  when:             froxlor_check.stat.exists == false
+  with_items:
+    - _default.conf
 
-- name:             link _logformats.conf to /etc/nginx/sites-enabled/
-  file:             path=/etc/nginx/sites-enabled/_logformats.conf src=/etc/nginx/sites-available/_logformats.conf state=link
+- name:             place default configs in /etc/nginx/sites-available/
+  copy:             dest=/etc/nginx/sites-available/{{ item }} src={{ item }} mode=0644
   notify:           restart nginx
+  with_items:
+    - _logformats.conf
+    - _ssl.conf
 
-- name:             place /etc/nginx/sites-available/_ssl.conf
-  copy:             dest=/etc/nginx/sites-available/_ssl.conf src=_ssl.conf mode=0644
+- name:             link default configs to /etc/nginx/sites-enabled/
+  file:             path=/etc/nginx/sites-enabled/{{ item }} src=/etc/nginx/sites-available/{{ item }} state=link
   notify:           restart nginx
+  with_items:
+    - _logformats.conf
+    - _ssl.conf
 
-- name:             link _ssl.conf to /etc/nginx/sites-enabled/
-  file:             path=/etc/nginx/sites-enabled/_ssl.conf src=/etc/nginx/sites-available/_ssl.conf state=link
-  notify:           restart nginx

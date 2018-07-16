@@ -5,7 +5,6 @@
   register:         frox_ip
   failed_when:      false
   changed_when:     false
-  when:             frox_ip is undefined
 
 - name:             set facts specific to debian-based distros
   set_fact:
@@ -60,6 +59,7 @@
   lineinfile:       dest=/etc/php/7.2/fpm/php-fpm.conf
                     insertafter='^include=/etc/php/7.2/fpm/pool.d/*.conf'
                     line='include=/etc/php/7.2/fpm/default.conf'
+                    state=present
   notify:           restart php-fpm
 
 - name:             update service startup scripts
@@ -88,6 +88,15 @@
   file:
     path:           "{{ frox_vhostpath }}/_froxlor.conf"
     state:          absent
+
+- name:             template /var/www/froxlor/scripts/froxlor_master_cronjob.php
+  template:
+    src:            froxlor_master_cronjob.php.j2
+    dest:           /var/www/froxlor/scripts/froxlor_master_cronjob.php
+    owner:          froxlocal
+    group:          froxlocal
+    mode:           0664
+    backup:         yes
 
 - name:             force run froxlor cronjob to finalize
   shell:            php /var/www/froxlor/scripts/froxlor_master_cronjob.php --force

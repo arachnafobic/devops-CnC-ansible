@@ -39,8 +39,9 @@
     mode:  "{{ item.mode }}"
   with_items:
     - { owner: "{{ frox_httpd_user }}", group: "{{ frox_httpd_group }}", path: "/var/www/froxlor", mode: "0750" }
-    - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/webs", mode: "0750" }
-    - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/logs", mode: "0750" }
+    - { owner: "root", group: "root", path: "/var/customers", mode: "0755" }
+    - { owner: "root", group: "root", path: "/var/customers/webs", mode: "0755" }
+    - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/logs", mode: "0755" }
     - { owner: "froxlocal", group: "froxlocal", path: "/var/customers/tmp", mode: "1777" }
 
 - name:            "download froxlor {{ frox_version }} tarball"

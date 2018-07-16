@@ -5,7 +5,6 @@
   register:         frox_ip
   failed_when:      false
   changed_when:     false
-  when:             frox_ip is undefined
 
 - name:             set facts specific to redhat-based distros
   set_fact:
@@ -14,23 +13,41 @@
     frox_httpd_user:  nginx
     frox_httpd_group: nginx
 
+- name:             disable check-files configs in nscd
+  lineinfile:       path=/etc/nscd.conf
+                    state=present
+                    backrefs=yes
+                    regexp=^{{ item.key }}
+                    line="{{ item.key }}{{ item.value }}"
+  with_items:
+    - { key: "\tcheck-files\t\tpasswd\t\t", value: 'no' }
+    - { key: "\tcheck-files\t\tgroup\t\t", value: 'no' }
+    - { key: "\tcheck-files\t\thosts\t\t", value: 'no' }
+    - { key: "\tcheck-files\t\tservices\t", value: 'no' }
+    - { key: "\tenable-cache\t\tnetgroup\t", value: 'no' }
+    - { key: "\tcheck-files\t\tnetgroup\t", value: 'no' }
+  notify:
+    - restart nscd
+
 - name:             template /etc/libnss-mysql.cfg
   template:
     src:            libnss-mysql.cfg.j2
     dest:           /etc/libnss-mysql.cfg
-    owner:          root
-    group:          root
+    owner:          nscd
+    group:          nscd
     mode:           0600
     backup:         yes
+  notify:           restart nscd
 
 - name:             template /etc/libnss-mysql-root.cfg
   template:
     src:            libnss-mysql-root.cfg.j2
     dest:           /etc/libnss-mysql-root.cfg
-    owner:          root
-    group:          root
+    owner:          nscd
+    group:          nscd
     mode:           0600
     backup:         yes
+  notify:           restart nscd
 
 - name:             copy /etc/nsswitch.conf
   copy:
@@ -63,6 +80,7 @@
   lineinfile:       dest=/etc/opt/remi/php72/php-fpm.conf
                     insertafter='^include=/etc/opt/remi/php72/php-fpm.d/*.conf'
                     line='include=/etc/opt/remi/php72/default.conf'
+                    state=present
   notify:           restart php-fpm
 
 - name:             create systemd folder for mariadb (redhat based)
@@ -100,6 +118,15 @@
   file:
     path:           "{{ frox_vhostpath }}/_froxlor.conf"
     state:          absent
+
+- name:             template /var/www/froxlor/scripts/froxlor_master_cronjob.php
+  template:
+    src:            froxlor_master_cronjob.php.j2
+    dest:           /var/www/froxlor/scripts/froxlor_master_cronjob.php
+    owner:          froxlocal
+    group:          froxlocal
+    mode:           0664
+    backup:         yes
 
 - name:             force run froxlor cronjob to finalize
   shell:            php /var/www/froxlor/scripts/froxlor_master_cronjob.php --force

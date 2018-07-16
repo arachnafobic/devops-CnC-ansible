@@ -43,11 +43,29 @@
   copy:             dest=/etc/devops/ssl/dhparams.4096.pem src=dhparams.4096.pem owner=root group=root mode=0600
   notify:           restart nginx
 
+- name:             check for pressence of froxlor
+  stat:             path=/var/www/froxlor
+  register:         froxlor_check
+  changed_when:     false
+
+- name:             place default vhost in /etc/nginx/sites-available/
+  copy:             dest=/etc/nginx/sites-available/{{ item }} src={{ item }} mode=0644
+  notify:           restart nginx
+  when:             froxlor_check.stat.exists == false
+  with_items:
+    - _default.conf
+
+- name:             link default vhost to /etc/nginx/sites-enabled/
+  file:             path=/etc/nginx/sites-enabled/{{ item }} src=/etc/nginx/sites-available/{{ item }} state=link
+  notify:           restart nginx
+  when:             froxlor_check.stat.exists == false
+  with_items:
+    - _default.conf
+
 - name:             place default configs in /etc/nginx/sites-available/
   copy:             dest=/etc/nginx/sites-available/{{ item }} src={{ item }} mode=0644
   notify:           restart nginx
   with_items:
-    - _default.conf
     - _logformats.conf
     - _ssl.conf
 
@@ -55,6 +73,5 @@
   file:             path=/etc/nginx/sites-enabled/{{ item }} src=/etc/nginx/sites-available/{{ item }} state=link
   notify:           restart nginx
   with_items:
-    - _default.conf
     - _logformats.conf
     - _ssl.conf
