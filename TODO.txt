@@ -7,3 +7,9 @@ roles:
 
 - phpmyadmin
   - create role
+
+CnC needs sshpass installed during provisions
+CentOS needs development tools installed during update roles
+CentOS firewalld needs http/https opened up permanently
+php-fpm enable only when it's installed/changed
+memcached enable only when it's installed/changed
