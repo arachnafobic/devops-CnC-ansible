@@ -4,6 +4,15 @@
   apt:              name="{{ item }}" state=present install_recommends=no
   with_items:       "{{ frox_support_pkgs_debian }}"
 
+- name:             copy libnss-mysql deb package if server runs bionic
+  copy:             src=libnss-mysql-bg_1.5-4build1_amd64.deb
+                    dest=/root/tmp/libnss-mysql-bg_1.5-4build1_amd64.deb
+  when:             ansible_distribution_release == 'bionic'
+
+- name:             install libnss-mysql from .deb if server runs bionic
+  apt:              deb=/root/tmp/libnss-mysql-bg_1.5-4build1_amd64.deb state=present
+  when:             ansible_distribution_release == 'bionic'
+
 - name:             create froxlocal group
   group:
     name:           froxlocal

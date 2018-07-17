@@ -23,6 +23,7 @@
   lineinfile:       path=/etc/apt/apt.conf.d/30autoproxy
                     line='Acquire::https::Proxy-Auto-Detect "/usr/share/squid-deb-proxy-client/apt-avahi-discover-https";'
                     state=present
+  when:             ansible_distribution_release != 'bionic'
 
 - name:             update packages list
   apt:              update_cache=yes

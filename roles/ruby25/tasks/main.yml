@@ -1,0 +1,15 @@
+---
+
+- name:             install ruby packages
+  package:          name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_ruby25 }}"
+  when:             pkgs_ruby25 is defined
+
+#- name:             set default ruby
+#  alternatives:     name=ruby path=/usr/bin/ruby2.3
+#  when:             pkgs_ruby23 is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+
+#- name:             set default gem
+#  alternatives:     name=gem path=/usr/bin/gem2.3
+#  when:             pkgs_ruby23 is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
