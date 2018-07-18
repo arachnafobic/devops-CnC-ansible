@@ -39,7 +39,6 @@
   when:             deb_mariadb_install_packages is defined and deb_mariadb_install_packages.changed
   no_log:           true
 
-
 # Has to be after the root password assignment, for idempotency.
 - name:             Copy .my.cnf file with root password credentials.
   template:
@@ -48,3 +47,4 @@
     owner: root
     group: root
     mode: 0600
+  when:             deb_mariadb_install_packages is defined and deb_mariadb_install_packages.changed
