@@ -20,6 +20,10 @@
   apt:              name=openjdk-11-jre-headless state=absent
   when:             ansible_distribution_release == 'bionic'
 
+- name:             update ca
+  shell:            rm /etc/ssl/certs/java/cacerts && update-ca-certificates -f
+  when:             ansible_distribution_release == 'bionic'
+
 - name:             install logstash package
   apt:              name={{ item }} state=present install_recommends=no
   with_items:
