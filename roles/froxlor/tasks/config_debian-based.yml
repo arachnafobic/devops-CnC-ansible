@@ -10,6 +10,19 @@
   set_fact:
     frox_mysql_socket: "/var/run/mysqld/mysqld.sock"
 
+- name:             create /etc/nginx/conf-enabled/ when ssl is enabled
+  file:             path=/etc/nginx/conf-enabled/ state=directory owner=root group=root mode=0755
+  when:             frox_use_ssl == true
+
+- name:             template /etc/nginx/conf-enabled/acme.conf when ssl is enabled
+  template:
+    src:            acme.conf.j2
+    dest:           /etc/nginx/conf-enabled/acme.conf
+    owner:          root
+    group:          root
+    mode:           0644
+  when:             frox_use_ssl == true
+
 - name:             template /etc/libnss-mysql.cfg
   template:
     src:            libnss-mysql.cfg.j2

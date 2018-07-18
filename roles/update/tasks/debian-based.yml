@@ -15,6 +15,7 @@
                     regexp="{{ item.regexp }}"
                     line="{{ item.line }}"
                     backrefs=yes
+  when:             squiddeb_statuscheck.stat.exists
   with_items:
     - {regexp: '            print "http:(.*)', line: '            print "https:\1'}
     - {regexp: '            print "http:(.*)', line: '            print "https:\1'}
@@ -23,7 +24,7 @@
   lineinfile:       path=/etc/apt/apt.conf.d/30autoproxy
                     line='Acquire::https::Proxy-Auto-Detect "/usr/share/squid-deb-proxy-client/apt-avahi-discover-https";'
                     state=present
-  when:             ansible_distribution_release != 'bionic'
+  when:             squiddeb_statuscheck.stat.exists and ansible_distribution_release != 'bionic'
 
 - name:             update packages list
   apt:              update_cache=yes
