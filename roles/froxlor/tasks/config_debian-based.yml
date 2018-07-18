@@ -95,6 +95,7 @@
   with_items:
     - { owner: "root", group: "root", path: "/etc/systemd/system/nginx.service.d", mode: "0755" }
     - { owner: "root", group: "root", path: "/etc/systemd/system/php7.2-fpm.service.d", mode: "0755" }
+    - { owner: "root", group: "root", path: "/etc/systemd/system/nscd.service.d", mode: "0755" }
 
 - name:             place systemd override configs
   template:
@@ -106,6 +107,7 @@
   with_items:
     - { service: "nginx", template: "systemd_debian_nginx_override.conf.j2" }
     - { service: "php7.2-fpm", template: "systemd_debian_php7.2-fpm_override.conf.j2" }
+    - { service: "nscd", template: "systemd_debian_nscd_override.conf.j2" }
 
 - name:             template updates.sql
   template:
