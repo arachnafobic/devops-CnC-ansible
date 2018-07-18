@@ -195,7 +195,7 @@
 - import_playbook: ../roles/setup-user.yml
   tags: [users, user-vagrant]
   vars:
-    targets:  vm-ubuntu, vm-clinux, vm-centos
+    targets:  vm-ubuntu, vm-clinux, vm-centos, vm-bionic
     user:   vagrant
     home:   /home/vagrant
     keygen: false
