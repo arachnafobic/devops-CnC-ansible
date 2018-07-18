@@ -9,7 +9,7 @@ Playbook Runner
 This shell script requires several options to be supplied in order to run specific playbooks.
 
 Syntax :
-$0 -v -p <playbook> -t <target> -l <limittoserver(s)> -o <playbook tag(s)> -a <gpg auth>
+$0 -v -s -p <playbook> -t <target> -l <limittoserver(s)> -o <playbook tag(s)> -a <gpg auth>
 
 <playbook> and <target> are mandatory.
 
@@ -43,7 +43,7 @@ PLAYBOOK_OPTIONS=
 VERBOSE=
 LIMITTO=
 GPGAUTH=
-SKIPCLONE=yes
+SKIPASKPW=no
 while getopts "hp:t:o:l:a:vs" OPTION
 do
      case $OPTION in
@@ -70,7 +70,7 @@ do
              VERBOSE=vvv
              ;;
          s)
-             SKIPCLONE=
+             SKIPASKPW=
              ;;
          ?)
              echo "invalid usage"
@@ -175,7 +175,12 @@ then
      then
           if [[ ! $TARGET == "vm" ]]
           then
-               ANSIBLE_COMMAND+=" --ask-become-pass"
+               if [[ ! -z $SKIPASKPW ]]
+               then
+                   ANSIBLE_COMMAND+=" --ask-become-pass"
+               else
+                   SKIPASKPW=yes
+               fi
           else
                ANSIBLE_COMMAND+=' --extra-vars "ansible_become_pass=foo"'
           fi
@@ -191,12 +196,7 @@ then
 fi
 if [[ ! -z $PLAYBOOK_OPTIONS ]]
 then
-     if [[ -z $SKIPCLONE ]]
-     then
-          ANSIBLE_COMMAND+=" --tags gather,init,${PLAYBOOK_OPTIONS//[[:space:]]}"
-     else
-          ANSIBLE_COMMAND+=" --tags gather,${PLAYBOOK_OPTIONS//[[:space:]]}"
-     fi
+     ANSIBLE_COMMAND+=" --tags gather,${PLAYBOOK_OPTIONS//[[:space:]]}"
 fi
 
 echo ""
@@ -209,7 +209,7 @@ echo "TARGET           == $TARGET"
 echo "LIMITTO          == $LIMITTO"
 echo "GPGAUTH          == $GPGAUTH"
 echo "PLAYBOOK_OPTIONS == $PLAYBOOK_OPTIONS"
-echo "SKIPCLONE        == $SKIPCLONE"
+echo "SKIPASKPW        == $SKIPASKPW"
 if [[ ! -z $FOUNDTAGS ]]
 then
      echo ""
