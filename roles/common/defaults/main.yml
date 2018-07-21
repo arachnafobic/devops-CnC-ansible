@@ -1,0 +1,8 @@
+---
+
+root_folders:
+  - tmp
+  - cache
+default_folders:
+  - /etc/devops
+  - /etc/devops/opt

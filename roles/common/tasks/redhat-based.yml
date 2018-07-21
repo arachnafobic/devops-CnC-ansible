@@ -1,0 +1,9 @@
+---
+
+- name:             set default editor
+  copy:             src=nano.sh
+                    dest=/etc/profile.d/nano.sh
+                    owner=root group=root mode=0644
+
+- name:             Set SELinux to permissive
+  selinux:          policy=targeted state=permissive

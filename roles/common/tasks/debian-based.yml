@@ -1,0 +1,35 @@
+---
+
+- name:             place apt wrapper
+  copy:             src=apt-wrapper
+                    dest=/usr/local/sbin/apt
+                    owner=root group=root mode=0755
+
+- name:             place apt-get wrapper
+  copy:             src=apt-get-wrapper
+                    dest=/usr/local/sbin/apt-get
+                    owner=root group=root mode=0755
+
+- name:             set default editor
+  command:          update-alternatives --set editor {{ default_editor }}
+  register:         common_alt_editor
+  changed_when:     '"using" in common_alt_editor.stdout'
+
+- name:             place /etc/checkrestart.blacklist
+  copy:             dest=/etc/checkrestart.blacklist src=checkrestart.blacklist mode=0644
+
+- name:             Set firewall rules for web traffic and SSH
+  ufw:              rule=allow port={{ item }} proto=tcp
+  with_items:
+    - ssh
+    - http
+    - https
+
+- name:             Allow internal network on VMs
+  ufw:              rule=allow src={{ item }}
+  with_items:
+    - 172.28.128.0/24
+  when:             ansible_virtualization_role == "guest"
+
+- name:             Deny everything and enable UFW
+  ufw:              state=enabled policy=deny
