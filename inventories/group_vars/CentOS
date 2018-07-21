@@ -65,10 +65,6 @@ pkgs_etckeeper:
   - git
 pkgs_ntp:
   - ntp
-pkgs_dotnet:
-  - libunwind
-  - libicu
-  - dotnet-hosting-2.0.8
 pkgs_python:
   - python-virtualenv
   - python-devel

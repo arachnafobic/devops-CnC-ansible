@@ -1,0 +1,6 @@
+---
+
+pkgs_dotnet:
+  - libunwind
+  - libicu
+  - dotnet-hosting-2.0.8

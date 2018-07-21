@@ -1,0 +1,14 @@
+---
+
+- name:             install packages-microsoft-prod.deb
+  apt:              deb=https://packages.microsoft.com/config/ubuntu/{{ ansible_distribution_version }}/packages-microsoft-prod.deb state=present
+  register:         dotnet_sources
+
+- name:             update apt cache
+  apt:              update_cache=yes
+  when:             dotnet_sources is changed
+
+- name:             install dotnet-hosting package
+  apt:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_dotnet }}"

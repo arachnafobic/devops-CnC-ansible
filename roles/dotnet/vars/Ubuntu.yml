@@ -1,0 +1,4 @@
+---
+
+pkgs_dotnet:
+  - dotnet-hosting-2.0.8

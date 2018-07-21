@@ -1,0 +1,10 @@
+---
+
+- name:             install packages-microsoft-prod.deb
+  yum:              name=https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm state=present
+  register:         dotnet_sources
+
+- name:             install dotnet-hosting package
+  yum:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_dotnet }}"

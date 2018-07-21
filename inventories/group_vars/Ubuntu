@@ -85,8 +85,6 @@ pkgs_ruby23:
   - ruby2.3-dev
 pkgs_ntp:
   - ntp
-pkgs_dotnet:
-  - dotnet-hosting-2.0.8
 pkgs_nodejs:
   - nodejs-legacy
   - nodejs-dev
