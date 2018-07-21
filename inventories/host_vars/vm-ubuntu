@@ -1,7 +1,0 @@
----
-
-monitor_ip: 127.0.0.1
-nodesource_use: true
-nodesource_version: 6.x
-default_servername: 172.28.128.4.xip.io
-

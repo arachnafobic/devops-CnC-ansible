@@ -28,7 +28,22 @@ user_defaults:
     - path:     ~/bin/ruby
       src:      /usr/bin/ruby2.3
 
+pkgs_nodejs:
+  - nodejs
+  - nodejs-legacy
+  - nodejs-dev
+  - npm
 pkgs_libav:
   - libav-tools
   - libavcodec-extra
 
+# Defaults, change here or per host in host_vars
+nodesource_use:     false              # if false, nodejs is ubuntu's default, 0.10
+nodesource_version: 4.x                # available versions: 4.x, 5.x, 6.x, 7.x, 8.x
+nodesource_pkgs_preclean:
+  - nodejs
+  - nodejs-legacy
+  - nodejs-dev
+  - npm
+nodesource_pkgs_nodejs:
+  - nodejs

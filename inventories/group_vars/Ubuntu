@@ -1,8 +1,5 @@
 ---
 
-alt:
-  editor:       /bin/nano
-
 service_ssh_name: ssh
 service_ntp_name: ntp
 service_phpfpm_name: php7.2-fpm
@@ -89,7 +86,7 @@ pkgs_ruby23:
 pkgs_ntp:
   - ntp
 pkgs_dotnet:
-  - dotnet-dev-1.0.4
+  - dotnet-hosting-2.0.8
 pkgs_nodejs:
   - nodejs-legacy
   - nodejs-dev

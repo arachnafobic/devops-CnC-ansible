@@ -24,24 +24,25 @@ elk_stack_use_xpack: true
 
 monitor_ip: 127.0.0.1
 
-gems:
-  - bundler
-  - pry
-  - localconfig
-  - bcrypt
 root_folders:
   - tmp
+  - cache
   - stat_services.d
   - pg.d
   - mongo.d
 default_folders:
   - /opt/src
   - /opt/pkg
-  - /root/cache
   - /__data
   - /__data/files
   - /etc/devops
   - /etc/devops/opt
+
+gems:
+  - bundler
+  - pry
+  - localconfig
+  - bcrypt
 gh_repos:
   - kchmck/vim-coffee-script
   - plasticboy/vim-markdown

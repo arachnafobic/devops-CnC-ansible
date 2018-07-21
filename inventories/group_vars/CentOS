@@ -1,8 +1,5 @@
 ---
 
-alt:
-  editor:       /usr/bin/nano
-
 service_ssh_name: sshd
 service_ntp_name: ntpd
 service_phpfpm_name: php72-php-fpm
@@ -68,9 +65,21 @@ pkgs_etckeeper:
   - git
 pkgs_ntp:
   - ntp
+pkgs_dotnet:
+  - libunwind
+  - libicu
+  - dotnet-hosting-2.0.8
 pkgs_python:
   - python-virtualenv
   - python-devel
+  - python34
+  - python34-devel
+pkgs_nodejs:
+  - nodejs
+  - nodejs-devel
+  - npm
+pkgs_erlang:
+  - erlang
 pkgs_ruby20:
   - ruby
   - ruby-devel
@@ -114,3 +123,13 @@ pkgs_redis:
   - redis
 pkgs_memcached:
  - memcached
+
+# Defaults, change here or per host in host_vars
+nodesource_use:     false              # if false, nodejs is ubuntu's default, 0.10
+nodesource_version: 4.x                # available versions: 4.x, 5.x, 6.x, 7.x, 8.x
+nodesource_pkgs_preclean:
+  - nodejs
+  - nodejs-devel
+  - npm
+nodesource_pkgs_nodejs:
+  - nodejs
