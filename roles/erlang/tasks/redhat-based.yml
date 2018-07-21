@@ -1,0 +1,19 @@
+---
+
+- name:             get rpm signing key for erlang solutions
+  get_url:          url=https://packages.erlang-solutions.com/rpm/erlang_solutions.asc dest=/root/cache/erlang_solutions.asc
+                    sha256sum=86232086a4dec44a5a505544d30822987a23a892db418f9e8e17dfff21eb0c23
+
+- name:             install rpm signing key for erlang solutions
+  rpm_key:          key=/root/cache/erlang_solutions.asc state=present
+
+- name:             erlang-solutions.repo for erlang solutions
+  template:         dest=/etc/yum.repos.d/erlang-solutions.repo src=erlang-solutions.repo
+                    owner=root group=root mode=0644
+  register:         erlang_sources
+
+- name:             install erlang from erlang solutions
+  yum:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_erlang }}"
+

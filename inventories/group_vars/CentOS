@@ -74,8 +74,6 @@ pkgs_nodejs:
   - nodejs
   - nodejs-devel
   - npm
-pkgs_erlang:
-  - erlang
 pkgs_ruby20:
   - ruby
   - ruby-devel
