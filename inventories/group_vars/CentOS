@@ -70,10 +70,6 @@ pkgs_python:
   - python-devel
   - python34
   - python34-devel
-pkgs_nodejs:
-  - nodejs
-  - nodejs-devel
-  - npm
 pkgs_ruby20:
   - ruby
   - ruby-devel
@@ -117,13 +113,3 @@ pkgs_redis:
   - redis
 pkgs_memcached:
  - memcached
-
-# Defaults, change here or per host in host_vars
-nodesource_use:     false              # if false, nodejs is ubuntu's default, 0.10
-nodesource_version: 4.x                # available versions: 4.x, 5.x, 6.x, 7.x, 8.x
-nodesource_pkgs_preclean:
-  - nodejs
-  - nodejs-devel
-  - npm
-nodesource_pkgs_nodejs:
-  - nodejs

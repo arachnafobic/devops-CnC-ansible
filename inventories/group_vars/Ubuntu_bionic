@@ -36,22 +36,8 @@ user_defaults:
 pkgs_ruby25:
   - ruby
   - ruby-dev
-pkgs_nodejs:
-  - nodejs
-  - nodejs-dev
-  - npm
 pkgs_libav:
   - libavcodec-extra
 
 frox_support_pkgs_debian:
   - nscd
-
-# Defaults, change here or per host in host_vars
-nodesource_use:     false              # if false, nodejs is ubuntu's default, 0.10
-nodesource_version: 4.x                # available versions: 4.x, 5.x, 6.x, 7.x, 8.x
-nodesource_pkgs_preclean:
-  - nodejs
-  - nodejs-dev
-  - npm
-nodesource_pkgs_nodejs:
-  - nodejs

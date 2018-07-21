@@ -1,0 +1,7 @@
+---
+
+nodesource_use:     false              # if false, distribution's node release is used
+nodesource_version: 10.x                # available versions: 4.x, 5.x, 6.x, 7.x, 8.x, 10.x
+nodesource_pkgs_nodejs:
+  - nodejs
+

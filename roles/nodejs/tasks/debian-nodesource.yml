@@ -23,7 +23,7 @@
 - name:             ensure distribution nodejs packages are not installed
   apt:              name={{ item }} state=absent
   with_items:
-    - "{{ nodesource_pkgs_preclean }}"
+    - "{{ pkgs_nodejs }}"
 
 - name:            "install nodejs {{ nodesource_version }} from nodesource"
   apt:              name={{ item }} state=present

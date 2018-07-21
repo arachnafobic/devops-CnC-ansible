@@ -1,9 +1,14 @@
 ---
 
+- include_vars:     "{{ ansible_distribution }}{{ ansible_distribution_version }}.yml"
+
 - name:             install nodejs packages
-  apt:              name={{ item }} state=present
+  package:          name={{ item }} state=present
   with_items:       '{{ pkgs_nodejs }}'
   when:             nodesource_use == false and pkgs_nodejs is defined
 
-- include_tasks:    nodesource.yml
-  when:             nodesource_use == true and nodesource_pkgs_nodejs is defined
+- include_tasks:    debian-nodesource.yml
+  when:             nodesource_use == true and nodesource_pkgs_nodejs is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+
+- include_tasks:    redhat-nodesource.yml
+  when:             nodesource_use == true and nodesource_pkgs_nodejs is defined and (ansible_distribution == "CentOS" or ansible_distribution == "RedHat")

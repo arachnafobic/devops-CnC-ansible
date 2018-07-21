@@ -1,0 +1,8 @@
+---
+
+pkgs_nodejs:
+  - nodejs
+  - nodejs-legacy
+  - nodejs-dev
+  - npm
+

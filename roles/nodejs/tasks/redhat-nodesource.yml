@@ -1,0 +1,20 @@
+---
+
+- name:             get rpm signing key for nodesource
+  get_url:          url=https://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL dest=/etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+                    sha256sum=0ea78d8bd6fb2e7c911b651d7bea798b4d88cc856fa6fdb53e2fc1d5efa7638b
+
+- name:             nodesource-el{{ ansible_distribution_major_version }}.repo for nodesource
+  template:         dest=/etc/yum.repos.d/nodesource-el{{ ansible_distribution_major_version }}.repo src=nodesource.repo
+                    owner=root group=root mode=0644
+  register:         nodesource_sources
+
+- name:             ensure distribution nodejs packages are not installed
+  yum:              name={{ item }} state=absent
+  with_items:
+    - "{{ pkgs_nodejs }}"
+
+- name:            "install nodejs {{ nodesource_version }} from nodesource"
+  yum:              name={{ item }} state=present
+  with_items:
+    - "{{ nodesource_pkgs_nodejs }}"

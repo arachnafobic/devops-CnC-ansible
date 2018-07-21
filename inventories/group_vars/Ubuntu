@@ -85,10 +85,6 @@ pkgs_ruby23:
   - ruby2.3-dev
 pkgs_ntp:
   - ntp
-pkgs_nodejs:
-  - nodejs-legacy
-  - nodejs-dev
-  - npm
 pkgs_imagemagick:
   - imagemagick
   - libmagickwand-dev
@@ -141,14 +137,3 @@ pkgs_fail2ban:
   - whois
 pkgs_memcached:
   - memcached
-
-# Defaults, change here or per host in host_vars
-nodesource_use:     false              # if false, nodejs is ubuntu's default, 0.10
-nodesource_version: 4.x                # available versions: 4.x, 5.x, 6.x, 7.x, 8.x
-nodesource_pkgs_preclean:
-  - nodejs-legacy
-  - nodejs-dev
-  - npm
-nodesource_pkgs_nodejs:
-  - nodejs
-
