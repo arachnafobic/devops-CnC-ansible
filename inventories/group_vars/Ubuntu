@@ -10,17 +10,8 @@ service_sensu_client: sensu-client
 service_sensu_server: sensu-server
 service_sensu_uchiwa: uchiwa
 
-default_ruby_version: "1.9"
 ruby_version:   1.9.3
 
-pkgs_ruby19:
-  - ruby1.9.1-full
-pkgs_ruby20:
-  - ruby2.0
-  - ruby2.0-dev
-pkgs_ruby23:
-  - ruby2.3
-  - ruby2.3-dev
 pkgs_redis:
   - redis-server
 pkgs_rabbitmq:

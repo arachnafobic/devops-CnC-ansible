@@ -1,0 +1,17 @@
+---
+
+- include_vars:     "{{ ansible_distribution }}{{ ansible_distribution_version }}.yml"
+
+- name:             install ruby packages
+  package:          name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_ruby }}"
+  when:             pkgs_ruby is defined
+
+- name:             set default ruby
+  alternatives:     name=ruby path="/usr/bin/ruby{{ default_ruby_version }}"
+  when:             default_ruby_set == true and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+
+- name:             set default gem
+  alternatives:     name=gem path="/usr/bin/gem{{ default_ruby_version }}"
+  when:             default_ruby_set == true and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")

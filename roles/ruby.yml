@@ -7,8 +7,5 @@
   become_user:      root
 
   roles:
-    - { role: ruby19, when: default_ruby_version == '1.9' }
-    - { role: ruby20, when: default_ruby_version == '2.0' }
-    - { role: ruby23, when: default_ruby_version == '2.3' }
-    - { role: ruby25, when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'bionic' }
+    - ruby
     - { role: chruby, when: ansible_hostname == 'vm-ubuntu'}

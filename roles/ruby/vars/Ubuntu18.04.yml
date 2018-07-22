@@ -1,0 +1,10 @@
+---
+
+# Ruby 1.9.1 and 2.0 have alternatives setting on debian based systems
+# put this to false for other combos
+default_ruby_set: false
+default_ruby_version: "2.5"
+
+pkgs_ruby:
+  - ruby
+  - ruby-dev

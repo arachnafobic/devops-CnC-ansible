@@ -7,7 +7,6 @@ service_memcached_name: memcached
 service_sensu_client: sensu-client
 service_mariadb_server: rh-mariadb102-mariadb
 
-default_ruby_version: "2.0"
 ruby_version:   2.0.0
 gem_exec:       /usr/bin/gem
 
@@ -31,9 +30,6 @@ install_pip_init:
   - passlib
 
 # Used during main play
-pkgs_ruby20:
-  - ruby
-  - ruby-devel
 pkgs_sensu:
   - sensu
 pkgs_beats:

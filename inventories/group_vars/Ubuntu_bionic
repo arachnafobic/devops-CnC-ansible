@@ -1,7 +1,5 @@
 ---
 
-default_ruby_version: "2.5"
-
 ruby_version:   2.5.1
 gem_exec:       /usr/bin/gem
 
@@ -14,10 +12,6 @@ user_defaults:
   npms:
     - uglify-js
     - coffee-script
-
-pkgs_ruby25:
-  - ruby
-  - ruby-dev
 
 frox_support_pkgs_debian:
   - nscd
