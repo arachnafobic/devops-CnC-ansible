@@ -1,4 +1,4 @@
 ---
 
 - name:             restart fail2ban
-  service:          name=fail2ban enabled=yes state=restarted
+  service:          name={{ service_fail2ban_name }} enabled=yes state=restarted

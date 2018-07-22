@@ -1,0 +1,7 @@
+---
+
+pkgs_fail2ban:
+  - fail2ban
+  - fail2ban-systemd
+  - python-inotify
+  - whois

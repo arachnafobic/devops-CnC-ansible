@@ -70,11 +70,6 @@ pkgs_mariadb:
   - rh-mariadb102
   - rh-mariadb102-mariadb-server
   - MySQL-python
-pkgs_fail2ban:
-  - fail2ban
-  - fail2ban-systemd
-  - python-inotify
-  - whois
 pkgs_redis:
   - redis
 pkgs_memcached:

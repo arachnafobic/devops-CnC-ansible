@@ -70,9 +70,5 @@ pkgs_phpfpm:
   - php7.2-curl
   - php7.2-bcmath
   - php7.2-zip
-pkgs_fail2ban:
-  - fail2ban
-  - python-pyinotify
-  - whois
 pkgs_memcached:
   - memcached
