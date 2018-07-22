@@ -69,9 +69,6 @@ uninstall_unwanted:
   - chef
   - chef-zero
 
-pkgs_etckeeper:
-  - etckeeper
-  - git
 pkgs_python:
   - python-virtualenv
   - python-dev

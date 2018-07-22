@@ -1,0 +1,5 @@
+---
+
+pkgs_etckeeper:
+  - etckeeper
+  - git

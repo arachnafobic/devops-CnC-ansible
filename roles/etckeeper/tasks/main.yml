@@ -1,4 +1,21 @@
 ---
 
-- include_tasks:    etckeeper.yml
-  when:             pkgs_etckeeper is defined
+- name:             install etckeeper and git
+  package:          name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_etckeeper }}"
+
+- name:             etckeeper w/o bzr
+  lineinfile:       dest=/etc/etckeeper/etckeeper.conf
+                    regexp='^(VCS="bzr")' line='#\1' backrefs=yes
+
+- name:             etckeeper w/ git
+  lineinfile:       dest=/etc/etckeeper/etckeeper.conf
+                    regexp='^#(VCS="git")' line='\1' backrefs=yes
+
+- name:             initialize etckeeper
+  shell:            bash -xec "etckeeper init;
+                               git commit -m ... | head -n 40;
+                               git gc;
+                               git status"
+                    chdir=/etc creates=/etc/.git
