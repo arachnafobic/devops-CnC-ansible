@@ -5,6 +5,9 @@
   with_items:       '{{ install_tools }}'
   when:             install_tools is defined
 
+- name:             install the 'Development tools' package group
+  yum:              name="@Development tools" state=present
+
 - name:             install development packages
   yum:              name={{ item }} state=present
   with_items:       '{{ install_dev }}'
@@ -30,4 +33,3 @@
 - name:             place /usr/share/git-core/contrib/git-prompt.sh
   copy:             dest=/usr/share/git-core/contrib/git-prompt.sh src=git-prompt.sh mode=0755
   when:             ansible_distribution == "CloudLinux" or ansible_distribution == "CentOS"
-

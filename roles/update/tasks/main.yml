@@ -1,5 +1,7 @@
 ---
 
+- include_vars:     "{{ ansible_distribution }}.yml"
+
 - name:             get stat into of status file
   stat:             path=/root/._ansible
   register:         update_statuscheck

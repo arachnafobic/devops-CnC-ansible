@@ -1,0 +1,59 @@
+---
+
+install_tools:
+  - ack-grep
+  - byobu
+  - curl
+  - git
+  - grc
+  - htop
+  - tree
+  - vim
+  - mc
+  - tig
+  - apg
+  - debian-goodies
+  - "{{ 'python3-software-properties' if ansible_distribution_release == 'bionic' else 'python-software-properties' }}"
+  - lm-sensors
+  - netcat
+  - sqlite3
+
+install_dev:
+  - build-essential
+  - zlib1g-dev
+  - libssl-dev
+  - libreadline-gplv2-dev
+  - libxml2-dev
+  - libxslt1-dev
+  - libmnl-dev
+  - libmnl0
+  - libuuid1
+  - libffi-dev
+  - python-pip
+  - python-psycopg2
+  - python-pyasn1
+  - python-mysqldb
+  - python-pymongo
+  - python-yaml
+  - libmagic-dev
+  - freetds-dev
+  - autoconf-archive
+  - autoconf
+  - autogen
+  - automake
+  - build-essential
+  - uuid
+  - uuid-dev
+  - pkg-config
+
+install_dev_pip:
+  - urllib3
+  - ndg-httpsclient
+
+uninstall_unwanted:
+  - rpcbind
+  - cloud-init
+  - puppet
+  - puppet-common
+  - chef
+  - chef-zero
