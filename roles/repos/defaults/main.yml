@@ -1,0 +1,20 @@
+---
+
+gh_repos:
+  - obfusk/cpbak
+  - obfusk/dev-misc
+  - obfusk/map.sh
+  - obfusk/sh-config
+  - obfusk/srvbak
+  - obfusk/stat
+  - obfusk/taskmaster
+  - obfusk/venv
+gh_links:
+  - path: /usr/local/bin/filter
+    src:  /opt/src/map.sh/bin/filter
+  - path: /usr/local/bin/map
+    src:  /opt/src/map.sh/bin/map
+  - path: /usr/local/bin/taskmaster
+    src:  /opt/src/taskmaster/taskmaster
+  - path: /usr/local/bin/venv
+    src:  /opt/src/venv/venv
