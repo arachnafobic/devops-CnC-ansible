@@ -27,7 +27,3 @@ user_defaults:
       src:      /usr/bin/ri2.3
     - path:     ~/bin/ruby
       src:      /usr/bin/ruby2.3
-
-pkgs_libav:
-  - libav-tools
-  - libavcodec-extra

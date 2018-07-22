@@ -1,5 +1,7 @@
 ---
 
+- include_vars:     "{{ ansible_distribution }}{{ ansible_distribution_version }}.yml"
+
 - name:             install libav packages
   package:          name={{ item }} state=present
   with_items:

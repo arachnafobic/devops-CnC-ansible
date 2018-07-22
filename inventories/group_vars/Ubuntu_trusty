@@ -29,10 +29,3 @@ user_defaults:
       src:      /usr/bin/ruby2.0
     - path:     ~/bin/testrb
       src:      /usr/bin/testrb2.0
-pkgs_libav:
-  - libav-tools
-  - libavcodec-extra-54
-  - libavdevice-extra-53
-  - libavfilter-extra-3
-  - libavformat-extra-54
-
