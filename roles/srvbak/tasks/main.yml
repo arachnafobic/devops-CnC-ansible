@@ -1,5 +1,9 @@
 ---
 
+- name:             clone/update srvbak
+  git:              repo=https://github.com/obfusk/srvbak.git
+                    dest=/opt/src/srvbak
+
 - name:             check for files folder
   stat:             path=/__data/files
   register:         data_check
@@ -41,12 +45,6 @@
 
 - name:             copy /etc/cron.2am/srvbak from sample
   copy:             src=srvbak.cron dest=/etc/cron.2am/srvbak owner=root group=root mode=0755
-
-#- name:             copy /etc/cron.2am/srvbak from sample
-#  command:          /bin/cp /opt/src/srvbak/srvbak.cron.sample /etc/cron.2am/srvbak
-#                    creates=/etc/cron.2am/srvbak
-#- name:             make /etc/cron.2am/srvbak executable
-#  file:             path=/etc/cron.2am/srvbak owner=root group=root mode=0755
 
 - name:             copy /etc/logrotate.d/srvbak from sample
   command:          /bin/cp /opt/src/srvbak/srvbak.logrotate.sample /etc/logrotate.d/srvbak
