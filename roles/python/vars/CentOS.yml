@@ -1,0 +1,9 @@
+---
+
+pkgs_python:
+  - python
+  - python-devel
+  - python-virtualenv
+  - python34
+  - python34-devel
+  - python34-virtualenv

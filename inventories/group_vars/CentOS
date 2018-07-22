@@ -31,11 +31,6 @@ install_pip_init:
   - passlib
 
 # Used during main play
-pkgs_python:
-  - python-virtualenv
-  - python-devel
-  - python34
-  - python34-devel
 pkgs_ruby20:
   - ruby
   - ruby-devel
