@@ -1,14 +1,5 @@
 ---
 
-- name:             enable predefined repositories
-  shell:            yum-config-manager --enable {{ item }}
-  with_items:       '{{ enable_repos }}'
-  when:             enable_repos is defined
-
-- name:             enable EPEL repository
-  yum:              name={{ item }} state=present
-  with_items:       '{{ install_epel }}'
-
 - name:             install some tools
   yum:              name={{ item }} state=present
   with_items:       '{{ install_tools }}'
