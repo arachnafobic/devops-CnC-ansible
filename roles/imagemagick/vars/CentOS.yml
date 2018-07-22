@@ -1,0 +1,9 @@
+---
+
+pkgs_imagemagick:
+  - ImageMagick
+  - ImageMagick-devel
+  - ghostscript
+  - ghostscript-devel
+  - netpbm
+  - netpbm-devel

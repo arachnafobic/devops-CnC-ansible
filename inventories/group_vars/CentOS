@@ -34,13 +34,6 @@ install_pip_init:
 pkgs_ruby20:
   - ruby
   - ruby-devel
-pkgs_imagemagick:
-  - ImageMagick
-  - ImageMagick-devel
-  - ghostscript
-  - ghostscript-devel
-  - netpbm
-  - netpbm-devel
 pkgs_sensu:
   - sensu
 pkgs_beats:
