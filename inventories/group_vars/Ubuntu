@@ -1,7 +1,6 @@
 ---
 
 service_ssh_name: ssh
-service_ntp_name: ntp
 service_phpfpm_name: php7.2-fpm
 service_redis_name: redis-server
 service_memcached_name: memcached
@@ -25,8 +24,6 @@ pkgs_ruby20:
 pkgs_ruby23:
   - ruby2.3
   - ruby2.3-dev
-pkgs_ntp:
-  - ntp
 pkgs_imagemagick:
   - imagemagick
   - libmagickwand-dev

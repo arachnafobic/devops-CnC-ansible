@@ -1,7 +1,6 @@
 ---
 
 service_ssh_name: sshd
-service_ntp_name: ntpd
 service_phpfpm_name: php72-php-fpm
 service_redis_name: redis
 service_memcached_name: memcached
@@ -32,8 +31,6 @@ install_pip_init:
   - passlib
 
 # Used during main play
-pkgs_ntp:
-  - ntp
 pkgs_python:
   - python-virtualenv
   - python-devel

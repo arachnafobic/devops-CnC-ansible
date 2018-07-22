@@ -1,0 +1,4 @@
+---
+
+pkgs_ntp:
+  - ntp

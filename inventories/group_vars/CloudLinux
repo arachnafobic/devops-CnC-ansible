@@ -63,8 +63,6 @@ install_dev_pip:
 uninstall_unwanted:
   - nothing_yet
 
-pkgs_ntp:
-  - ntp
 pkgs_python:
   - python-virtualenv
   - python-devel
