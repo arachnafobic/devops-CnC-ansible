@@ -2,7 +2,6 @@
 
 service_ssh_name: ssh
 service_phpfpm_name: php7.2-fpm
-service_redis_name: redis-server
 service_memcached_name: memcached
 service_rabbitmq_name: rabbitmq-server
 service_sensu_api: sensu-api
@@ -12,8 +11,6 @@ service_sensu_uchiwa: uchiwa
 
 ruby_version:   1.9.3
 
-pkgs_redis:
-  - redis-server
 pkgs_rabbitmq:
   - rabbitmq-server
 pkgs_sensu:

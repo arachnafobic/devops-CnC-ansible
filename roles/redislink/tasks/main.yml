@@ -1,5 +1,7 @@
 ---
 
+- include_vars:     "{{ ansible_distribution }}.yml"
+
 - name:             fetch stat info for /var/lib/redis
   stat:             path=/var/lib/redis
   register:         redislink_check

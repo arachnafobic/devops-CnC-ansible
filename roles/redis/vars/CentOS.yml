@@ -1,0 +1,6 @@
+---
+
+service_redis_name: redis
+
+pkgs_redis:
+  - redis

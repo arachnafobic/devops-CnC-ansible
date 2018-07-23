@@ -2,7 +2,6 @@
 
 service_ssh_name: sshd
 service_phpfpm_name: php72-php-fpm
-service_redis_name: redis
 service_memcached_name: memcached
 service_sensu_client: sensu-client
 service_mariadb_server: rh-mariadb102-mariadb
@@ -54,7 +53,5 @@ pkgs_mariadb:
   - rh-mariadb102
   - rh-mariadb102-mariadb-server
   - MySQL-python
-pkgs_redis:
-  - redis
 pkgs_memcached:
  - memcached

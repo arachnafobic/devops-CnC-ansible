@@ -107,7 +107,7 @@
     targets: redis
 
 - import_playbook: ../roles/redislink.yml
-  tags: [redis, services]
+  tags: [redis, redislink, services]
   vars:
     targets: redis
 
