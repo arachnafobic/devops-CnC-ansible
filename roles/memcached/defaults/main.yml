@@ -1,0 +1,6 @@
+---
+
+service_memcached_name: memcached
+
+pkgs_memcached:
+  - memcached

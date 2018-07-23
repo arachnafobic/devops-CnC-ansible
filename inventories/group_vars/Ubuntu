@@ -2,7 +2,6 @@
 
 service_ssh_name: ssh
 service_phpfpm_name: php7.2-fpm
-service_memcached_name: memcached
 service_rabbitmq_name: rabbitmq-server
 service_sensu_api: sensu-api
 service_sensu_client: sensu-client
@@ -50,5 +49,3 @@ pkgs_phpfpm:
   - php7.2-curl
   - php7.2-bcmath
   - php7.2-zip
-pkgs_memcached:
-  - memcached
