@@ -38,5 +38,8 @@
     - { key: ';listen.group = nobody', value: 'listen.group = nginx' }
     - { key: ';listen.mode = 0660', value: 'listen.mode = 0664' }
 
-- name:             link php to php72
-  file:             path=/usr/bin/php src=/opt/remi/php72/root/usr/bin/php state=link
+- name:             link php72* binaries to /usr/bin/php*
+  file:             path=/usr/bin/{{ item }} src=/opt/remi/php72/root/usr/bin/{{ item }} state=link
+  with_items:
+    - "php"
+    - "php-cgi"

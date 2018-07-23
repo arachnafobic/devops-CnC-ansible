@@ -1,7 +1,6 @@
 ---
 
 service_ssh_name: ssh
-service_phpfpm_name: php7.2-fpm
 service_sensu_api: sensu-api
 service_sensu_client: sensu-client
 service_sensu_server: sensu-server
@@ -31,12 +30,3 @@ pkgs_beats:
   - metricbeat
   - auditbeat
   - packetbeat
-pkgs_phpfpm:
-  - php7.2-cli
-  - php7.2-fpm
-  - php7.2-mysql
-  - php7.2-xml
-  - php7.2-mbstring
-  - php7.2-curl
-  - php7.2-bcmath
-  - php7.2-zip
