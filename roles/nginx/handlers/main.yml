@@ -1,4 +1,4 @@
 ---
 
 - name:             restart nginx
-  service:          name=nginx state=restarted enabled=yes
+  service:          name={{ service_nginx_name }} state=restarted enabled=yes

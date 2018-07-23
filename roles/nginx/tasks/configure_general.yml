@@ -1,0 +1,56 @@
+---
+
+- name:             touch nginx in /root/stat_services.d
+  file:             path=/root/stat_services.d/nginx state=touch
+  changed_when:     false
+
+- name:             create directory /etc/devops/www
+  file:             path=/etc/devops/www state=directory mode=0755
+
+- name:             ensure /etc/devops/ssl exists and is secure
+  file:             path=/etc/devops/ssl state=directory owner=root group=root mode=0700
+
+- name:             place /etc/devops/www/index.html
+  copy:             dest=/etc/devops/www/index.html src=index.html mode=0644
+
+- name:             place /etc/devops/www/502.html
+  copy:             dest=/etc/devops/www/502.html src=502.html mode=0644
+
+- name:             place /etc/devops/ssl/dhparams.pem
+  copy:             dest=/etc/devops/ssl/dhparams.pem src=dhparams.pem owner=root group=root mode=0600
+
+- name:             place /etc/devops/ssl/dhparams.4096.pem
+  copy:             dest=/etc/devops/ssl/dhparams.4096.pem src=dhparams.4096.pem owner=root group=root mode=0600
+
+- name:             check for pressence of froxlor
+  stat:             path=/var/www/froxlor
+  register:         froxlor_check
+  changed_when:     false
+
+- name:             place default vhost in /etc/nginx/sites-available/
+  copy:             dest=/etc/nginx/sites-available/{{ item }} src={{ item }} mode=0644
+  notify:           restart nginx
+  when:             froxlor_check.stat.exists == false
+  with_items:
+    - _default.conf
+
+- name:             link default vhost to /etc/nginx/sites-enabled/
+  file:             path=/etc/nginx/sites-enabled/{{ item }} src=/etc/nginx/sites-available/{{ item }} state=link
+  notify:           restart nginx
+  when:             froxlor_check.stat.exists == false
+  with_items:
+    - _default.conf
+
+- name:             place default configs in /etc/nginx/sites-available/
+  copy:             dest=/etc/nginx/sites-available/{{ item }} src={{ item }} mode=0644
+  notify:           restart nginx
+  with_items:
+    - _logformats.conf
+    - _ssl.conf
+
+- name:             link default configs to /etc/nginx/sites-enabled/
+  file:             path=/etc/nginx/sites-enabled/{{ item }} src=/etc/nginx/sites-available/{{ item }} state=link
+  notify:           restart nginx
+  with_items:
+    - _logformats.conf
+    - _ssl.conf

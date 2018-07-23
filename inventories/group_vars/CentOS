@@ -35,8 +35,6 @@ pkgs_beats:
   - metricbeat
   - auditbeat
   - packetbeat
-pkgs_nginx:
-  - nginx
 pkgs_phpfpm:
   - php72
   - php72-php-fpm

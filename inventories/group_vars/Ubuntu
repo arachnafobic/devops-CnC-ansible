@@ -31,8 +31,6 @@ pkgs_beats:
   - metricbeat
   - auditbeat
   - packetbeat
-pkgs_nginx:
-  - nginx
 pkgs_mariadb:
   - mariadb-server
   - python-mysqldb
