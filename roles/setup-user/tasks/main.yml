@@ -1,5 +1,7 @@
 ---
 
+- include_vars:     "{{ ansible_distribution }}{{ ansible_distribution_version }}.yml"
+
 - name:             create 755 directories in ~"{{ user }}"
   file:             path={{ home }}/{{ item }} state=directory mode=0755
   with_items:

@@ -6,8 +6,6 @@ service_sensu_client: sensu-client
 service_sensu_server: sensu-server
 service_sensu_uchiwa: uchiwa
 
-ruby_version:   1.9.3
-
 pkgs_sensu:
   - sensu
 pkgs_uchiwa:
