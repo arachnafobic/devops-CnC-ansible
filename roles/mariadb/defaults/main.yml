@@ -1,0 +1,5 @@
+---
+
+# Change this when not testing!
+# Overwrite with group_vars or host_vars
+mariadb_root_password: "foo"

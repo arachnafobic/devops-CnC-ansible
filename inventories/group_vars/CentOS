@@ -3,7 +3,6 @@
 service_ssh_name: sshd
 service_phpfpm_name: php72-php-fpm
 service_sensu_client: sensu-client
-service_mariadb_server: rh-mariadb102-mariadb
 
 ruby_version:   2.0.0
 gem_exec:       /usr/bin/gem
@@ -46,7 +45,3 @@ pkgs_phpfpm:
   - php72-php-process
   - php72-php-bcmath
   - php72-php-pecl-zip
-pkgs_mariadb:
-  - rh-mariadb102
-  - rh-mariadb102-mariadb-server
-  - MySQL-python

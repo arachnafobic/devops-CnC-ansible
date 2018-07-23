@@ -1,0 +1,8 @@
+---
+
+service_mariadb_server: rh-mariadb102-mariadb
+
+pkgs_mariadb:
+  - rh-mariadb102
+  - rh-mariadb102-mariadb-server
+  - MySQL-python

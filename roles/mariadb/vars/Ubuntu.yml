@@ -1,0 +1,6 @@
+---
+
+pkgs_mariadb:
+  - mariadb-server
+  - python-mysqldb
+  - apparmor-profiles
