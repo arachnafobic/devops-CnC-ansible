@@ -1,0 +1,29 @@
+---
+
+- name:             get rpm signing key for rabbitmq
+  get_url:          url=https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey dest=/root/cache/packagecloud-gpgkey.asc
+                    sha256sum=e42d7eb66290ac070ac66d056ca9fbc65bee202fad915a1f595b643558c5fd4a
+
+- name:             install rpm signing key for rabbitmq
+  rpm_key:          key=/root/cache/packagecloud-gpgkey.asc state=present
+
+- name:             yum.repos.d for rabbitmq
+  template:         dest=/etc/yum.repos.d/rabbitmq.repo src=rabbitmq.repo
+                    owner=root group=root mode=0644
+  register:         rabbitmq_sources
+
+#- name:             test
+#  yum_repository:   name=rabbitmq_rabbitmq-server state=present gpgcheck=yes
+#                    baseurl="https://packagecloud.io/rabbitmq/rabbitmq-server/el/{{ ansible_distribution_major_version }}/$basearch"
+#                    description="RabbitMQ YUM repo"
+#  when:             rabbitmq_sources is changed
+
+- name:             install rabbitmq package
+  yum:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_rabbitmq }}"
+  register:         rabbitmq_install
+
+- name:             touch rabbitmq-server in /root/stat_services.d
+  file:             path=/root/stat_services.d/rabbitmq-server state=touch
+  changed_when:     false

@@ -1,0 +1,6 @@
+---
+
+service_rabbitmq_name: rabbitmq-server
+
+pkgs_rabbitmq:
+  - rabbitmq-server

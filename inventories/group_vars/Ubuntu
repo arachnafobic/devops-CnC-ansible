@@ -2,7 +2,6 @@
 
 service_ssh_name: ssh
 service_phpfpm_name: php7.2-fpm
-service_rabbitmq_name: rabbitmq-server
 service_sensu_api: sensu-api
 service_sensu_client: sensu-client
 service_sensu_server: sensu-server
@@ -10,8 +9,6 @@ service_sensu_uchiwa: uchiwa
 
 ruby_version:   1.9.3
 
-pkgs_rabbitmq:
-  - rabbitmq-server
 pkgs_sensu:
   - sensu
 pkgs_uchiwa:
