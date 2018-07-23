@@ -1,0 +1,3 @@
+#!/bin/bash
+systemctl restart ntp.service
+exit 0

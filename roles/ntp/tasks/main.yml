@@ -13,3 +13,6 @@
 - name:             place initial drift file
   copy:             dest=/var/lib/ntp/ntp.drift src=ntp.drift owner=ntp group=ntp mode=0644 force=no
   notify:           restart ntp
+
+- include_tasks:    bionic-fix.yml
+  when:             ansible_distribution == "Ubuntu" and ansible_distribution_release == "bionic"
