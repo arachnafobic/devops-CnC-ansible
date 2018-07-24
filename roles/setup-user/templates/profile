@@ -21,7 +21,7 @@ do
 done
 unset _path
 
-export LC_ALL=C LANG=C GEM_HOME="$HOME/.gem/ruby/$_ruby_v"
+export GEM_HOME="$HOME/.gem/ruby/$_ruby_v"
 export NODE_PATH="$HOME/.node/lib/node_modules"
 export ASPNETCORE_ENVIRONMENT=Production
 export ASPNETCORE_DB_ENGINE=pg
