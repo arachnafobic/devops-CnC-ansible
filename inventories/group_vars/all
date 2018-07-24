@@ -17,9 +17,3 @@ default_folders:
   - /__data/files
   - /etc/devops
   - /etc/devops/opt
-
-gems:
-  - bundler
-  - pry
-  - localconfig
-  - bcrypt

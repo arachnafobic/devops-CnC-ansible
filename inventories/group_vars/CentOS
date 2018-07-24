@@ -10,10 +10,3 @@ install_init:
   - nano
 install_pip_init:
   - passlib
-
-# Used during main play
-pkgs_beats:
-  - filebeat
-  - metricbeat
-  - auditbeat
-  - packetbeat

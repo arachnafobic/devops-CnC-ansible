@@ -1,0 +1,12 @@
+---
+
+service_filebeat_name:   filebeat
+service_metricbeat_name: metricbeat
+service_auditbeat_name:  auditbeat
+service_packetbeat_name: packetbeat
+
+pkgs_beats:
+  - filebeat
+  - metricbeat
+  - auditbeat
+  - packetbeat

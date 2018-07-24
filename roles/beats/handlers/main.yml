@@ -1,13 +1,13 @@
 ---
 
 - name:             restart filebeat
-  service:          name=filebeat state=restarted enabled=yes
+  service:          name={{ service_filebeat_name }} state=restarted enabled=yes
 
 - name:             restart metricbeat
-  service:          name=metricbeat state=restarted enabled=yes
+  service:          name={{ service_metricbeat_name }} state=restarted enabled=yes
 
 - name:             restart auditbeat
-  service:          name=auditbeat state=restarted enabled=yes
+  service:          name={{ service_auditbeat_name }} state=restarted enabled=yes
 
 - name:             restart packetbeat
-  service:          name=packetbeat state=restarted enabled=yes
+  service:          name={{ service_packetbeat_name }} state=restarted enabled=yes

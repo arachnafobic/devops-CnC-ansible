@@ -15,8 +15,3 @@ pkgs_logstash:
   - logstash
 pkgs_kibana:
   - kibana
-pkgs_beats:
-  - filebeat
-  - metricbeat
-  - auditbeat
-  - packetbeat
