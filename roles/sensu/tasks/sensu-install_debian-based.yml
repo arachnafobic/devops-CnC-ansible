@@ -22,7 +22,11 @@
     - "{{ pkgs_sensu }}"
   register:         sensu_install
 
-# legacy 0.2x task, haven't needed this repo since sensu's new plugin manager was added
+#
+# legacy sensu 0.2x task, haven't needed this repo since sensu's new plugin manager
+# was added. keeping it for the curious.
+# This clones the sensu-community-plugins at the exact commit before it was emptied.
+#
 #- name:             clone sensu-community-plugins at specific HEAD (workaround)
 #  git:              repo=https://github.com/sensu/sensu-community-plugins.git
 #                    dest=/opt/src/sensu-community-plugins

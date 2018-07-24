@@ -4,3 +4,9 @@ service_rabbitmq_name: rabbitmq-server
 
 pkgs_rabbitmq:
   - rabbitmq-server
+
+# CHANGE THESE IN PRODUCTION, ALSO IN sensu ROLE
+rabbitmq_admin_pass:   adminpass
+rabbitmq_sensu_pass:   sensupass
+
+rabbitmq_web:          true

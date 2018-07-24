@@ -4,26 +4,6 @@ release:        "{{ ansible_distribution_release }}"
 
 # defaults, overwrite in distribution or host specific var files
 
-# CHANGE THESE IN PRODUCTION
-rabbitmq_admin_pass:   adminpass
-rabbitmq_sensu_pass:   sensupass
-rabbitmq_web:          true
-sensu_api_pass:        adminpass
-
-sensu_default_plugins:
-  - cpu-checks
-  - disk-checks
-  - memory-checks
-  - process-checks
-  - load-checks
-
-sensu_client_plugins:
-  - vmstats
-
-elk_stack_use_xpack: true
-
-monitor_ip: 127.0.0.1
-
 root_folders:
   - tmp
   - cache

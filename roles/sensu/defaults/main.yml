@@ -1,0 +1,32 @@
+---
+
+service_sensu_api:    sensu-api
+service_sensu_client: sensu-client
+service_sensu_server: sensu-server
+service_sensu_uchiwa: uchiwa
+
+pkgs_sensu:
+  - sensu
+pkgs_uchiwa:
+  - uchiwa
+
+# defaults, overwrite in distribution or host specific var files
+
+sensu_default_plugins:
+  - cpu-checks
+  - disk-checks
+  - memory-checks
+  - process-checks
+  - load-checks
+
+sensu_client_plugins:
+  - vmstats
+
+# CHANGE THESE IN PRODUCTION, ALSO IN rabbitmq ROLE
+rabbitmq_admin_pass:   adminpass
+rabbitmq_sensu_pass:   sensupass
+sensu_api_pass:        adminpass
+
+elk_stack_use_xpack:   true
+
+monitor_ip:            127.0.0.1

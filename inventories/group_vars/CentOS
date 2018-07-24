@@ -1,7 +1,6 @@
 ---
 
 service_ssh_name: sshd
-service_sensu_client: sensu-client
 
 # Used during initialize play
 install_epel:
@@ -13,8 +12,6 @@ install_pip_init:
   - passlib
 
 # Used during main play
-pkgs_sensu:
-  - sensu
 pkgs_beats:
   - filebeat
   - metricbeat

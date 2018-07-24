@@ -10,8 +10,8 @@
 
 # Install extra handlers and extensions on the server
 #
-- include_tasks:    sensu-install_server.yml
-  when:             inventory_hostname in groups['monitor']
+#- include_tasks:    sensu-install_server.yml
+#  when:             inventory_hostname in groups['monitor']
 
 # Copy tls keys and configure rabbitmq
 #
@@ -29,8 +29,8 @@
 
 # Install uchiwa package
 #
-- include_tasks:    uchiwa-install_debian-based.yml
-  when:             pkgs_uchiwa is defined and (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian") and inventory_hostname in groups['monitor']
+- include_tasks:    uchiwa-install.yml
+  when:             inventory_hostname in groups['monitor']
 
 # Config uchiwa
 # Start/Enable uchiwa

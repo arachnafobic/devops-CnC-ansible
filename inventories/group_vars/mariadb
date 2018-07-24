@@ -1,4 +1,0 @@
----
-
-# Change this when not testing!
-mariadb_root_password: "foo"

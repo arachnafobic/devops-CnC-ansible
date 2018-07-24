@@ -1,15 +1,7 @@
 ---
 
 service_ssh_name: ssh
-service_sensu_api: sensu-api
-service_sensu_client: sensu-client
-service_sensu_server: sensu-server
-service_sensu_uchiwa: uchiwa
 
-pkgs_sensu:
-  - sensu
-pkgs_uchiwa:
-  - uchiwa
 pkgs_grafana:
   - grafana
 pkgs_uwsgi:
