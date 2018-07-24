@@ -7,3 +7,11 @@
   with_items:
     - "{{ pkgs_python }}"
   when:             pkgs_python is defined
+
+- name:             upgrade pip and setuptools on centos
+  shell:           "pip install --upgrade {{ item }}"
+  with_items:
+    - pip
+    - setuptools
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+  changed_when:     false

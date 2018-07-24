@@ -28,7 +28,7 @@
   notify:           restart carbon-cache
 
 - name:             (re)create uwsgi config for graphite
-  copy:             src=graphite.ini dest=/etc/uwsgi/apps-enabled/graphite.ini
+  copy:             src=graphite.ini dest="{{ uwsgi_config_path }}/graphite.ini"
   notify:           restart uwsgi
 
 - name:             setup initial django database

@@ -1,0 +1,20 @@
+---
+
+- name:             get rpm signing key for package cloud
+  get_url:          url=https://grafanarel.s3.amazonaws.com/RPM-GPG-KEY-grafana dest=/root/cache/RPM-GPG-KEY-grafana
+                    sha256sum=560785c1430b5f9cae7a49311ab3ff1a3944223078afdd9daf6631e1246010f9
+
+- name:             install rpm signing key for package cloud
+  rpm_key:          key=/root/cache/RPM-GPG-KEY-grafana state=present
+
+- name:             yum.repos.d for grafana
+  template:         dest=/etc/yum.repos.d/grafana.repo src=grafana.repo
+                    owner=root group=root mode=0644
+  register:         grafana_sources
+
+- name:             install grafana package if missing
+  yum:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_grafana }}"
+  register:         grafana_install
+

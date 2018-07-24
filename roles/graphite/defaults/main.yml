@@ -1,5 +1,11 @@
 ---
 
+pkgs_uwsgi:
+  - uwsgi
+  - uwsgi-plugin-python
+pkgs_grafana:
+  - grafana
+
 # Change this or overwrite it in group_vars or host_vars
 graphite_secret_key:   ATLEAST_ITS_DIFFERENT
 

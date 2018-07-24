@@ -40,3 +40,9 @@
     - https://github.com/graphite-project/graphite-web/tarball/master
   environment:
     PYTHONPATH:     "/opt/graphite/lib/:/opt/graphite/webapp/"
+
+- name:             install uwsgi packages
+  package:          name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_uwsgi }}"
+
