@@ -1,0 +1,13 @@
+---
+
+- name:             reload nginx
+  service:          name={{ service_nginx_name }} state=reloaded
+
+- name:             restart sensu-client
+  service:          name={{ service_sensu_client }} enabled=yes state=restarted
+
+- name:             restart sensu-server
+  service:          name={{ service_sensu_server }} enabled=yes state=restarted
+
+- name:             restart sensu-api
+  service:          name={{ service_sensu_api }} enabled=yes state=restarted

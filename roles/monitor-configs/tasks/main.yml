@@ -1,9 +1,0 @@
----
-
-- include_tasks:    setup_nginx.yml
-  when:             inventory_hostname in groups['monitor']
-
-- include_tasks:    setup_sensu_server.yml
-  when:             inventory_hostname in groups['monitor']
-
-- include_tasks:    setup_sensu_client.yml

@@ -4,6 +4,7 @@ service_sensu_api:    sensu-api
 service_sensu_client: sensu-client
 service_sensu_server: sensu-server
 service_sensu_uchiwa: uchiwa
+service_nginx_name:   nginx
 
 pkgs_sensu:
   - sensu

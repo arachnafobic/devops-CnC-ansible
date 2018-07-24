@@ -3,23 +3,32 @@
 - name:             (re)create conf.d/redis.json
   template:         dest=/etc/sensu/conf.d/redis.json src=redis.json
                     owner=sensu group=sensu mode=0600
+  notify:           
+    - restart sensu-api
+    - restart sensu-server
 
 - name:             (re)create conf.d/api.json
   template:         dest=/etc/sensu/conf.d/api.json src=api.json
                     owner=sensu group=sensu mode=0600
+  notify:           
+    - restart sensu-api
+    - restart sensu-server
 
 - name:             (re)create default system checks
   copy:             dest=/etc/sensu/conf.d/ src={{ item }}
                     owner=sensu group=sensu mode=0600
   with_fileglob:    check_*.json
+  notify:           
+    - restart sensu-api
+    - restart sensu-server
 
-- name:             enable + start sensu-server
-  service:          name={{ service_sensu_server }} enabled=yes state=started
-  when:             sensu_install is changed
-
-- name:             enable + start sensu-api
-  service:          name={{ service_sensu_api }} enabled=yes state=started
-  when:             sensu_install is changed
+# broken atm
+#- name:             (re)create metrics "check"
+#  copy:             src=metrics_vmstat.json dest=/etc/sensu/conf.d/metrics_vmstat.json
+#                    owner=sensu group=sensu mode=0600
+#  notify:           
+#    - restart sensu-api
+#    - restart sensu-server
 
 - name:             touch sensu-server in /root/stat_services.d
   file:             path=/root/stat_services.d/sensu-server state=touch
