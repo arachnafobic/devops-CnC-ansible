@@ -1,15 +1,32 @@
+general
+
+- remove ALL code for CloudLinux support
+
+vagrant provisioning
+
+- CnC needs sshpass installed during provisions
+
 roles:
 
 - common
   - remove static example.com domain on localhost name, add variable to host_vars with default in group_vars instead
   - remove static ufw settings, add variable to host_vars with default in group_vars instead
   - add firewalld version to complement ufw steps
+  - template /etc/defaults/locale on ubuntu with en_US.UTF-8 (it's c.UTF-8 on bionic)
 
-- phpmyadmin
+- proftpd
   - create role
 
-CnC needs sshpass installed during provisions
-CentOS needs development tools installed during update roles
-CentOS firewalld needs http/https opened up permanently
-php-fpm enable only when it's installed/changed
-memcached enable only when it's installed/changed
+- nullmailer
+  - create role
+
+- sensu
+  - move rabbitmq user/vhost setup out of rabbitmq role to sensu
+
+- graphite-web
+  - installs allright, 502's on centos tho
+
+- froxlor
+  - update.sql < add all default settings needed to be letsencrypt ready
+  - change the install in such a way that froxlor manages the default_server, sits on /admin/ and has phpmyadmin/netdata locations
+  - add an optional switch to pre-populate froxlor with a user that has a working default wordpress site

@@ -2,8 +2,6 @@
 
 service_ssh_name: ssh
 
-pkgs_grafana:
-  - grafana
 pkgs_elasticsearch:
   - openjdk-8-jre-headless
   - elasticsearch
