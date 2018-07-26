@@ -119,18 +119,26 @@
   failed_when:      false
   changed_when:     false
 
-- name:             preseed debconf
+- name:             unattended-upgrades/enable_auto_updates -- preseed debconf
   copy:             src=preseed_unattended-upgrades dest=/root/tmp/debconf.preseed force=yes
   when:             'update_unattendedcheck.stdout != "* unattended-upgrades/enable_auto_updates: true"'
 
-- name:             run debconf
+- name:             unattended-upgrades/enable_auto_updates -- run debconf
   shell:            /usr/bin/debconf-set-selections /root/tmp/debconf.preseed
   when:             'update_unattendedcheck.stdout != "* unattended-upgrades/enable_auto_updates: true"'
 
-- name:             process preseed
+- name:             unattended-upgrades/enable_auto_updates -- process preseed
   shell:            /usr/sbin/dpkg-reconfigure -fnoninteractive unattended-upgrades
   when:             'update_unattendedcheck.stdout != "* unattended-upgrades/enable_auto_updates: true"'
 
-- name:             cleanup preseed
+- name:             unattended-upgrades/enable_auto_updates -- cleanup preseed
   file:             path=/root/tmp/debconf.preseed state=absent
   when:             'update_unattendedcheck.stdout != "* unattended-upgrades/enable_auto_updates: true"'
+
+- name:             enable automatic reboot in unattended-upgrades
+  replace:          path=/etc/apt/apt.conf.d/50unattended-upgrades
+                    regexp="^//[\s]?{{ item.key }}[\s+](.*)$"
+                    replace="{{ item.key }} {{ item.value }};"
+  with_items:
+    - { key: 'Unattended-Upgrade::Automatic-Reboot', value: '"true"' }
+    - { key: 'Unattended-Upgrade::Automatic-Reboot-Time', value: '"03:00"' }
