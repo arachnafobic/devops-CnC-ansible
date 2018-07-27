@@ -33,3 +33,9 @@
 
 - name:             Deny everything and enable UFW
   ufw:              state=enabled policy=deny
+
+- name:             disable UFW broadcast spam in syslog
+  replace:          dest=/etc/rsyslog.d/20-ufw.conf
+                    regexp="^#& stop"
+                    replace="& stop"
+  notify:           restart syslog

@@ -2,3 +2,6 @@
 
 - name:             restart ssh
   service:          name={{ service_ssh_name }} state=restarted enabled=yes
+
+- name:             restart syslog
+  service:          name={{ service_syslog_name }} state=restarted enabled=yes
