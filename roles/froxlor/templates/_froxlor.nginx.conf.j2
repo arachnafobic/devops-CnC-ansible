@@ -1,8 +1,8 @@
 server {
   listen 80;
-  server_name froxlor.*;
+  server_name {{ frox_ip.stdout }}.xip.io;
 
-  root /var/www/froxlor;
+  root /var/www;
   index index.php index.html index.htm;
 
   location / {

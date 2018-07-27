@@ -28,5 +28,4 @@ roles:
 
 - froxlor
   - update.sql < add all default settings needed to be letsencrypt ready
-  - change the install in such a way that froxlor manages the default_server, sits on /admin/ and has phpmyadmin/netdata locations
   - add an optional switch to pre-populate froxlor with a user that has a working default wordpress site

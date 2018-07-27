@@ -6,10 +6,6 @@
   failed_when:      false
   changed_when:     false
 
-- name:             set facts specific to debian-based distros
-  set_fact:
-    frox_mysql_socket: "/var/run/mysqld/mysqld.sock"
-
 - name:             create /etc/nginx/conf-enabled/ when ssl is enabled
   file:             path=/etc/nginx/conf-enabled/ state=directory owner=root group=root mode=0755
   when:             frox_use_ssl == true
@@ -50,13 +46,27 @@
     mode:           0644
     backup:         yes
 
-- name:             template /etc/nginx/sites-available/_default.conf
+- name:             template /etc/nginx/nginx.conf
   template:
-    src:            nginx.default.conf.j2
-    dest:           /etc/nginx/sites-available/_default.conf
+    src:            nginx.conf.j2
+    dest:           /etc/nginx/nginx.conf
     owner:          root
     group:          root
     mode:           0664
+  notify:           restart nginx
+
+- name:             template /etc/nginx/sites-available/_upstreams.conf
+  template:
+    src:            nginx.upstreams.conf.j2
+    dest:           /etc/nginx/sites-available/_upstreams.conf
+    owner:          root
+    group:          root
+    mode:           0664
+
+- name:             symlink _upstreams.conf
+  file:             src=/etc/nginx/sites-available/_upstreams.conf
+                    dest=/etc/nginx/sites-enabled/_upstreams.conf
+                    state=link
   notify:           restart nginx
 
 - name:             template /etc/php/7.2/fpm/default.conf
@@ -92,6 +102,7 @@
     owner: "{{ item.owner }}"
     group: "{{ item.group }}"
     mode:  "{{ item.mode }}"
+  register:         systemd_folders
   with_items:
     - { owner: "root", group: "root", path: "/etc/systemd/system/nginx.service.d", mode: "0755" }
     - { owner: "root", group: "root", path: "/etc/systemd/system/php7.2-fpm.service.d", mode: "0755" }
@@ -104,10 +115,15 @@
     owner:          root
     group:          root
     mode:           0644
+  register:         systemd_overrides
   with_items:
     - { service: "nginx", template: "systemd_debian_nginx_override.conf.j2" }
     - { service: "php7.2-fpm", template: "systemd_debian_php7.2-fpm_override.conf.j2" }
     - { service: "nscd", template: "systemd_debian_nscd_override.conf.j2" }
+
+- name:             force systemd to reread configs
+  systemd:          daemon_reload=yes
+  when:             systemd_folders is changed or systemd_overrides is changed
 
 - name:             template updates.sql
   template:
@@ -122,21 +138,30 @@
   shell:           "mysql -BN {{ frox_mysql_db }} < /root/tmp/updates.sql"
   when:             froxlor_check.stat.exists == false
 
-- name:             remove our froxlor vhost config
+- name:             remove unneeded vhost configs
   file:
-    path:           "{{ frox_vhostpath }}/_froxlor.conf"
+    path:           "{{ frox_vhostpath }}/{{ item }}"
     state:          absent
+  with_items:
+    - _default.conf
+    - _froxlor.conf
 
-- name:             template /var/www/froxlor/scripts/froxlor_master_cronjob.php
+- name:             symlink /etc/devops/www/index.html to docroot for now
+  file:
+    src:           "/etc/devops/www/index.html"
+    dest:          "/var/www/index.html"
+    state:          link
+
+- name:            "template /var/www/{{ frox_webpath }}/scripts/froxlor_master_cronjob.php"
   template:
     src:            froxlor_master_cronjob.php.j2
-    dest:           /var/www/froxlor/scripts/froxlor_master_cronjob.php
+    dest:          "/var/www/{{ frox_webpath }}/scripts/froxlor_master_cronjob.php"
     owner:          froxlocal
     group:          froxlocal
     mode:           0664
     backup:         yes
 
 - name:             force run froxlor cronjob to finalize
-  shell:            php /var/www/froxlor/scripts/froxlor_master_cronjob.php --force
+  shell:           "php /var/www/{{ frox_webpath }}/scripts/froxlor_master_cronjob.php --force"
   when:             froxlor_check.stat.exists == false
   notify:           restart nginx

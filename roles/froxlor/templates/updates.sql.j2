@@ -26,3 +26,8 @@ UPDATE panel_settings SET value = 1 WHERE settinggroup = 'system' AND varname = 
 
 # Only allow mysql access on localhost
 UPDATE panel_settings SET value = '127.0.0.1,localhost' WHERE settinggroup = 'system' AND varname = 'mysql_access_host';
+
+# Modify ipsandports
+UPDATE panel_ipsandports SET docroot = '/var/www/' WHERE id = 1;
+UPDATE panel_ipsandports SET specialsettings = 'location /netdata {\n  proxy_set_header             Host               $http_host;\n  proxy_set_header             X-Forwarded-Host   $host;\n  proxy_set_header             X-Forwarded-Server $host;\n  proxy_set_header             X-Forwarded-For    $proxy_add_x_forwarded_for;\n  proxy_pass                   http://netdata;\n  proxy_http_version           1.1;\n  proxy_pass_request_headers   on;\n  proxy_set_header             Connection \"keep-alive\";\n  proxy_store                  off;\n  proxy_redirect               off;\n  access_log                   /dev/null;\n  rewrite /netdata/(.*) /$1 break;\n}\n\nlocation /database {\n  root /usr/local/src/;\n  index index.php index.html index.htm;\n  location ~ ^/database/(.+\\.php)$ {\n    try_files $uri =404;\n    root /usr/local/src/;\n    fastcgi_pass unix:/run/php7.2-fpm.sock;\n    fastcgi_index index.php;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n    include /etc/nginx/fastcgi_params;\n  }\n  location ~* ^/database/(.+\\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {\n    root /usr/local/src/;\n  }\n}\n' WHERE id = 1;
+INSERT INTO `panel_ipsandports` VALUES (2,'127.0.0.1',80,0,0,1,0,'location /stub_status {\n  stub_status on;\n  allow 127.0.0.1;\n  deny all;\n}',0,'','','','','','/var/www/html/');

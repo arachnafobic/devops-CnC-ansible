@@ -1,24 +1,34 @@
 ---
 
-frox_version:     0.9.39.5
-frox_sha256sum:   1fd245d459346a43ffab1179b64b7215bc2727235fe3fcfec569a195e1345599
+service_phpfpm_name: php7.2-fpm
 
-frox_mysql_db:    froxlor
-frox_mysql_user:  froxlor
-frox_mysql_pass:  froxlor
+# Change this when not testing!
+# Overwrite with group_vars or host_vars
+mariadb_root_password: "foo"
 
-frox_admin_user:  admin
-frox_admin_pass:  admin
+frox_version:      0.9.39.5
+frox_sha256sum:    1fd245d459346a43ffab1179b64b7215bc2727235fe3fcfec569a195e1345599
 
-frox_httpd:       nginx
-frox_httpd_user:  www-data
-frox_httpd_group: www-data
+frox_webpath:      admin
 
-frox_lang:        english
+frox_mysql_db:     froxlor
+frox_mysql_user:   froxlor
+frox_mysql_pass:   froxlor
 
-frox_use_ssl:     true
+frox_admin_user:   admin
+frox_admin_pass:   admin
 
-frox_vhostpath:   /etc/nginx/sites-enabled
+frox_httpd:        nginx
+frox_httpd_user:   www-data
+frox_httpd_group:  www-data
+
+frox_lang:         english
+
+frox_use_ssl:      true
+
+frox_vhostpath:    /etc/nginx/sites-enabled
+
+frox_mysql_socket: "/var/run/mysqld/mysqld.sock"
 
 frox_support_pkgs_debian:
   - libnss-mysql-bg
