@@ -1,0 +1,6 @@
+#!/bin/bash
+{% if ansible_distribution == "Ubuntu" and ansible_distribution_release == "bionic" %}
+[[ ! -e /etc/ntp.conf ]] || systemctl restart ntp.service
+{% endif %}
+hostname {{ default_servername }}
+exit 0

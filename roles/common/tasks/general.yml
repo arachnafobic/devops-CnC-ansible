@@ -31,6 +31,9 @@
 - name:             place /etc/prompt.bash
   copy:             dest=/etc/prompt.bash src=prompt.bash mode=0644
 
+- name:             place /etc/rc.local
+  template:         dest=/etc/rc.local src=rc.local.j2 mode=0755
+
 - name:             fix stock sshd_config in trusty (add EOF..)
   shell:            'test "$( tail -c1 /etc/ssh/sshd_config )" = "" || echo >> /etc/ssh/sshd_config'
   changed_when:     false
