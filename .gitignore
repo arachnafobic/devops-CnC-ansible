@@ -7,9 +7,9 @@
 /.vagrant
 /shared
 
-# Variable files containing secrets, keys, etc
-# see <file>.example
-inventories/group_vars/*_secrets
+# Folder dynamicly cloned during CnC vm buildup if defined.
+# can contain private playbooks, inventory files
+/secrets
 
 # Generated Dynamicly
 inventories/hosts.vm/hosts

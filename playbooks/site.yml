@@ -13,8 +13,6 @@
        changed_when: false
      - group_by:     key={{ ansible_distribution }}_{{ ansible_distribution_release }}
        changed_when: false
-     - group_by:     key={{ inventory_hostname }}_secrets
-       changed_when: false
 
 # go time
 - name:             Running Plays now
