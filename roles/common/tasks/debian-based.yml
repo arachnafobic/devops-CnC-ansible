@@ -29,7 +29,7 @@
   ufw:              rule=allow src={{ item }}
   with_items:
     - 172.28.128.0/24
-  when:             ansible_virtualization_role == "guest"
+  when:             ansible_virtualization_role == "guest" and ansible_virtualization_type == "virtualbox"
 
 - name:             Deny everything and enable UFW
   ufw:              state=enabled policy=deny
