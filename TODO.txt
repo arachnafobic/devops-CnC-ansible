@@ -1,8 +1,6 @@
 general:
 
 - remove ALL code for CloudLinux support
-- add default_domain var to group_vars/all, use it + ansible_hostname to dynamicly generate default_server if not defined
-  this removes the need for host_vars entirelly while using default vars.
 
 playbooks:
   - dynamicly group up vm's at the start of play, removes the need for a few static definitions.
@@ -10,25 +8,23 @@ playbooks:
 roles:
 
 - common
-  - remove static ufw settings, add variable to host_vars with default in group_vars instead
-  - add firewalld version to complement ufw steps
+  - remove static ufw settings, add variable to host_vars with default in group_vars instead (ubuntu)
+  - add firewalld version to complement ufw steps (centos)
+  - systemd-resolvd bypass needs hardening (ubuntu bionic)
 
 - proftpd
-  - create role
-
-- nullmailer
-  - create role
+  - create role (ubuntu/centos)
 
 - phpmyadmin
-  - make webroot dynamic
+  - make webroot dynamic (ubuntu/centos)
 
 - sensu
-  - move rabbitmq user/vhost setup out of rabbitmq role to sensu
+  - move rabbitmq user/vhost setup out of rabbitmq role to sensu (ubuntu/centos)
 
 - graphite-web
-  - installs allright, 502's on centos tho
+  - installs allright, 502's tho (centos)
 
-- froxlor
+- froxlor (ubuntu/centos)
   - update.sql < add all default settings needed to be letsencrypt ready
   - update.sql < add opcache settings
   - replace a few skin templates with custom versions to hide unneeded options/text and add a phpmyadmin link to the admin user's sidebar
