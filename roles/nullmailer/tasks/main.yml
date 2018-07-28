@@ -1,0 +1,22 @@
+---
+
+#
+# Nullmailer is debian based specific, run postfix on redhat based
+#
+
+- name:             check if nullmailer is installed
+  stat:             path=/usr/share/doc/nullmailer
+  register:         nullmailer_check
+  failed_when:      false
+  changed_when:     false
+
+- include:          install_debian-based.yml
+  when:
+    - nullmailer_check.stat.exists == false
+#    - inventory_hostname not in groups['postfix']
+    - (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+
+- include:          configure.yml
+  when:
+#    - inventory_hostname not in groups['postfix']
+    - (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")

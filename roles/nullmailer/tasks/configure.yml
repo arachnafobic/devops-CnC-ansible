@@ -1,0 +1,13 @@
+---
+
+- name:             fill in adminaddr
+  template:         src=adminaddr.j2 dest=/etc/nullmailer/adminaddr mode=0644
+  notify:           restart nullmailer
+
+- name:             fill in defaultdomain
+  template:         src=defaultdomain.j2 dest=/etc/nullmailer/defaultdomain mode=0644
+  notify:           restart nullmailer
+
+- name:             fill in remotes
+  template:         src=remotes.j2 dest=/etc/nullmailer/remotes owner=mail group=mail mode=0600
+  notify:           restart nullmailer

@@ -1,0 +1,11 @@
+---
+# nullmailer.yml
+
+- name:             nullmailer
+  hosts:            "{{ targets }}"
+  gather_facts:     no
+  become:           true
+  become_user:      root
+
+  roles:
+    - nullmailer

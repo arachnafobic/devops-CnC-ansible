@@ -99,6 +99,11 @@
     targets: libraries
 
 # services
+- import_playbook: ../roles/nullmailer.yml
+  tags: [nullmailer, services]
+  vars:
+    targets: nullmailer
+
 - import_playbook: ../roles/redis.yml
   tags: [redis, services]
   vars:

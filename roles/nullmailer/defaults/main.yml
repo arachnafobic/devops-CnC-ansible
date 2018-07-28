@@ -1,0 +1,16 @@
+---
+
+service_nullmailer_name: nullmailer
+
+pkgs_nullmailer:
+  - nullmailer
+
+nullmailer:
+  adminaddr:      example@example.com
+  defaultdomain:  example.com
+  smtp:
+    host:         smtp.example.com
+    port:         587
+    user:         example_user
+    pass:         example_pass
+    extraopts:    --starttls

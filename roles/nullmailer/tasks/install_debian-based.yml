@@ -1,0 +1,21 @@
+---
+
+- name:             remove present /etc/mailname
+  file:             path=/etc/mailname state=absent
+
+- name:             preseed debconf
+  template:         src=nullmailer_preseed.j2 dest=/root/tmp/debconf.preseed mode=0644
+
+- name:             run debconf
+  command:          /usr/bin/debconf-set-selections /root/tmp/debconf.preseed
+
+- name:             install nullmailer package
+  apt:              name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_nullmailer }}"
+
+- name:             process preseed
+  command:          /usr/sbin/dpkg-reconfigure -fnoninteractive -pcritical nullmailer
+
+- name:             cleanup gitolite preseed
+  file:             path=/root/tmp/debconf.preseed state=absent

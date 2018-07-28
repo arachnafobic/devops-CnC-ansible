@@ -1,0 +1,4 @@
+---
+
+- name:             restart nullmailer
+  service:          name={{ service_nullmailer_name }} enabled=yes state=restarted
