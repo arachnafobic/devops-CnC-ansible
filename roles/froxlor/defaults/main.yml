@@ -9,7 +9,7 @@ mariadb_root_password: "foo"
 frox_version:      0.9.39.5
 frox_sha256sum:    1fd245d459346a43ffab1179b64b7215bc2727235fe3fcfec569a195e1345599
 
-frox_webpath:      admin
+frox_webpath:      froxlor
 
 frox_mysql_db:     froxlor
 frox_mysql_user:   froxlor
