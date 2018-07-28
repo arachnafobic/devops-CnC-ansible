@@ -17,7 +17,7 @@
   lineinfile:       dest=/etc/hosts insertafter='^127\.0\.0\.1' line='127.0.1.1 {{ ansible_hostname }}.example.com {{ ansible_hostname }} netdata.me' owner=root group=root mode=0644
   when:             ansible_virtualization_type == "virtualbox"
 
-- name:             set example.com FQDN - hostname
+- name:             set default_servername as FQDN - hostname
   lineinfile:       dest=/etc/hosts insertafter='^127\.0\.0\.1' line='127.0.1.1 {{ default_servername }} {{ ansible_hostname }} netdata.me' owner=root group=root mode=0644
   when:             ansible_virtualization_type != "virtualbox"
 
@@ -26,6 +26,9 @@
 
 - name:             place /etc/prompt.bash
   copy:             dest=/etc/prompt.bash src=prompt.bash mode=0644
+
+- name:             place /etc/resolv.conf.google
+  copy:             dest=/etc/resolv.conf.google src=resolv.conf.google mode=0644
 
 - name:             place /etc/rc.local
   template:         dest=/etc/rc.local src=rc.local.j2 mode=0755
