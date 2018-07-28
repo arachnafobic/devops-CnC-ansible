@@ -2,6 +2,8 @@
 
 release:        "{{ ansible_distribution_release }}"
 
+default_domain: example.com
+
 # defaults, overwrite in distribution or host specific var files
 
 root_folders:

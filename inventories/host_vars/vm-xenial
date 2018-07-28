@@ -2,5 +2,3 @@
 
 nodesource_use: true
 nodesource_version: 10.x
-default_servername: 172.28.128.6.xip.io
-

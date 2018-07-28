@@ -13,6 +13,8 @@
        changed_when: false
      - group_by:     key={{ ansible_distribution }}_{{ ansible_distribution_release }}
        changed_when: false
+     - set_fact:     default_servername={{ ansible_hostname }}.{{ default_domain }}
+       changed_when: false
 
 # go time
 - name:             Running Plays now
