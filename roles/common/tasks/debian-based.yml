@@ -21,9 +21,11 @@
 - name:             Set firewall rules for web traffic and SSH
   ufw:              rule=allow port={{ item }} proto=tcp
   with_items:
+    - ftp
     - ssh
     - http
     - https
+    - 50000:50500
 
 - name:             Allow internal network on VMs
   ufw:              rule=allow src={{ item }}

@@ -1,0 +1,5 @@
+---
+
+pkgs_proftpd:
+  - proftpd
+  - proftpd-mysql

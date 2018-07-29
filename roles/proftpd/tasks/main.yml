@@ -1,0 +1,8 @@
+---
+
+- include_vars:     "{{ ansible_distribution }}.yml"
+
+- name:             install proftpd packages
+  package:          name={{ item }} state=present
+  with_items:
+    - "{{ pkgs_proftpd }}"
