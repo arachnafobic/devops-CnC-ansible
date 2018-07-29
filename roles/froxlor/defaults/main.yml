@@ -1,6 +1,7 @@
 ---
 
 service_phpfpm_name: php7.2-fpm
+service_proftpd_name: proftpd
 
 # Change this when not testing!
 # Overwrite with group_vars or host_vars
@@ -37,3 +38,7 @@ frox_support_pkgs_debian:
 frox_support_pkgs_redhat:
   - libnss-mysql
   - nscd
+
+proftpd_user:      proftpd
+proftpd_group:     nogroup
+proftpd_modules:   /usr/lib/proftpd

@@ -46,6 +46,33 @@
     mode:           0644
     backup:         yes
 
+- name:             template /etc/proftpd/proftpd.conf
+  template:
+    src:            proftpd.conf.j2
+    dest:           /etc/proftpd/proftpd.conf
+    owner:          root
+    group:          root
+    mode:           0600
+  notify:           restart proftpd
+
+- name:             template /etc/proftpd/modules.conf
+  template:
+    src:            modules.conf.j2
+    dest:           /etc/proftpd/modules.conf
+    owner:          root
+    group:          root
+    mode:           0644
+  notify:           restart proftpd
+
+- name:             template /etc/proftpd/sql.conf
+  template:
+    src:            sql.conf.j2
+    dest:           /etc/proftpd/sql.conf
+    owner:          root
+    group:          root
+    mode:           0600
+  notify:           restart proftpd
+
 - name:             template /etc/nginx/nginx.conf
   template:
     src:            nginx.conf.j2

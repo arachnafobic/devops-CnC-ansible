@@ -6,6 +6,9 @@
 - name:             restart php-fpm
   service:          name="{{ service_phpfpm_name }}" state=restarted enabled=yes
 
+- name:             restart proftpd
+  service:          name="{{ service_proftpd_name }}" state=restarted enabled=yes
+
 - name:             restart rh-mariadb
   service:          name=rh-mariadb102-mariadb state=restarted enabled=yes
 

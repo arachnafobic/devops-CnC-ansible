@@ -13,6 +13,9 @@
     frox_mysql_socket: "/var/lib/mysql/mysql.sock"
     frox_httpd_user:  nginx
     frox_httpd_group: nginx
+    proftpd_user:     nobody
+    proftpd_group:    nobody
+    proftpd_modules:  /usr/libexec/proftpd/
 
 - name:             disable check-files configs in nscd
   lineinfile:       path=/etc/nscd.conf
@@ -71,6 +74,36 @@
     group:          root
     mode:           0644
     backup:         yes
+
+- name:             ensure /etc/proftpd/ exists
+  file:             path=/etc/proftpd/ state=directory owner=root group=root mode=0755
+
+- name:             template /etc/proftpd.conf
+  template:
+    src:            proftpd.conf.j2
+    dest:           /etc/proftpd.conf
+    owner:          root
+    group:          root
+    mode:           0600
+  notify:           restart proftpd
+
+- name:             template /etc/proftpd/modules.conf
+  template:
+    src:            modules.conf.j2
+    dest:           /etc/proftpd/modules.conf
+    owner:          root
+    group:          root
+    mode:           0644
+  notify:           restart proftpd
+
+- name:             template /etc/proftpd/sql.conf
+  template:
+    src:            sql.conf.j2
+    dest:           /etc/proftpd/sql.conf
+    owner:          root
+    group:          root
+    mode:           0600
+  notify:           restart proftpd
 
 - name:             template /etc/nginx/nginx.conf
   template:
