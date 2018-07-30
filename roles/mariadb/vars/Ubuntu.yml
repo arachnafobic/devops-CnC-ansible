@@ -1,6 +1,11 @@
 ---
 
+service_mariadb_server: mysql
+
 pkgs_mariadb:
   - mariadb-server
   - python-mysqldb
   - apparmor-profiles
+
+cnf_template: mariadb-server.cnf.j2
+cnf_path:     /etc/mysql/mariadb.conf.d/50-server.cnf

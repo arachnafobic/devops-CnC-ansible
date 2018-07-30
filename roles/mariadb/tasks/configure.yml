@@ -48,3 +48,12 @@
     group: root
     mode: 0600
   when:             deb_mariadb_install_packages is defined and deb_mariadb_install_packages.changed
+
+- name:             (re)configure server cnf
+  template:
+    src:  "{{ cnf_template }}"
+    dest: "{{ cnf_path }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify:           restart mariadb

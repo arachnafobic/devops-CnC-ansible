@@ -6,3 +6,6 @@ pkgs_mariadb:
   - rh-mariadb102
   - rh-mariadb102-mariadb-server
   - MySQL-python
+
+cnf_template: rh-mariadb-server.cnf.j2
+cnf_path:     /etc/opt/rh/rh-mariadb102/my.cnf.d/mariadb-server.cnf

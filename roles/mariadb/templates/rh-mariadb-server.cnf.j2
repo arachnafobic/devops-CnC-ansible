@@ -1,0 +1,85 @@
+#
+# These groups are read by MariaDB server.
+# Use it for options that only the server (but not clients) should see
+#
+# See the examples of server my.cnf files in /usr/share/mysql/
+#
+
+# this is read by the standalone daemon and embedded servers
+[server]
+
+# this is only for the mysqld standalone daemon
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mysqld/mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+[mysqld]
+datadir=/var/opt/rh/rh-mariadb102/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+log-error=/var/opt/rh/rh-mariadb102/log/mariadb/mariadb.log
+pid-file=/run/rh-mariadb102-mariadb/mariadb.pid
+
+#
+# * Fine Tuning
+#
+key_buffer_size          = {{ cnf.mysqld.key_buffer_size }}
+key_cache_block_size     = {{ cnf.mysqld.key_cache_block_size }}
+key_cache_division_limit = {{ cnf.mysqld.key_cache_division_limit }}
+key_cache_age_threshold  = {{ cnf.mysqld.key_cache_age_threshold }}
+
+max_allowed_packet       = {{ cnf.mysqld.max_allowed_packet }}
+thread_stack             = {{ cnf.mysqld.thread_stack }}
+thread_cache_size        = {{ cnf.mysqld.thread_cache_size }}
+
+innodb_buffer_pool_size       = {{ cnf.mysqld.innodb_buffer_pool_size }}
+innodb_buffer_pool_instances  = {{ cnf.mysqld.innodb_buffer_pool_instances }}
+
+# This replaces the startup script and checks MyISAM tables if needed
+# the first time they are touched
+myisam_recover_options   = BACKUP
+max_connections          = {{ cnf.mysqld.max_connections }}
+table_cache              = {{ cnf.mysqld.table_cache }}
+# thread_concurrency     = 10
+
+#
+# * Query Cache Configuration
+#
+query_cache_type         = {{ cnf.mysqld.query_cache_type }}
+query_cache_size         = {{ cnf.mysqld.query_cache_size }}
+query_cache_limit        = {{ cnf.mysqld.query_cache_limit }}
+query_cache_min_res_unit = {{ cnf.mysqld.query_cache_min_res_unit }}
+
+
+#
+# * Galera-related settings
+#
+[galera]
+# Mandatory settings
+#wsrep_on=ON
+#wsrep_provider=
+#wsrep_cluster_address=
+#binlog_format=row
+#default_storage_engine=InnoDB
+#innodb_autoinc_lock_mode=2
+#
+# Allow server to accept connections on all interfaces.
+#
+#bind-address=0.0.0.0
+#
+# Optional setting
+#wsrep_slave_threads=1
+#innodb_flush_log_at_trx_commit=0
+
+# this is only for embedded server
+[embedded]
+
+# This group is only read by MariaDB servers, not by MySQL.
+# If you use the same .cnf file for MySQL and MariaDB,
+# you can put MariaDB-only options here
+[mariadb]
+
+# This group is only read by MariaDB-10.1 servers.
+# If you use the same .cnf file for MariaDB of different versions,
+# use this group for options that older servers don't understand
+[mariadb-10.1]
+
