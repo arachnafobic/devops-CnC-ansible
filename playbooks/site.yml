@@ -13,6 +13,9 @@
        changed_when: false
      - group_by:     key={{ ansible_distribution }}_{{ ansible_distribution_release }}
        changed_when: false
+     - group_by:     key=vm
+       when:         ansible_virtualization_role == "guest" and ansible_virtualization_type == "virtualbox"
+       changed_when: false
      - set_fact:     default_servername={{ ansible_hostname }}.{{ default_domain }}
        changed_when: false
 
@@ -200,7 +203,7 @@
 - import_playbook: ../roles/setup-user.yml
   tags: [users, user-vagrant]
   vars:
-    targets:  vm-xenial, vm-clinux, vm-centos, vm-bionic
+    targets:  vm
     user:   vagrant
     home:   /home/vagrant
     keygen: false
