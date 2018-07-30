@@ -3,3 +3,7 @@
 pkgs_proftpd:
   - proftpd-basic
   - proftpd-mod-mysql
+
+ports:
+  - ftp
+  - 50000:50500

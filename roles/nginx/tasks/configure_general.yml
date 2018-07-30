@@ -23,7 +23,7 @@
   copy:             dest=/etc/devops/ssl/dhparams.4096.pem src=dhparams.4096.pem owner=root group=root mode=0600
 
 - name:             check for pressence of froxlor
-  stat:             path=/var/www/froxlor
+  stat:             path=/var/www/{{ frox_webpath }}
   register:         froxlor_check
   changed_when:     false
 

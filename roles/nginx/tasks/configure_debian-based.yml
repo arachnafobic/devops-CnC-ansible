@@ -23,3 +23,8 @@
   lineinfile:       dest=/etc/nginx/nginx.conf
                     regexp='^\t(gzip_disable "msie6";)' line='\t# \1' backrefs=yes
   notify:           restart nginx
+
+- name:             Allow http/https traffic through UFW
+  ufw:              rule=allow port={{ item }} proto=tcp
+  with_items:
+    - "{{ ports }}"

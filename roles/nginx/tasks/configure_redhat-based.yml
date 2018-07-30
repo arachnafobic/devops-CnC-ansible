@@ -7,6 +7,7 @@
 - name:             create nginx config folders
   file:             path=/etc/nginx/{{ item }} state=directory mode=0755
   notify:           restart nginx
+  register:         fix_nginx
   with_items:
     - sites-available
     - sites-enabled
@@ -14,3 +15,9 @@
 - name:             fix nginx.conf
   copy:             dest=/etc/nginx/nginx.conf src=nginx.conf.redhat-based mode=0644
   notify:           restart nginx
+  when:             fix_nginx is changed
+
+- name:             Allow http/https traffic through Firewalld
+  firewalld:        service={{ item }} permanent=true state=enabled
+  with_items:
+    - "{{ ports }}"

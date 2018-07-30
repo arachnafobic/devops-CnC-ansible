@@ -18,22 +18,18 @@
 - name:             place /etc/checkrestart.blacklist
   copy:             dest=/etc/checkrestart.blacklist src=checkrestart.blacklist mode=0644
 
-- name:             Set firewall rules for web traffic and SSH
+- name:             Ensure SSH is allowed through UFW
   ufw:              rule=allow port={{ item }} proto=tcp
   with_items:
-    - ftp
     - ssh
-    - http
-    - https
-    - 50000:50500
 
-- name:             Allow internal network on VMs
+- name:             Allow internal network on VMs through UFW
   ufw:              rule=allow src={{ item }}
   with_items:
     - 172.28.128.0/24
   when:             ansible_virtualization_role == "guest" and ansible_virtualization_type == "virtualbox"
 
-- name:             Deny everything and enable UFW
+- name:             Deny everything else and enable UFW
   ufw:              state=enabled policy=deny
 
 - name:             disable UFW broadcast spam in syslog

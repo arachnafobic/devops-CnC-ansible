@@ -16,3 +16,17 @@
 
 - name:             Set SELinux to permissive
   selinux:          policy=targeted state=permissive
+
+- name:             Ensure SSH is allowed through Firewalld
+  firewalld:        service={{ item }} permanent=true state=enabled
+  with_items:
+    - ssh
+
+- name:             Allow internal network on VMs through Firewalld
+  firewalld:        source={{ item }} permanent=true state=enabled
+  with_items:
+    - 172.28.128.0/24
+  when:             ansible_virtualization_role == "guest" and ansible_virtualization_type == "virtualbox"
+
+- name:             Ensure Firewalld is started
+  service:          name=firewalld state=started enabled=yes
