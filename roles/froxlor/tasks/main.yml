@@ -1,7 +1,7 @@
 ---
 
 - name:             check for pressence of froxlor
-  stat:             path=/var/www/admin
+  stat:             path=/var/www/{{ frox_webpath }}
   register:         froxlor_check
   changed_when:     false
 

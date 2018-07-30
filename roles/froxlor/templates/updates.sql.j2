@@ -16,13 +16,15 @@ UPDATE panel_fpmdaemons SET reload_cmd = 'systemctl restart php7.2-fpm.service' 
 UPDATE panel_fpmdaemons SET config_dir = '/etc/php/7.2/fpm/pool.d/' WHERE id = 1;
 UPDATE panel_settings SET value = '/etc/php/7.2/fpm/pool.d/' WHERE settinggroup = 'phpfpm' AND varname = 'configdir';
 {% endif %}
-
 UPDATE panel_settings SET value = 1 WHERE settinggroup = 'phpfpm' AND varname = 'enabled';
 UPDATE panel_settings SET value = 1 WHERE settinggroup = 'phpfpm' AND varname = 'enabled_ownvhost';
 UPDATE panel_settings SET value = 'froxlocal' WHERE settinggroup = 'phpfpm' AND varname = 'vhost_httpuser';
 UPDATE panel_settings SET value = 'froxlocal' WHERE settinggroup = 'phpfpm' AND varname = 'vhost_httpgroup';
 UPDATE panel_settings SET value = '2' WHERE settinggroup = 'phpfpm' AND varname = 'defaultini';
 UPDATE panel_settings SET value = 1 WHERE settinggroup = 'system' AND varname = 'froxlordirectlyviahostname';
+UPDATE panel_fpmdaemons SET limit_extensions = '.php .xml' WHERE id = 1;
+UPDATE panel_phpconfigs SET description = '{{ frox_vhost_config_name }}' WHERE id = 2;
+UPDATE panel_phpconfigs SET phpsettings = 'allow_call_time_pass_reference = Off\nallow_url_fopen = On\nasp_tags = Off\ndisable_classes =\ndisable_functions = curl_multi_exec,exec,parse_ini_file,passthru,popen,proc_close,proc_get_status,proc_nice,proc_open,proc_terminate,shell_exec,show_source,system\ndisplay_errors = Off\ndisplay_startup_errors = Off\nenable_dl = Off\nerror_reporting = E_ALL & ~E_NOTICE\nexpose_php = Off\nfile_uploads = On\ncgi.force_redirect = 1\ngpc_order = \"GPC\"\nhtml_errors = Off\nignore_repeated_errors = Off\nignore_repeated_source = Off\ninclude_path = \".:{PEAR_DIR}\"\nlog_errors = On\nlog_errors_max_len = 1024\nmagic_quotes_gpc = Off\nmagic_quotes_runtime = Off\nmagic_quotes_sybase = Off\nmax_execution_time = 60\nmax_input_time = 60\nmemory_limit = 128M\noutput_buffering = 4096\npost_max_size = 16M\nprecision = 14\nregister_argc_argv = Off\nregister_globals = Off\nreport_memleaks = On\nsendmail_path = \"/usr/sbin/sendmail -t -i -f {CUSTOMER_EMAIL}\"\nsession.auto_start = 0\nsession.bug_compat_42 = 0\nsession.bug_compat_warn = 1\nsession.cache_expire = 180\nsession.cache_limiter = nocache\nsession.cookie_domain =\nsession.cookie_lifetime = 0\nsession.cookie_path = /\nsession.entropy_file = /dev/urandom\nsession.entropy_length = 16\nsession.gc_divisor = 1000\nsession.gc_maxlifetime = 1440\nsession.gc_probability = 1\nsession.name = PHPSESSID\nsession.referer_check =\nsession.save_handler = files\nsession.save_path = \"{TMP_DIR}\"\nsession.serialize_handler = php\nsession.use_cookies = 1\nsession.use_trans_sid = 0\nshort_open_tag = On\nsuhosin.mail.protect = 1\nsuhosin.simulation = Off\ntrack_errors = Off\nupload_max_filesize = 32M\nupload_tmp_dir = \"{TMP_DIR}\"\nvariables_order = \"GPCS\"\n;mail.add_x_header = On\n;mail.log = \"/var/log/phpmail.log\"\nopcache.restrict_api = \"\"\nopcache.revalidate_freq={{ frox_opcache_revalidate_freq }}\nopcache.validate_timestamps={{ frox_opcache_validate_timestamps }}\nopcache.max_accelerated_files={{ frox_opcache_accelerated_files }}\nopcache.memory_consumption={{ frox_opcache_memory_consumption }}\nopcache.interned_strings_buffer={{ frox_opcache_interned_strings_buffer }}\n' WHERE id = 2;
 
 # Only allow mysql access on localhost
 UPDATE panel_settings SET value = '127.0.0.1,localhost' WHERE settinggroup = 'system' AND varname = 'mysql_access_host';
@@ -31,3 +33,18 @@ UPDATE panel_settings SET value = '127.0.0.1,localhost' WHERE settinggroup = 'sy
 UPDATE panel_ipsandports SET docroot = '/var/www/' WHERE id = 1;
 UPDATE panel_ipsandports SET specialsettings = 'location /netdata {\n  proxy_set_header             Host               $http_host;\n  proxy_set_header             X-Forwarded-Host   $host;\n  proxy_set_header             X-Forwarded-Server $host;\n  proxy_set_header             X-Forwarded-For    $proxy_add_x_forwarded_for;\n  proxy_pass                   http://netdata;\n  proxy_http_version           1.1;\n  proxy_pass_request_headers   on;\n  proxy_set_header             Connection \"keep-alive\";\n  proxy_store                  off;\n  proxy_redirect               off;\n  access_log                   /dev/null;\n  rewrite /netdata/(.*) /$1 break;\n}\n\nlocation /database {\n  root /usr/local/src/;\n  index index.php index.html index.htm;\n  location ~ ^/database/(.+\\.php)$ {\n    try_files $uri =404;\n    root /usr/local/src/;\n    fastcgi_pass unix:/run/php7.2-fpm.sock;\n    fastcgi_index index.php;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n    include /etc/nginx/fastcgi_params;\n  }\n  location ~* ^/database/(.+\\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {\n    root /usr/local/src/;\n  }\n}\n' WHERE id = 1;
 INSERT INTO `panel_ipsandports` VALUES (2,'127.0.0.1',80,0,0,1,0,'location /stub_status {\n  stub_status on;\n  allow 127.0.0.1;\n  deny all;\n}',0,'','','','','','/var/www/html/');
+
+# General settings
+UPDATE panel_settings SET value = '{{ frox_noreply_email }}' WHERE settinggroup = 'ticket' AND varname = 'noreply_email';
+UPDATE panel_settings SET value = '0' WHERE settinggroup = 'admin' AND varname = 'show_news_feed';
+UPDATE panel_settings SET value = '0' WHERE settinggroup = 'system' AND varname = 'bind_enable';
+UPDATE panel_settings SET value = '0' WHERE settinggroup = 'system' AND varname = 'mailpwcleartext';
+UPDATE panel_settings SET value = '{{ frox_admin_email }}' WHERE settinggroup = 'panel' AND varname = 'adminmail';
+{% if frox_use_ssl == false %}
+UPDATE panel_settings SET value = 'http://{{ default_servername }}/database/' WHERE settinggroup = 'panel' AND varname = 'phpmyadmin_url';
+{% else %}
+UPDATE panel_settings SET value = 'https://{{ default_servername }}/database/' WHERE settinggroup = 'panel' AND varname = 'phpmyadmin_url';
+{% endif %}
+UPDATE panel_settings SET value = '0' WHERE settinggroup = 'panel' AND varname = 'no_robots';
+UPDATE panel_settings SET value = '{{ frox_admin_name }}' WHERE settinggroup = 'panel' AND varname = 'adminmail_defname';
+UPDATE panel_settings SET value = '1' WHERE settinggroup = 'panel' AND varname = 'allow_preset_admin';

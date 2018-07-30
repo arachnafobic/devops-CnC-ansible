@@ -2,14 +2,9 @@ general:
 
 - remove ALL code for CloudLinux support
 
-playbooks:
-  - dynamicly group up vm's at the start of play, removes the need for a few static definitions.
-
 roles:
 
 - common
-  - remove static ufw settings, add ufw specific tasks to each role that needs ports to be opened up
-  - add firewalld version to complement ufw steps (centos)
   - systemd-resolvd bypass needs hardening (ubuntu bionic)
 
 - phpmyadmin
@@ -23,6 +18,5 @@ roles:
 
 - froxlor (ubuntu/centos)
   - update.sql < add all default settings needed to be letsencrypt ready
-  - update.sql < add opcache settings
   - replace a few skin templates with custom versions to hide unneeded options/text and add a phpmyadmin link to the admin user's sidebar
   - add an optional switch to pre-populate froxlor with a user that has a working default wordpress site
