@@ -4,6 +4,7 @@
 
 - name:             install proftpd packages
   package:          name={{ item }} state=present
+  notify:           start proftpd
   with_items:
     - "{{ pkgs_proftpd }}"
 
@@ -15,12 +16,14 @@
 
 - name:             Allow ftp traffic through Firewalld
   firewalld:        service={{ item }} permanent=true state=enabled
+  notify:           reload firewalld
   with_items:
     - "{{ ports }}"
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
 
 - name:             Allow PASV traffic through Firewalld
   firewalld:        port={{ item }} permanent=true state=enabled
+  notify:           reload firewalld
   with_items:
     - "{{ ports_pasv }}"
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"

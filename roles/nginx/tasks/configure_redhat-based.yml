@@ -21,3 +21,4 @@
   firewalld:        service={{ item }} permanent=true state=enabled
   with_items:
     - "{{ ports }}"
+  notify:           reload firewalld

@@ -2,3 +2,6 @@
 
 - name:             restart nginx
   service:          name={{ service_nginx_name }} state=restarted enabled=yes
+
+- name:             reload firewalld
+  service:          name=firewalld state=reloaded enabled=yes

@@ -1,0 +1,8 @@
+---
+
+- name:             start proftpd
+  service:          name=proftpd state=started enabled=yes
+
+- name:             reload firewalld
+  service:          name=firewalld state=reloaded enabled=yes
+
