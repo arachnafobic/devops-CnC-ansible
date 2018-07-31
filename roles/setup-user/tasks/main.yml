@@ -38,7 +38,7 @@
   become_user:      root
   template:         dest={{ home }}/.bash_profile src=profile
                     mode=0644 backup=yes owner={{ user }} group={{ user }}
-  when:             ansible_distribution == "CloudLinux" or ansible_distribution == "CentOS"
+  when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
 
 - name:             ~{{ user }}/.gemrc
   become:           yes

@@ -218,14 +218,6 @@
     keygen: false
 
 - import_playbook: ../roles/setup-user.yml
-  tags: [users, user-cloudlinux]
-  vars:
-    targets:  CloudLinux
-    user:   cloudlinux
-    home:   /home/cloudlinux
-    keygen: false
-
-- import_playbook: ../roles/setup-user.yml
   tags: [users, user-centos]
   vars:
     targets:  CentOS
