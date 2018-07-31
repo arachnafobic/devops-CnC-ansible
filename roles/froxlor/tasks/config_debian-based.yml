@@ -73,6 +73,16 @@
     mode:           0600
   notify:           restart proftpd
 
+- name:             template /etc/proftpd/tls.conf
+  template:
+    src:            tls.conf.j2
+    dest:           /etc/proftpd/tls.conf
+    owner:          root
+    group:          root
+    mode:           0644
+  notify:           restart proftpd
+  when:             frox_use_ssl == true
+
 - name:             template /etc/nginx/nginx.conf
   template:
     src:            nginx.conf.j2

@@ -9,7 +9,7 @@
 
   SQLAuthTypes Crypt
   SQLAuthenticate users* groups*
-  SQLConnectInfo froxlor@127.0.0.1 froxlor froxlor
+  SQLConnectInfo froxlor@127.0.0.1 froxlor {{ frox_mysql_pass }}
   SQLUserInfo ftp_users username password uid gid homedir shell
   SQLGroupInfo ftp_groups groupname gid members
   SQLUserWhereClause "login_enabled = 'y'"

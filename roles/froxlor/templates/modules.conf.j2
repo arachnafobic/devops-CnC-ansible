@@ -13,7 +13,7 @@ ModuleControlsACLs insmod,rmmod allow user root
 ModuleControlsACLs lsmod allow user *
 
 LoadModule mod_ctrls_admin.c
-#LoadModule mod_tls.c
+{% if frox_use_ssl == false %}#{% endif %}LoadModule mod_tls.c
 
 # Install proftpd-mod-mysql or proftpd-mod-pgsql to use this
 LoadModule mod_sql.c

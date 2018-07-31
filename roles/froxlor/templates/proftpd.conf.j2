@@ -130,4 +130,4 @@ Include /etc/proftpd/sql.conf
 #
 # This is used for FTPS connections
 #
-#Include /etc/proftpd/tls.conf
+{% if frox_use_ssl == false %}#{% endif %}Include /etc/proftpd/tls.conf

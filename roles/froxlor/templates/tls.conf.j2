@@ -1,0 +1,8 @@
+<IfModule mod_tls.c>
+  TLSEngine                               on
+  TLSLog                                  /var/log/proftpd/tls.log
+  TLSProtocol                             TLSv1 TLSv1.2
+  TLSRSACertificateFile                   /etc/ssl/froxlor-custom/{{ default_servername }}.crt
+  TLSRSACertificateKeyFile                /etc/ssl/froxlor-custom/{{ default_servername }}.key
+  TLSCACertificateFile                    /etc/ssl/froxlor-custom/{{ default_servername }}_CA.pem
+</IfModule>
