@@ -31,7 +31,9 @@ UPDATE panel_settings SET value = '127.0.0.1,localhost' WHERE settinggroup = 'sy
 
 # Modify ipsandports
 UPDATE panel_ipsandports SET docroot = '/var/www/' WHERE id = 1;
+{% if frox_use_ssl == false %}
 UPDATE panel_ipsandports SET specialsettings = 'location /netdata {\n  proxy_set_header             Host               $http_host;\n  proxy_set_header             X-Forwarded-Host   $host;\n  proxy_set_header             X-Forwarded-Server $host;\n  proxy_set_header             X-Forwarded-For    $proxy_add_x_forwarded_for;\n  proxy_pass                   http://netdata;\n  proxy_http_version           1.1;\n  proxy_pass_request_headers   on;\n  proxy_set_header             Connection \"keep-alive\";\n  proxy_store                  off;\n  proxy_redirect               off;\n  access_log                   /dev/null;\n  rewrite /netdata/(.*) /$1 break;\n}\n\nlocation /database {\n  root /usr/local/src/;\n  index index.php index.html index.htm;\n  location ~ ^/database/(.+\\.php)$ {\n    try_files $uri =404;\n    root /usr/local/src/;\n    fastcgi_pass unix:/run/php7.2-fpm.sock;\n    fastcgi_index index.php;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n    include /etc/nginx/fastcgi_params;\n  }\n  location ~* ^/database/(.+\\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {\n    root /usr/local/src/;\n  }\n}\n' WHERE id = 1;
+{% endif %}
 INSERT INTO `panel_ipsandports` VALUES (2,'127.0.0.1',80,0,0,1,0,'location /stub_status {\n  stub_status on;\n  allow 127.0.0.1;\n  deny all;\n}',0,'','','','','','/var/www/html/');
 
 # General settings
@@ -48,3 +50,20 @@ UPDATE panel_settings SET value = 'https://{{ default_servername }}/database/' W
 UPDATE panel_settings SET value = '0' WHERE settinggroup = 'panel' AND varname = 'no_robots';
 UPDATE panel_settings SET value = '{{ frox_admin_name }}' WHERE settinggroup = 'panel' AND varname = 'adminmail_defname';
 UPDATE panel_settings SET value = '1' WHERE settinggroup = 'panel' AND varname = 'allow_preset_admin';
+
+{% if frox_use_ssl == true %}
+# SSL settings
+UPDATE panel_settings SET value = '1' WHERE settinggroup = 'system' AND varname = 'use_ssl';
+UPDATE panel_settings SET value = 'NL' WHERE settinggroup = 'system' AND varname = 'letsencryptcountrycode';
+UPDATE panel_settings SET value = '/var/www' WHERE settinggroup = 'system' AND varname = 'letsencryptchallengepath';
+UPDATE panel_settings SET value = '1' WHERE settinggroup = 'system' AND varname = 'leenabled';
+UPDATE panel_settings SET value = '1' WHERE settinggroup = 'system' AND varname = 'le_froxlor_enabled';
+UPDATE panel_settings SET value = '/etc/nginx/conf-enabled/acme.conf' WHERE settinggroup = 'system' AND varname = 'letsencryptacmeconf';
+UPDATE panel_settings SET value = '31536000' WHERE settinggroup = 'system' AND varname = 'hsts_maxage';
+UPDATE panel_settings SET value = '1' WHERE settinggroup = 'system' AND varname = 'leregistered';
+UPDATE panel_ipsandports SET specialsettings = 'if ($request_uri !~ ^/.well-known/acme-challenge/\\w+$) {\n  return 301 https://vps001.ictmaatwerk.com/$request_uri;\n}\n' WHERE id = 1;
+UPDATE panel_ipsandports SET namevirtualhost_statement = '0' WHERE id = 1;
+UPDATE panel_ipsandports SET vhostcontainer_servername_statement = '0' WHERE id = 1;
+UPDATE panel_ipsandports SET default_vhostconf_domain = NULL WHERE id = 1;
+INSERT INTO `panel_ipsandports` VALUES (3,'{{ frox_ip.stdout }}',443,0,0,1,0,'location /netdata {\n  proxy_set_header             Host               $http_host;\n  proxy_set_header             X-Forwarded-Host   $host;\n  proxy_set_header             X-Forwarded-Server $host;\n  proxy_set_header             X-Forwarded-For    $proxy_add_x_forwarded_for;\n  proxy_pass                   http://netdata;\n  proxy_http_version           1.1;\n  proxy_pass_request_headers   on;\n  proxy_set_header             Connection \"keep-alive\";\n  proxy_store                  off;\n  proxy_redirect               off;\n  access_log                   /dev/null;\n  rewrite /netdata/(.*) /$1 break;\n}\n\nlocation /database {\n  root /usr/local/src/;\n  index index.php index.html index.htm;\n  location ~ ^/database/(.+\\.php)$ {\n    try_files $uri =404;\n    root /usr/local/src/;\n    fastcgi_pass unix:/run/php7.2-fpm.sock;\n    fastcgi_index index.php;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n    include /etc/nginx/fastcgi_params;\n  }\n  location ~* ^/database/(.+\\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {\n    root /usr/local/src/;\n  }\n}\n',1,'','','','','','/var/www/');
+{% endif %}

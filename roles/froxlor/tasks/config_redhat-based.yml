@@ -210,6 +210,11 @@
     mode:           0664
     backup:         yes
 
+- name:             force run froxlor cronjob for letsencrypt
+  shell:           "php /var/www/{{ frox_webpath }}/scripts/froxlor_master_cronjob.php --letsencrypt"
+  when:             froxlor_check.stat.exists == false and frox_use_ssl == true
+  notify:           restart nginx
+
 - name:             force run froxlor cronjob to finalize
   shell:           "php /var/www/{{ frox_webpath }}/scripts/froxlor_master_cronjob.php --force"
   when:             froxlor_check.stat.exists == false
