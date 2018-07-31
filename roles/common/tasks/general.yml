@@ -27,8 +27,17 @@
 - name:             place /etc/prompt.bash
   copy:             dest=/etc/prompt.bash src=prompt.bash mode=0644
 
-- name:             place /etc/resolv.conf.google
-  copy:             dest=/etc/resolv.conf.google src=resolv.conf.google mode=0644
+- name:             check /etc/resolv.conf
+  stat:             path=/etc/resolv.conf
+  register:         resolv_check
+
+- name:             delete /etc/resolv.conf if it's a symlink
+  file:             path=/etc/resolv.conf state=absent
+  when:             resolv_check.stat.islnk is defined and resolv_check.stat.islnk
+
+- name:             copy our resolv.conf
+  copy:             dest=/etc/resolv.conf src=resolv.conf.google mode=0644
+  when:             resolv_check.stat.islnk is defined and resolv_check.stat.islnk
 
 - name:             place /etc/rc.local
   template:         dest=/etc/rc.local src=rc.local.j2 mode=0755

@@ -1,12 +1,10 @@
 general:
+-
 
-- remove ALL code for CloudLinux support
+playbooks:
+-
 
 roles:
-
-- common
-  - systemd-resolvd bypass needs hardening (ubuntu bionic)
-
 - phpmyadmin
   - make webroot dynamic (ubuntu/centos)
 
