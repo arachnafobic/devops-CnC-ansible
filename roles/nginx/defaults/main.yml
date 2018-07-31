@@ -5,7 +5,7 @@ service_nginx_name: nginx
 pkgs_nginx:
   - nginx
 
-ports:
+nginx_ports:
   - http
   - https
 

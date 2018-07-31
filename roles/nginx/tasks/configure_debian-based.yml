@@ -27,4 +27,4 @@
 - name:             Allow http/https traffic through UFW
   ufw:              rule=allow port={{ item }} proto=tcp
   with_items:
-    - "{{ ports }}"
+    - "{{ nginx_ports }}"

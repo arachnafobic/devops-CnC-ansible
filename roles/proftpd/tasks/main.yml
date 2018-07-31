@@ -11,19 +11,19 @@
 - name:             Allow ftp and PASV ports through UFW
   ufw:              rule=allow port={{ item }} proto=tcp
   with_items:
-    - "{{ ports }}"
+    - "{{ ftp_ports }}"
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
 - name:             Allow ftp traffic through Firewalld
   firewalld:        service={{ item }} permanent=true state=enabled
   notify:           reload firewalld
   with_items:
-    - "{{ ports }}"
+    - "{{ ftp_ports }}"
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
 
 - name:             Allow PASV traffic through Firewalld
   firewalld:        port={{ item }} permanent=true state=enabled
   notify:           reload firewalld
   with_items:
-    - "{{ ports_pasv }}"
+    - "{{ ftp_ports_pasv }}"
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"

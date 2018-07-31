@@ -20,5 +20,5 @@
 - name:             Allow http/https traffic through Firewalld
   firewalld:        service={{ item }} permanent=true state=enabled
   with_items:
-    - "{{ ports }}"
+    - "{{ nginx_ports }}"
   notify:           reload firewalld
