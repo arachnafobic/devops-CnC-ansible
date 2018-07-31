@@ -1,0 +1,17 @@
+---
+
+- name:            "template /var/www/{{ frox_webpath }}/templates/Sparkle/admin/index/index.tpl"
+  template:
+    src:            Sparkle_admin_index.tpl.j2
+    dest:          "/var/www/{{ frox_webpath }}/templates/Sparkle/admin/index/index.tpl"
+    owner:          froxlocal
+    group:          froxlocal
+    mode:           0644
+
+- name:            "template /var/www/{{ frox_webpath }}/lib/navigation/00.froxlor.main.php"
+  template:
+    src:            00.froxlor.main.php.j2
+    dest:          "/var/www/{{ frox_webpath }}/lib/navigation/00.froxlor.main.php"
+    owner:          froxlocal
+    group:          froxlocal
+    mode:           0644

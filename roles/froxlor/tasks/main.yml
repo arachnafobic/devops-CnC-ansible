@@ -16,3 +16,5 @@
 
 - include_tasks:    config_redhat-based.yml
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
+- include_tasks:    config_general.yml
