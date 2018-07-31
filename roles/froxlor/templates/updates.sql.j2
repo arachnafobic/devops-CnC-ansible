@@ -50,6 +50,7 @@ UPDATE panel_settings SET value = 'https://{{ default_servername }}/database/' W
 UPDATE panel_settings SET value = '0' WHERE settinggroup = 'panel' AND varname = 'no_robots';
 UPDATE panel_settings SET value = '{{ frox_admin_name }}' WHERE settinggroup = 'panel' AND varname = 'adminmail_defname';
 UPDATE panel_settings SET value = '1' WHERE settinggroup = 'panel' AND varname = 'allow_preset_admin';
+INSERT INTO `panel_plans` VALUES (1,1,'Default','Currently supported settings','{\"diskspace\":-1,\"traffic\":-1,\"subdomains\":0,\"emails\":0,\"email_accounts\":0,\"email_forwarders\":0,\"email_quota\":-1,\"email_imap\":0,\"email_pop3\":0,\"ftps\":0,\"tickets\":-1,\"mysqls\":-1,\"phpenabled\":1,\"allowed_phpconfigs\":[2],\"perlenabled\":0,\"dnsenabled\":0}',0);
 
 {% if frox_use_ssl == true %}
 # SSL settings
