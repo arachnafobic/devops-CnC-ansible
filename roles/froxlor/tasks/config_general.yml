@@ -15,3 +15,11 @@
     owner:          froxlocal
     group:          froxlocal
     mode:           0644
+
+- name:            "template /var/www/{{ frox_webpath }}/scripts/jobs/cron_tasks.inc.http.30.nginx.php"
+  template:
+    src:            cron_tasks.inc.http.30.nginx.php
+    dest:          "/var/www/{{ frox_webpath }}/scripts/jobs/cron_tasks.inc.http.30.nginx.php"
+    owner:          froxlocal
+    group:          froxlocal
+    mode:           0644
