@@ -3,7 +3,7 @@
     {
       "check-linux-disk-usage":
         {
-          "command": "/opt/sensu/embedded/bin/check-disk-usage.rb -w 80 -c 90",
+          "command": "/opt/sensu/embedded/bin/check-disk-usage.rb -w 80 -c 90 -x tracefs",
           "interval": 60,
           "occurrences": 5,
           "subscribers": [ "all" ]
