@@ -39,3 +39,4 @@
 
 - name:             disable autossh if this is fresh install, config is not part of this task
   service:          name="{{ service_autossh_name }}" state=stopped enabled=no
+  when:             autossh_install is changed
