@@ -1,0 +1,8 @@
+---
+
+service_autossh_name: autossh
+
+pkgs_autossh:
+  - autossh
+
+sshkey_name: yourkeyhere

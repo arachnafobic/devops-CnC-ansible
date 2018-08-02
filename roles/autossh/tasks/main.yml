@@ -1,0 +1,9 @@
+---
+
+- include_tasks:    general.yml
+
+- include_tasks:    client.yml
+  when:             "'monitor' not in group_names"
+
+- include_tasks:    server.yml
+  when:             "'monitor' in group_names"

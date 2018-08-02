@@ -1,0 +1,41 @@
+---
+
+- name:             copy autossh ssh keyset
+  copy:
+    src:           "{{ item }}"
+    dest:          "/var/lib/autossh/.ssh/{{ item }}"
+    owner:          autossh
+    group:          autossh
+    mode:           0600
+  with_items:
+    - "{{ sshkey_name }}"
+    - "{{ sshkey_name }}.pub"
+
+- name:             install autossh
+  package:
+    name:          "{{ item }}"
+    state:          present
+  register:         autossh_install
+  with_items:
+    - "{{ pkgs_autossh }}"
+
+- name:             copy /etc/default/autossh if this is fresh install
+  copy:
+    src:            autossh.default
+    dest:           /etc/default/autossh
+    owner:          root
+    group:          root
+    mode:           0644
+  when:             autossh_install is changed
+
+- name:             copy /etc/init.d/autossh if this is fresh install
+  copy:
+    src:            autossh.init
+    dest:           /etc/init.d/autossh
+    owner:          root
+    group:          root
+    mode:           0755
+  when:             autossh_install is changed
+
+- name:             disable autossh if this is fresh install, config is not part of this task
+  service:          name="{{ service_autossh_name }}" state=stopped enabled=no

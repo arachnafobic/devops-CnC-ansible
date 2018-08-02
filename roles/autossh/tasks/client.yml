@@ -1,0 +1,9 @@
+---
+
+- name:             template authorized_keys
+  template:
+    src:            authorized_keys.j2
+    dest:           /var/lib/autossh/.ssh/authorized_keys
+    owner:          autossh
+    group:          autossh
+    mode:           0600

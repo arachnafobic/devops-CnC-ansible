@@ -1,0 +1,23 @@
+---
+
+- name:             create autossh group
+  group:
+    name:           autossh
+    state:          present
+
+- name:             create autossh user
+  user:
+    name:           autossh
+    group:          autossh
+    system:         yes
+    home:           /var/lib/autossh
+    shell:          /bin/false
+    state:          present
+
+- name:             create /var/lib/autossh/.ssh
+  file:
+    path:           /var/lib/autossh/.ssh
+    state:          directory
+    owner:          autossh
+    group:          autossh
+    mode:           0700

@@ -67,6 +67,11 @@
   vars:
     targets: all
 
+- import_playbook: ../roles/autossh.yml
+  tags: [autossh, init]
+  vars:
+    targets: all
+
 # dev
 - import_playbook: ../roles/ruby.yml
   tags: [ruby, dev]
