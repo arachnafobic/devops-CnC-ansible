@@ -18,7 +18,7 @@
 
 - name:            "template /var/www/{{ frox_webpath }}/scripts/jobs/cron_tasks.inc.http.30.nginx.php"
   template:
-    src:            cron_tasks.inc.http.30.nginx.php
+    src:            cron_tasks.inc.http.30.nginx.php.j2
     dest:          "/var/www/{{ frox_webpath }}/scripts/jobs/cron_tasks.inc.http.30.nginx.php"
     owner:          froxlocal
     group:          froxlocal
