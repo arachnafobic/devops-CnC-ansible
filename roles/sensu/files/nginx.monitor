@@ -55,6 +55,7 @@ server {
   satisfy any;
   allow   127.0.0.1/32;
   allow   172.28.128.0/24;
+  allow   192.168.0.0/24;
   deny    all;
 
   auth_basic "Restricted";
