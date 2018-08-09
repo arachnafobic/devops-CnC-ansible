@@ -57,3 +57,4 @@ uninstall_unwanted:
   - puppet-common
   - chef
   - chef-zero
+  - snapd
