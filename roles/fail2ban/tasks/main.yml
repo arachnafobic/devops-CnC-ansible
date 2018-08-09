@@ -26,5 +26,8 @@
   notify:           restart fail2ban
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
+- name:             copy logrotate.d/fail2ban
+  template:         src=fail2ban.logrotate.j2 dest=/etc/logrotate.d/fail2ban owner=root group=root mode=0644
+
 - name:             remove /etc/fail2ban/jail.d/defaults-debian.conf if present
   file:             path=/etc/fail2ban/jail.d/defaults-debian.conf state=absent
