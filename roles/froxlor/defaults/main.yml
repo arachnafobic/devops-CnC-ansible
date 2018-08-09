@@ -39,6 +39,9 @@ frox_support_pkgs_redhat:
   - libnss-mysql
   - nscd
 
+frox_dont_backup:
+  - cache/wp-rocket/
+
 frox_opcache_revalidate_freq:         '0'
 frox_opcache_validate_timestamps:     'false'
 frox_opcache_accelerated_files:       '100000'
