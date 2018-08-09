@@ -7,6 +7,9 @@
 - name:             copy our srvbaklib.bash in place
   copy:             src=srvbaklib.bash dest=/opt/src/srvbak/srvbaklib.bash owner=root group=root mode=0644
 
+- name:             copy basic exclude file
+  copy:             src=srvbak.exclude dest=/etc/devops/opt/srvbak.exclude owner=root group=root mode=0644
+
 - name:             check for files folder
   stat:             path=/__data/files
   register:         data_check
