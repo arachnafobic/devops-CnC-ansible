@@ -2,7 +2,7 @@
 
 - name:             github repos
   git:              repo=https://github.com/{{ item }}.git
-                    dest=/opt/src/{{ item|basename }}
+                    dest=/opt/src/{{ item|basename }} update=no
   with_items:
     - "{{ gh_repos }}"
   when:             gh_repos is defined

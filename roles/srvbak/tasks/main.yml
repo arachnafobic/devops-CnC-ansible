@@ -2,7 +2,10 @@
 
 - name:             clone/update srvbak
   git:              repo=https://github.com/obfusk/srvbak.git
-                    dest=/opt/src/srvbak
+                    dest=/opt/src/srvbak update=no
+
+- name:             copy our srvbaklib.bash in place
+  copy:             src=srvbaklib.bash dest=/opt/src/srvbak/srvbaklib.bash owner=root group=root mode=0644
 
 - name:             check for files folder
   stat:             path=/__data/files

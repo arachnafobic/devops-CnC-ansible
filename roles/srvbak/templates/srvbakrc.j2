@@ -24,6 +24,10 @@ finally=( '' )
 
 base_dir=/__data/srvbak             # backups in subdirs
 
+# file with paths to exclude during rsync runs
+# only used if defined and if exists
+exclude_from=/etc/devops/opt/srvbak.exclude
+
 # keep last {{ srvbak_keep_last }} backups
 # keep all -> keep_last=all
 keep_last={{ srvbak_keep_last }}
