@@ -42,11 +42,20 @@ frox_support_pkgs_redhat:
 frox_dont_backup:
   - cache/wp-rocket/
 
+# Reconfigure default settings
 frox_opcache_revalidate_freq:         '0'
 frox_opcache_validate_timestamps:     'false'
 frox_opcache_accelerated_files:       '100000'
 frox_opcache_memory_consumption:      '512'
 frox_opcache_interned_strings_buffer: '32'
+
+frox_fpm_pm:                          'dynamic'
+frox_fpm_pm_max_children:             '5'
+frox_fpm_pm_start_servers:            '3'
+frox_fpm_pm_min_spare_servers:        '2'
+frox_fpm_pm_max_spare_servers:        '4'
+frox_fpm_pm_max_requests:             '200'
+
 frox_vhost_config_name:               'Froxlor Vhost Config'
 frox_noreply_email:                   'example@example.com'
 frox_admin_email:                     'example@example.com'
