@@ -31,3 +31,12 @@
     state:          present
   with_items:
     - "{{ frox_dont_backup }}"
+
+- name:             Adding /var/customers/logs to nginx's logrotate
+  replace:
+    path:           /etc/logrotate.d/nginx
+    regexp:        '^/var/log/nginx/.*$'
+    replace:       "/var/log/nginx/*.log /var/customers/logs/*.log {"
+    owner:          root
+    group:          root
+    mode:           0644
