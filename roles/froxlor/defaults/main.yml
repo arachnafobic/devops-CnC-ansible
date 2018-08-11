@@ -49,6 +49,11 @@ frox_opcache_accelerated_files:       '100000'
 frox_opcache_memory_consumption:      '512'
 frox_opcache_interned_strings_buffer: '32'
 
+frox_php_max_execution_time:          '60'
+frox_php_memory_limit:                '128M'
+frox_php_post_max_size:               '16M'
+frox_php_upload_max_filesize:         '32M'
+
 frox_fpm_pm:                          'dynamic'
 frox_fpm_pm_max_children:             '5'
 frox_fpm_pm_start_servers:            '3'
