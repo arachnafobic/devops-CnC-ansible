@@ -9,3 +9,12 @@
 - name:             set fact to prepend for shell commands during configure
   set_fact:
     scl_mariadb:   " "
+
+- name:             Adding root pw to /etc/mysql/debian.cnf so logrotate doesn't break
+  replace:
+    path:           /etc/mysql/debian.cnf
+    regexp:        '^password =.*$'
+    replace:       "password = {{ mariadb_root_password }}"
+    owner:          root
+    group:          root
+    mode:           0600

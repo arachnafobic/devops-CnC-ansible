@@ -35,19 +35,18 @@
   no_log:           true
 
 - name:             Allow root to login on localhost
-  shell:           "{{ scl_mariadb }} mysql --password='{{mariadb_root_password }}' -NBe \"GRANT ALL PRIVILEGES on *.* to 'root'@'localhost' IDENTIFIED BY '{{ mariadb_root_password}}'; FLUSH PRIVILEGES;\""
+  shell:           "{{ scl_mariadb }} mysql --password='{{ mariadb_root_password }}' -NBe \"GRANT ALL PRIVILEGES on *.* to 'root'@'localhost' IDENTIFIED BY '{{ mariadb_root_password}}'; FLUSH PRIVILEGES;\""
   when:             deb_mariadb_install_packages is defined and deb_mariadb_install_packages.changed
   no_log:           true
 
 # Has to be after the root password assignment, for idempotency.
 - name:             Copy .my.cnf file with root password credentials.
   template:
-    src: "user-my.cnf.j2"
-    dest: "/root/.my.cnf"
-    owner: root
-    group: root
-    mode: 0600
-  when:             deb_mariadb_install_packages is defined and deb_mariadb_install_packages.changed
+    src:           "user-my.cnf.j2"
+    dest:          "/root/.my.cnf"
+    owner:          root
+    group:          root
+    mode:           0600
 
 - name:             (re)configure server cnf
   template:
