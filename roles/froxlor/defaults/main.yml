@@ -69,3 +69,5 @@ frox_admin_name:                      'Froxlor Administrator'
 proftpd_user:      proftpd
 proftpd_group:     nogroup
 proftpd_modules:   /usr/lib/proftpd
+
+phpmyadmin_webroot: database

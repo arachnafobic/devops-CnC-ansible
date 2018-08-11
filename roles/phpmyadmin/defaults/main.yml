@@ -1,5 +1,8 @@
 ---
 
+phpmyadmin_version: 4.8.2
+phpmyadmin_webroot: database
+
 httpd_user:  www-data
 httpd_group: www-data
 

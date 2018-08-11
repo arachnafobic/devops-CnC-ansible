@@ -47,10 +47,10 @@ server {
     rewrite /netdata/(.*) /$1 break;
   }
 
-  location /database {
+  location /{{ phpmyadmin_webroot }} {
     root /usr/local/src/;
     index index.php index.html index.htm;
-    location ~ ^/database/(.+\.php)$ {
+    location ~ ^/{{ phpmyadmin_webroot }}/(.+\.php)$ {
       try_files $uri =404;
       root /usr/local/src/;
       fastcgi_pass unix:/run/php7.2-fpm.sock;
@@ -58,7 +58,7 @@ server {
       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
       include /etc/nginx/fastcgi_params;
     }
-    location ~* ^/database/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
+    location ~* ^/{{ phpmyadmin_webroot }}/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
       root /usr/local/src/;
     }
   }
