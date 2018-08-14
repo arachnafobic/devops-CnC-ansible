@@ -37,8 +37,15 @@ http {
 	# Logging Settings
 	##
 
-	access_log /var/log/nginx/access.log;
-	error_log /var/log/nginx/error.log;
+        map $request $loggable {
+{% for dont_log in frox_dont_log %}
+          {{ dont_log }} 0;
+{% endfor %}
+          default 1;
+        }
+
+	access_log /var/log/nginx/access.log combined if=$loggable;
+	error_log /var/log/nginx/error.log error;
 
 	##
 	# Gzip Settings

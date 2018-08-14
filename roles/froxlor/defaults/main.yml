@@ -42,6 +42,11 @@ frox_support_pkgs_redhat:
 frox_dont_backup:
   - cache/wp-rocket/
 
+frox_dont_log:
+  - ~*dontlogme.php
+  - ~*example.php
+  - ~*favicon.ico
+
 # Reconfigure default settings
 frox_opcache_revalidate_freq:         '0'
 frox_opcache_validate_timestamps:     'false'
