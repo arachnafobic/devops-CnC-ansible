@@ -11,7 +11,7 @@
   file:             path=/etc/devops/ssl state=directory owner=root group=root mode=0700
 
 - name:             place /etc/devops/www/index.html
-  copy:             dest=/etc/devops/www/index.html src=index.html mode=0644
+  copy:             dest=/etc/devops/www/index.html src=index.html mode=0644 force=no
 
 - name:             place /etc/devops/www/502.html
   copy:             dest=/etc/devops/www/502.html src=502.html mode=0644
