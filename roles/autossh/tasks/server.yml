@@ -26,6 +26,7 @@
     owner:          root
     group:          root
     mode:           0644
+    force:          no
   when:             autossh_install is changed
 
 - name:             copy /etc/init.d/autossh if this is fresh install
@@ -35,6 +36,7 @@
     owner:          root
     group:          root
     mode:           0755
+    force:          no
   when:             autossh_install is changed
 
 - name:             disable autossh if this is fresh install, config is not part of this task
