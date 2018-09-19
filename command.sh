@@ -32,6 +32,7 @@ GPGAUTH=
 COMMAND=
 BECOME=
 LIMITTO="all"
+SKIPASKPW=no
 dummy_arg="__dummy__"
 extra_args=("${dummy_arg}") # Because set -u does not allow undefined variables to be used
 discard_opts_after_doubledash=0 # 1=Discard, 0=Save opts after -- to ${extra_args}
@@ -47,8 +48,8 @@ fi
 # An option followed by a single colon ':' means that it *needs* an argument.
 # An option followed by double colons '::' means that its argument is optional.
 # See `man getopt'.
-SHORT=bvht:a:l:                                 # List all the short options
-LONG=become,verbose,help,target:,auth:,limitto: # List all the long options
+SHORT=sbvht:a:l:                                       # List all the short options
+LONG=skippw,become,verbose,help,target:,auth:,limitto: # List all the long options
 
 # - Temporarily store output to be able to check for errors.
 # - Activate advanced mode getopt quoting e.g. via "--options".
@@ -97,6 +98,9 @@ do
         -a|--auth)
                    shift
                    GPGAUTH="$1"
+                   ;;
+        -s|--skippw)
+                   SKIPASKPW=
                    ;;
         --)
                    if [[ ${discard_opts_after_doubledash} -eq 1 ]]
@@ -194,7 +198,12 @@ then
           then
                if [[ ! $TARGET == "vm" ]]
                then
-                    ANSIBLE_COMMAND+=" --ask-become-pass"
+                   if [[ ! -z $SKIPASKPW ]]
+                   then
+                        ANSIBLE_COMMAND+=" --ask-become-pass"
+                   else
+                        SKIPASKPW=yes
+                   fi
                else
                     ANSIBLE_COMMAND+=' --extra-vars "ansible_become_pass=foo"'
                fi
@@ -215,6 +224,7 @@ echo "TARGET           == $TARGET"
 echo "LIMITTO          == $LIMITTO"
 echo "GPGAUTH          == $GPGAUTH"
 echo "COMMAND          == $COMMAND"
+echo "SKIPASKPW        == $SKIPASKPW"
 if [[ ! -z $FOUNDLIMIT ]]
 then
      echo ""
