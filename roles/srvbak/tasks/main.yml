@@ -5,7 +5,7 @@
                     dest=/opt/src/srvbak update=no
 
 - name:             copy our srvbaklib.bash in place
-  copy:             src=srvbaklib.bash dest=/opt/src/srvbak/srvbaklib.bash owner=root group=root mode=0644
+  template:         src=srvbaklib.bash.j2 dest=/opt/src/srvbak/srvbaklib.bash owner=root group=root mode=0644
 
 - name:             copy basic exclude file
   copy:             src=srvbak.exclude dest=/etc/devops/opt/srvbak.exclude owner=root group=root mode=0644
@@ -41,7 +41,7 @@
   file:             path=/etc/cron.2am owner=root group=root mode=0755 state=directory
 
 - name:             (re)construct srvbakrc
-  template:         src=srvbakrc.j2 dest=/etc/devops/opt/srvbakrc owner=root group=root mode=0600
+  template:         src=srvbakrc.j2 dest=/etc/devops/opt/srvbakrc owner=root group=root mode=0600 force=no
 
 - name:             symlink srvbakrc
   file:             path=/opt/src/srvbak/srvbakrc src=/etc/devops/opt/srvbakrc state=link

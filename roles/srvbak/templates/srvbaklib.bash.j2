@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# --                                                            ; {{{1
+# --
 #
 # File        : srvbaklib.bash
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
@@ -21,7 +21,7 @@
 # $sensitive_data_dir__${sensitive_data_dir_n}, $sensitive_data_dir_n;
 # $srvbak_status.
 #
-# --                                                            ; }}}1
+# --
 
 export LC_COLLATE=C
 
@@ -33,12 +33,12 @@ function die () { echo "$@" >&2; exit 1; }
 # Usage: pipe_chk [<msg(s)>]
 # Checks ${PIPESTATUS[@]} and dies if any are non-zero.
 function pipe_chk ()
-{                                                               # {{{1
+{
   local ps=( "${PIPESTATUS[@]}" ) x
   for x in "${ps[@]}"; do
     [ "$x" -eq 0 ] || die 'non-zero PIPESTATUS' "$@"
   done
-}                                                               # }}}1
+}
 
 # Usage: grep0 [<arg(s)>]
 # Runs grep <arg(s)> but returns 0 if grep returned 0 or 1; and 1 if
@@ -50,13 +50,13 @@ function grep0 () { grep "$@" || [ "$?" -eq 1 ]; }
 # Creates lock file using ln -s; target defaults to $$; dies if ln
 # fails and message doesn't contain 'exists'.
 function lock ()
-{                                                               # {{{1
+{
   local x="$( ! LC_ALL=C ln -s "${2:-$$}" "$1" 2>&1 || echo OK )"
   if [ "$x" != OK ]; then
     [[ "$x" != *exists* ]] && die "locking failed -- $x"
     return 1
   fi
-}                                                               # }}}1
+}
 
 # --
 
@@ -85,14 +85,14 @@ function run_multi () { local x; for x in "$@"; do run $x; done; }
 # Gets content of $base_dir/.var/status, or 'ok first-run' if it does
 # not exist (yet); or 'ok dryrun' if dryrun.  See set_status.
 function read_status ()
-{                                                               # {{{1
+{
   if dryrun; then
     echo 'ok dryrun'
   else
     local f="$base_dir"/.var/status
     if [ -e "$f" ]; then cat "$f"; else echo 'ok first-run'; fi
   fi
-}                                                               # }}}1
+}
 
 # Usage: get_status
 # Sets $srvbak_status using read_status.
@@ -148,37 +148,37 @@ function hashpath ()
 # Usage: chown_to <user>
 # Chowns $base_dir and, recursively, $base_dir/*/.
 function chown_to ()
-{                                                               # {{{1
+{
   local user="$1" v="${verbose:+-c}"
   run chown       "$user" "$base_dir"
   run chown $v -R "$user" "$base_dir"/*/
-}                                                               # }}}1
+}
 
 # Usage: chgrp_to <group>
 # Chgrps $base_dir and, recursively, $base_dir/*/**.
 function chgrp_to ()
-{                                                               # {{{1
+{
   local group="$1" v="${verbose:+-c}"
   run chgrp       "$group" "$base_dir"
   run chgrp $v -R "$group" "$base_dir"/*/
-}                                                               # }}}1
+}
 
 # Usage: chmod_dirs <mode>
 # Chmods $base_dir and dirs in $base_dir/*/.
 function chmod_dirs ()
-{                                                               # {{{1
+{
   local mode="$1" v="${verbose:+-c}"
   run chmod "$mode" "$base_dir"
   run find "$base_dir"/*/ -type d -execdir chmod $v "$mode" {} \;
-}                                                               # }}}1
+}
 
 # Usage: chmod_files <mode>
 # Chmods files in $base_dir/*/.
 function chmod_files ()
-{                                                               # {{{1
+{
   local mode="$1" v="${verbose:+-c}"
   run find "$base_dir"/*/ -type f -execdir chmod $v "$mode" {} \;
-}                                                               # }}}1
+}
 
 # Usage: original_files_info <path> <to>
 # Lists null-separated mode:owner:group:time:path of the original
@@ -186,12 +186,12 @@ function chmod_files ()
 # the info of $path/some/file).
 # TODO: how best to handle failures?
 function original_files_info ()
-{                                                               # {{{1
+{
   local path="$( canonpath "$1" )" to="$2" file
   find "$to" -printf '%P\0' | while IFS= read -r -d '' file; do
     stat --printf '%a:%U:%G:%.Y:%n\0' -- "$path/$file"
   done
-}                                                               # }}}1
+}
 
 # --
 
@@ -199,14 +199,14 @@ function original_files_info ()
 # Lists backups in <dir>; if dryrun and <dir> does not exist, prints a
 # message to stderr instead of failing.
 function ls_backups ()
-{                                                               # {{{1
+{
   local dir="$1"
   if dryrun && [ ! -e "$dir" ]; then
     echo "( ls_backups: DRY RUN and \`$dir' does not exist )" >&2
   else
     ls "$dir" | grep0 -E '^[0-9]{4}-'; pipe_chk
   fi
-}                                                               # }}}1
+}
 
 # Usage: last_backup <dir>
 # Uses ls_backups.
@@ -223,24 +223,24 @@ function obsolete_backups ()
 # NB: call before new backup (or dir creation)!
 # Uses last_backup.
 function cp_last_backup ()
-{                                                               # {{{1
+{
   local dir="$1" path="$2" ; local last="$( last_backup "$dir" )"
   if [ -n "$last" -a -e "$dir/$last" ]; then
     run cp -alT "$dir/$last" "$path"
   fi
-}                                                               # }}}1
+}
 
 # Usage: rm_obsolete_backups <dir>
 # NB: call after new backup!
 # Uses $keep_last, obsolete_backups.
 function rm_obsolete_backups ()
-{                                                               # {{{1
+{
   [ "$keep_last" == all ] && return
   local dir="$1" x
   for x in $( obsolete_backups "$dir" ); do
     run rm -fr "$dir/$x"
   done
-}                                                               # }}}1
+}
 
 # --
 
@@ -251,18 +251,18 @@ function set_gpg ()
 
 # Usage: gpg_file <out> <in>
 # Uses set_gpg.
-function gpg_file ()                                            # {{{1
+function gpg_file ()
 {
   local out="$1" in="$2" gpg ; set_gpg
 
   run_hdr "${gpg[@]} < $in > $out"
   dryrun || "${gpg[@]}" < "$in" > "$out"
   run_ftr
-}                                                               # }}}1
+}
 
 # Usage: tar_gpg <out> <arg(s)>
 # Uses set_gpg.
-function tar_gpg ()                                             # {{{1
+function tar_gpg ()
 {
   local out="$1" ; shift
   local tar=( tar c --anchored "$@" ) gpg ; set_gpg
@@ -270,14 +270,14 @@ function tar_gpg ()                                             # {{{1
   run_hdr "${tar[@]} | ${gpg[@]} > $out"
   dryrun || { "${tar[@]}" | "${gpg[@]}" > "$out"; pipe_chk; }
   run_ftr
-}                                                               # }}}1
+}
 
 # --
 
 # Usage: process_mongo_passfile
 # Uses $mongo_passfile; sets $mongo_auth__${db}__{user,pass}.
 function process_mongo_passfile ()
-{                                                               # {{{1
+{
   [ -e "$mongo_passfile" ] || \
     die "bad mongo_passfile: $mongo_passfile"
 
@@ -288,7 +288,7 @@ function process_mongo_passfile ()
     eval "mongo_auth__${db_}__user=\$user"
     eval "mongo_auth__${db_}__pass=\$pass"
   done < "$mongo_passfile" ; IFS="$oldifs"
-}                                                               # }}}1
+}
 
 # --
 
@@ -296,7 +296,7 @@ function process_mongo_passfile ()
 # baktogit --> tar + gpg to $base_dir/baktogit/$date.tar.gpg.
 # Uses $BAKTOGIT_REPO, $baktogit_keep_last.
 function baktogit_tar_gpg ()
-{                                                               # {{{1
+{
   local baktogit="$1" ; shift
   [ -x "$baktogit" -o -x "$( which "$baktogit" )" ] || \
     die "bad baktogit: $baktogit"
@@ -309,7 +309,7 @@ function baktogit_tar_gpg ()
   run mkdir -p "$dir"
   tar_gpg "$to" $verbose "$BAKTOGIT_REPO"
   rm_obsolete_backups "$dir"
-}                                                               # }}}1
+}
 
 # Usage: data_backup <path> [<opt(s)>]
 # rsync directory to $base_dir/data/hash/$hash_of_path/$date,
@@ -319,7 +319,7 @@ function baktogit_tar_gpg ()
 # directories to $base_dir/data/list/$hash_of_path/$date.
 # Hard links last backup (if any); removes obsolete backups.
 function data_backup ()
-{                                                               # {{{1
+{
   local path="$1" ; shift ; local hash="$( hashpath "$path" )"
   local       ddir="$base_dir"/data
   local    pdir_up="$ddir/path/$( dirname "$path" )"
@@ -337,7 +337,11 @@ function data_backup ()
   [ -e "$exclude_from" ] || run rsync -a --no-owner --no-group --no-perms $verbose --delete "$@" "$path"/ "$to"/
   [ ! -e "$exclude_from" ] || run rsync -a --exclude-from="$exclude_from" --no-owner --no-group --no-perms $verbose --delete "$@" "$path"/ "$to"/
 
+{% if srvbak_use_nas_path == True %}
+  run ln -Tfs "{{ srvbak_nas_path }}/hash/$hash" "$pdir"
+{% else %}
   [ -e "$pdir" ] || run ln -Ts "$hdir" "$pdir"
+{% endif %}
 
   run_hdr "[$path] > $info_path"
   dryrun || printf '%s' "$path" > "$info_path"
@@ -349,7 +353,7 @@ function data_backup ()
 
   rm_obsolete_backups "$hdir"
   rm_obsolete_backups "$ldir"
-}                                                               # }}}1
+}
 
 # Usage: sensitive_data_backup <dir> [<opt(s)>]
 # tar + gpg directory to
@@ -358,7 +362,7 @@ function data_backup ()
 # Writes $path to $base_dir/sensitive_data/info/${hash_of_path}.path.
 # Removes obsolete backups.
 function sensitive_data_backup ()
-{                                                               # {{{1
+{
   local path="$1" ; shift ; local hash="$( hashpath "$path" )"
   local      ddir="$base_dir"/sensitive_data
   local   pdir_up="$ddir/path/$( dirname "$path" )"
@@ -377,14 +381,14 @@ function sensitive_data_backup ()
   run_ftr
 
   rm_obsolete_backups "$hdir"
-}                                                               # }}}1
+}
 
 # Usage: pg_backup <dbname> <dbuser>
 # PostgreSQL dump to $base_dir/postgresql/$dbname/$date.sql.gpg.
 # Removes obsolete backups.
 # Uses $PG*.
 function pg_backup ()
-{                                                               # {{{1
+{
   local dbname="$1" dbuser="$2"
   local dir="$base_dir/postgresql/$dbname"
   local temp="$( mktemp_dry )"
@@ -395,14 +399,14 @@ function pg_backup ()
   gpg_file "$dump" "$temp"
   run rm -f "$temp"
   rm_obsolete_backups "$dir"
-}                                                               # }}}1
+}
 
 # Usage: mongo_backup <dbname>
 # MongoDB dump to $base_dir/mongodb/$dbname/$date.tar.gpg.
 # Removes obsolete backups.
 # Uses $mongo_{host,auth__${dbname}__{user,pass}}.
 function mongo_backup ()
-{                                                               # {{{1
+{
   [ -n "$mongo_host" ] || die 'empty $mongo_host'
 
   local dbname="$1" dbname_ user pass
@@ -423,13 +427,13 @@ function mongo_backup ()
   tar_gpg "$dump" $verbose -C "$temp" "$tsub"
   run rm -fr "$temp"
   rm_obsolete_backups "$dir"
-}                                                               # }}}1
+}
 
 # Usage: dpkg_selections_backup
 # dpkg selections dump to $base_dir/dpkg/$date.
 # Removes obsolete backups.
 function dpkg_selections_backup ()
-{                                                               # {{{1
+{
   local dir="$base_dir/dpkg" ; local dump="$dir/$date"
 
   run mkdir -p "$dir"
@@ -437,6 +441,6 @@ function dpkg_selections_backup ()
   dryrun || dpkg --get-selections > "$dump"
   run_ftr
   rm_obsolete_backups "$dir"
-}                                                               # }}}1
+}
 
 # vim: set tw=70 sw=2 sts=2 et fdm=marker :

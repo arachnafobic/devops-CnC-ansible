@@ -1,3 +1,9 @@
 ---
 
 srvbak_keep_last: 14
+
+# Use this if you rsync your backup to a seperate machine/NAS and
+# the location on this machine/NAS differs from the location where
+# the backup is made originally.
+srvbak_use_nas_path: false
+srvbak_nas_path: /path/to/folder/on/nas
