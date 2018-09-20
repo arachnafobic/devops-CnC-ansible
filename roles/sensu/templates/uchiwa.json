@@ -1,7 +1,7 @@
 {
   "sensu": [
     {
-      "name": "datacenter",
+      "name": "{{ sensu_datacenter_name }}",
       "host": "127.0.0.1",
       "ssl": false,
       "port": 4567,

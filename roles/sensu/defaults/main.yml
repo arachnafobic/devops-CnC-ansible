@@ -13,6 +13,8 @@ pkgs_uchiwa:
 
 # defaults, overwrite in distribution or host specific var files
 
+sensu_datacenter_name: datacenter
+
 sensu_default_plugins:
   - cpu-checks
   - disk-checks
@@ -31,3 +33,5 @@ sensu_api_pass:        adminpass
 elk_stack_use_xpack:   true
 
 monitor_ip:            127.0.0.1
+monitor_vhost:         monitor.*
+monitor_index_xipio:   true

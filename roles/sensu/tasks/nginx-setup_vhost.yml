@@ -1,7 +1,7 @@
 ---
 
 - name:             copy nginx.monitor to /etc/nginx/sites-available/monitor.conf
-  copy:             src=nginx.monitor dest=/etc/nginx/sites-available/monitor.conf
+  template:         src=nginx.monitor.j2 dest=/etc/nginx/sites-available/monitor.conf
                     owner=root group=root mode=0644
   notify:           reload nginx
 

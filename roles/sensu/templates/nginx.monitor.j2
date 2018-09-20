@@ -42,14 +42,14 @@ map $request $loggable {
 server {
   listen      80;
   listen      [::]:80;
-  server_name monitor.*;
+  server_name {{ monitor_vhost }};
 
 #  rewrite     ^ https://$host$request_uri? permanent;
 #}
 #
 #server {
 #  listen      443 ssl;
-#  server_name monitor.*;
+#  server_name {{ monitor_vhost }};
 
   root /etc/devops/www.monitor;
   index index.html index.htm;
