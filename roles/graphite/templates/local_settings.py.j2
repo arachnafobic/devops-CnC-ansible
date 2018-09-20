@@ -17,7 +17,7 @@ SECRET_KEY = '{{ graphite_secret_key }}'
 # accessible as. See:
 # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS
 # ALLOWED_HOSTS = [ '*' ]
-ALLOWED_HOSTS = [ '127.0.0.1', 'localhost', 'monitor.127.0.0.1.xip.io'{% for ip in ansible_all_ipv4_addresses|sort %}, 'monitor.{{ ip }}.xip.io', '{{ ip }}'{% endfor %}]
+ALLOWED_HOSTS = [ '127.0.0.1', 'localhost'{% for ip in ansible_all_ipv4_addresses|sort %}, 'monitor.{{ ip }}.xip.io', '{{ ip }}'{% endfor %}{% for host in graphite_allowed_hosts|sort %}, '{{ host }}'{% endfor %}]
 
 # Set your local timezone (Django's default is America/Chicago)
 # If your graphs appear to be offset by a couple hours then this probably

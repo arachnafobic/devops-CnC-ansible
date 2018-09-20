@@ -22,3 +22,5 @@ graphite_configs:
   - storage-schemas.conf
   - whitelist.conf
 
+graphite_allowed_hosts:
+  - monitor.127.0.0.1.xip.io
