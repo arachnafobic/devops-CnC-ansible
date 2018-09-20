@@ -24,6 +24,7 @@
   shell:            dpkg -l | grep nodejs-dev
   register:         nodejs_check
   failed_when:      false
+  changed_when:     false
 
 - name:             ensure distribution nodejs packages are not installed
   apt:              name={{ item }} state=absent
