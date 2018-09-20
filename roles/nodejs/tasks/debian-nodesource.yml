@@ -20,10 +20,16 @@
   apt:              update_cache=yes
   when:             nodesource_sources is changed
 
+- name:             check for distribution nodejs packages
+  shell:            dpkg -l | grep nodejs-dev
+  register:         nodejs_check
+  failed_when:      false
+
 - name:             ensure distribution nodejs packages are not installed
   apt:              name={{ item }} state=absent
   with_items:
     - "{{ pkgs_nodejs }}"
+  when:             nodejs_check.rc == 0
 
 - name:            "install nodejs {{ nodesource_version }} from nodesource"
   apt:              name={{ item }} state=present
