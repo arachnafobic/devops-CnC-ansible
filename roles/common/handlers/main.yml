@@ -5,3 +5,6 @@
 
 - name:             restart syslog
   service:          name={{ service_syslog_name }} state=restarted enabled=yes
+
+- name:             restart journald
+  service:          name={{ service_journald_name }} state=restarted enabled=yes

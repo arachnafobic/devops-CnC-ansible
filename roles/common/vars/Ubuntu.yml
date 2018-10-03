@@ -1,5 +1,6 @@
 ---
 
 service_syslog_name: rsyslog
+service_journald_name: systemd-journald.service
 
 default_editor: /bin/nano

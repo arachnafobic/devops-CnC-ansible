@@ -6,3 +6,7 @@ root_folders:
 default_folders:
   - /etc/devops
   - /etc/devops/opt
+
+systemd_journald_Compress:          true
+systemd_journald_SystemMaxUse:      50M
+systemd_journald_SystemMaxFileSize: 1M

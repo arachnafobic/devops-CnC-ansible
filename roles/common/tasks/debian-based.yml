@@ -37,3 +37,7 @@
                     regexp="^#& stop"
                     replace="& stop"
   notify:           restart syslog
+
+- name:             place /etc/systemd/journal.conf
+  template:         dest=/etc/systemd/journal.conf src=journal.conf.j2 mode=0644 owner=root group=root
+  notify:           restart journald
