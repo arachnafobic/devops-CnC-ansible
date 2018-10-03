@@ -24,13 +24,14 @@
     group:          froxlocal
     mode:           0644
 
-- name:             Update backup exclude list
-  lineinfile:
-    path:           /etc/devops/opt/srvbak.exclude
-    line:          "{{ item }}"
-    state:          present
-  with_items:
-    - "{{ frox_dont_backup }}"
+# srvbak is no longer installed on the vps itself
+#- name:             Update backup exclude list
+#  lineinfile:
+#    path:           /etc/devops/opt/srvbak.exclude
+#    line:          "{{ item }}"
+#    state:          present
+#  with_items:
+#    - "{{ frox_dont_backup }}"
 
 - name:             Adding /var/customers/logs to nginx's logrotate
   replace:
