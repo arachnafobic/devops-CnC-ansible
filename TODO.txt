@@ -5,6 +5,9 @@ playbooks:
 -
 
 roles:
+- update
+  - checkrestart output now includes systemctl, rewrite regexp to include this with service check
+
 - sensu
   - move rabbitmq user/vhost setup out of rabbitmq role to sensu (ubuntu/centos)
 
