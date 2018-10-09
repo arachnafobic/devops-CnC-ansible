@@ -98,12 +98,12 @@
   shell:           "wget -q -O /dev/null --post-data \"&mysql_host=127.0.0.1&\
                                  mysql_database={{ frox_mysql_db }}&\
                                  mysql_unpriv_user={{ frox_mysql_user }}&\
-                                 mysql_unpriv_pass={{ frox_mysql_pass }}&\
+                                 mysql_unpriv_pass=`echo -n '{{ frox_mysql_pass }}' | jq -s -R -r @uri`&\
                                  mysql_root_user=root&\
-                                 mysql_root_pass={{ mariadb_root_password }}&\
+                                 mysql_root_pass=`echo -n '{{ mariadb_root_password }}' | jq -s -R -r @uri`&\
                                  admin_user={{ frox_admin_user }}&\
                                  admin_pass1={{ frox_admin_pass }}&\
-                                 admin_pass2={{ frox_admin_pass }}&\
+                                 admin_pass2=`echo -n '{{ frox_admin_pass }}' | jq -s -R -r @uri`&\
                                  servername={{ default_servername }}&\
                                  serverip={{ frox_ip.stdout }}&\
                                  webserver={{ frox_httpd }}&\

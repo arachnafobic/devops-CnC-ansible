@@ -7,6 +7,7 @@ install_tools:
   - tree
   - vim-enhanced
   - mc
+  - jq
   - tig
   - apg
   - wget

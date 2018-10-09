@@ -4,6 +4,7 @@ install_tools:
   - ack-grep
   - byobu
   - curl
+  - jq
   - git
   - grc
   - htop
