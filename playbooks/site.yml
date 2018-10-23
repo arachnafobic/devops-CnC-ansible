@@ -201,6 +201,11 @@
   vars:
     targets: hosting
 
+- import_playbook: ../roles/froxlor-wp.yml
+  tags: [froxlor, froxlor-wp, hosting]
+  vars:
+    targets: hosting
+
 # general user setup
 - import_playbook: ../roles/setup-user.yml
   tags: [users, user-root]

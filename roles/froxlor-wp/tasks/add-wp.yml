@@ -1,0 +1,41 @@
+---
+
+- debug: var=user
+
+- name:            "remove default froxlor index.html from /var/customers/webs/{{ user.value.username }}"
+  file:             path="/var/customers/webs/{{ user.value.username }}/index.html" state=absent
+
+- name:            "download wordpress-latest and extract in /var/customers/webs/{{ user.value.username }}"
+  shell:           "wp --allow-root core download
+                    chdir=/var/customers/webs/{{ user.value.username }}
+                    creates=/var/customers/webs/{{ user.value.username }}/index.php"
+
+- name:             generate wp-config.php
+  shell:           "wp --allow-root config create --dbname={{ user.value.username }}sql1 --dbuser={{ user.value.username }}sql1 --dbpass={{ user.value.password }}
+                    chdir=/var/customers/webs/{{ user.value.username }}
+                    creates=/var/customers/webs/{{ user.value.username }}/wp-config.php"
+
+- name:             run wordpress installer
+  shell:           "wp --allow-root core install --url={{ user.value.domain }} --title=\"{{ user.value.wordpress.title }}\" --admin_user={{ user.value.wordpress.user }} --admin_password={{ user.value.wordpress.pass }} --admin_email={{ user.value.wordpress.email }} --skip-email
+                    chdir=/var/customers/webs/{{ user.value.username }}"
+
+- name:             uninstall default wordpress themes
+  shell:           "wp --allow-root theme delete {{ item }}
+                    chdir=/var/customers/webs/{{ user.value.username }}"
+  with_items:
+    - "{{ wordpress_delete_themes }}"
+
+- name:             uninstall default wordpress plugins
+  shell:           "wp --allow-root plugin uninstall {{ item }}
+                    chdir=/var/customers/webs/{{ user.value.username }}"
+  with_items:
+    - "{{ wordpress_delete_plugins }}"
+
+- name:             install wordpress plugins
+  shell:           "wp --allow-root plugin install {{ item }} --activate
+                    chdir=/var/customers/webs/{{ user.value.username }}"
+  with_items:
+    - "{{ wordpress_default_plugins }}"
+
+- name:             fix up file permissions
+  shell:           "chown -R {{ user.value.username }}:{{ user.value.username }} /var/customers/webs/{{ user.value.username }}/"
