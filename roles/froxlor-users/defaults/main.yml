@@ -1,0 +1,31 @@
+---
+
+frox_webpath:      froxlor
+frox_use_ssl:      false
+
+froxlor_users:
+  ictmtest:
+    username:  ictmtest
+    email:     ictmtest@example.com
+    password:  foo
+    domain:    ictmtest.172.28.128.7.xip.io
+    name:      ICT Maatwerk
+    firstname: ICTM
+    company:   ICT Maatwerk BV
+  testuser1:
+    username:  testuser1
+    email:     testuser1@example.com
+    password:  foo
+    domain:    test1.172.28.128.7.xip.io
+    name:      test1
+    firstname: test1
+    company:   test1
+  testuser2:
+    username:  testuser2
+    email:     testuser2@example.com
+    password:  bar
+    domain:    test2.172.28.128.7.xip.io
+    name:      test2
+    firstname: test2
+    company:   test2
+

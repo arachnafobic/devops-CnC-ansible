@@ -1,0 +1,8 @@
+---
+
+- include_tasks:    process-user.yml
+  vars:
+    user:          "{{ user }}"
+  loop_control:
+    loop_var:      user
+  with_dict:       "{{ froxlor_users }}"
