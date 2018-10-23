@@ -142,3 +142,4 @@
   with_items:
     - { key: 'Unattended-Upgrade::Automatic-Reboot', value: '"true"' }
     - { key: 'Unattended-Upgrade::Automatic-Reboot-Time', value: '"03:00"' }
+  when:             "'monitor' not in group_names"
