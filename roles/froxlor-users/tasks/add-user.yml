@@ -1,0 +1,64 @@
+---
+
+- debug: var=user
+
+- name:             determine current highest system uid/gid
+  shell:            mysql froxlor -sNe 'select value from panel_settings where settinggroup="system" and varname="lastguid"'
+  register:         froxuser_guid
+  changed_when:     false
+
+- name:            "insert user {{ user.value.username }} into panel_customers"
+  shell:           "mysql froxlor -sNe \"insert into panel_customers (loginname, password, adminid, name, firstname, company, street, zipcode, city, phone, fax, email, customernumber, def_language, diskspace, mysqls, mysqls_used, email_quota, tickets, traffic, documentroot, guid, pop3, imap, custom_notes, allowed_phpconfigs) values ('{{ user.value.username }}', '{{ user.value.password | password_hash('sha256') | regex_escape() }}', '1', '{{ user.value.name }}', '{{ user.value.firstname }}', '{{ user.value.company }}', '', '', '', '', '', '{{ user.value.email }}', '', 'English', -1024, -1, 1, -1, -1, -1048576, '/var/customers/webs/{{ user.value.username }}/', {{ (froxuser_guid.stdout)|int + 1 }}, 0, 0, '', '[2]')\""
+
+- name:             increment system uid/gid
+  shell:            mysql froxlor -sNe 'update panel_settings set value="{{ (froxuser_guid.stdout)|int + 1 }}" where settinggroup="system" and varname="lastguid"'
+
+- name:             determine new customerid
+  shell:           "mysql froxlor -sNe \"select customerid from panel_customers where loginname='{{ user.value.username }}'\""
+  register:         froxuser_customerid
+  changed_when:     false
+
+- name:            "add user {{ user.value.username }} into ftp_users"
+  shell:           "mysql froxlor -sNe \"insert into ftp_users (username, uid, gid, password, homedir, login_enabled, customerid, description) values ('{{ user.value.username }}', {{ (froxuser_guid.stdout)|int + 1 }}, {{ (froxuser_guid.stdout)|int + 1 }}, '{{ user.value.password | password_hash('sha256') | regex_escape() }}', '/var/customers/webs/{{ user.value.username }}/', 'Y', {{ froxuser_customerid.stdout }}, 'Default')\""
+
+- name:            "add group for user {{ user.value.username }} into ftp_groups"
+  shell:           "mysql froxlor -sNe \"insert into ftp_groups (groupname, gid, members, customerid) values ('{{ user.value.username }}',{{ (froxuser_guid.stdout)|int + 1 }},'{{ user.value.username }},www-data,froxlocal',{{ froxuser_customerid.stdout }})\""
+
+- name:            "add quota for user {{ user.value.username }} into ftp_quotatallies"
+  shell:           "mysql froxlor -sNe \"insert into ftp_quotatallies (name, quota_type, bytes_in_used, bytes_out_used, bytes_xfer_used, files_in_used, files_out_used, files_xfer_used) VALUES ('{{ user.value.username }}','user',0,0,0,0,0,0)\""
+
+- name:            "add default protected folders entry for user {{ user.value.username }} into panel_htpasswds"
+  shell:           "mysql froxlor -sNe \"insert into panel_htpasswds (customerid, path, username, password) values ({{ froxuser_customerid.stdout }}, '/var/customers/webs/{{ user.value.username }}/webalizer/', '{{ user.value.username }}', 'notyetused@#$')\""
+
+- name:            "create a initial database {{ user.value.username }}sql1"
+  mysql_db:         name="{{ user.value.username }}sql1" state=present
+
+- name:            "set privileges for {{ user.value.username }}sql1"
+  shell:           "mysql -sNe \"GRANT ALL PRIVILEGES ON {{ user.value.username }}sql1.* TO {{ user.value.username }}sql1@{{ item }} IDENTIFIED BY '{{ user.value.password }}'\""
+  with_items:
+    - 127.0.0.1
+    - localhost
+
+- name:            "make froxlor aware off database {{ user.value.username }}sql1"
+  shell:           "mysql froxlor -sNe \"insert into panel_databases (customerid, databasename, description, dbserver) values ({{ froxuser_customerid.stdout }}, '{{ user.value.username }}sql1', '{{ user.value.username }}', 0)\""
+
+- name:            "Add domain {{ user.value.domain }} to user {{ user.value.username }}"
+  shell:           "mysql froxlor -sNe \"insert into panel_domains (domain, adminid, customerid, documentroot, iswildcarddomain, zonefile, dkim, dkim_id, dkim_privkey, dkim_pubkey, wwwserveralias, phpenabled, openbasedir, speciallogfile, ssl_redirect, specialsettings, add_date, phpsettingid, letsencrypt, hsts, hsts_sub, hsts_preload, ocsp_stapling, http2) values ('{{ user.value.domain }}', 1, {{ froxuser_customerid.stdout }}, '/var/customers/webs/{{ user.value.username }}/', 0, '', 1, 0, '', '', 0, 1, 1, 1, 0, '', UNIX_TIMESTAMP(), 2, 0, '0', 0, 0, 0, 0)\""
+
+- name:            "Determine id for newly added domain {{ user.value.domain }}"
+  shell:           "mysql froxlor -sNe \"select id from panel_domains where customerid='{{ froxuser_customerid.stdout }}'\""
+  register:         froxuser_domainid
+  changed_when:     false
+
+- name:            "Link domain {{ user.value.domain }} to server default IP"
+  shell:           "mysql froxlor -sNe \"insert into panel_domaintoip (id_domain, id_ipandports) VALUES ({{ froxuser_domainid.stdout }},1)\""
+
+- name:             force run froxlor cronjob to generate configs
+  shell:           "php /var/www/{{ frox_webpath }}/scripts/froxlor_master_cronjob.php --force"
+
+- name:             force run froxlor cronjob for letsencrypt
+  shell:           "php /var/www/{{ frox_webpath }}/scripts/froxlor_master_cronjob.php --letsencrypt"
+  when:             frox_use_ssl == true
+
+- name:             force run froxlor cronjob to finalize
+  shell:           "php /var/www/{{ frox_webpath }}/scripts/froxlor_master_cronjob.php --force"

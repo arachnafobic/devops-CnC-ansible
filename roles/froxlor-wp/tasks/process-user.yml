@@ -1,0 +1,11 @@
+---
+
+- debug: var=user
+
+- name:             check if user should have a wordpress site and if it exists
+  stat:             path="/var/customers/webs/{{ user.value.username }}/wp-config.php"
+  register:         froxwp_check
+  changed_when:     false
+
+- include_tasks:    add-wp.yml
+  when:             froxwp_check.stat.exists == false and user.value.wordpress.install == true

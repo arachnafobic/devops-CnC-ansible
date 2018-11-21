@@ -1,0 +1,56 @@
+---
+
+frox_webpath:      froxlor
+frox_use_ssl:      false
+
+froxlor_users:
+  ictmtest:
+    username:  ictmtest
+    email:     ictmtest@example.com
+    password:  foo
+    domain:    ictmtest.172.28.128.7.xip.io
+    name:      ICT Maatwerk
+    firstname: ICTM
+    company:   ICT Maatwerk BV
+    wordpress:
+      install: false
+  testuser1:
+    username:  testuser1
+    email:     testuser1@example.com
+    password:  foo
+    domain:    test1.172.28.128.7.xip.io
+    name:      test1
+    firstname: test1
+    company:   test1
+    wordpress:
+      install: true
+      title:   Test Site for user Testuser1
+      user:    testwp1
+      pass:    testwp1
+      email:   testwp1@example.com
+  testuser2:
+    username:  testuser2
+    email:     testuser2@example.com
+    password:  bar
+    domain:    test2.172.28.128.7.xip.io
+    name:      test2
+    firstname: test2
+    company:   test2
+    wordpress:
+      install: true
+      title:   Test Site for user Testuser2
+      user:    testwp2
+      pass:    testwp2
+      email:   testwp2@example.com
+
+wordpress_default_plugins:
+  - wordpress-seo
+  - admin-menu-editor
+
+wordpress_delete_plugins:
+  - akismet
+  - hello
+
+wordpress_delete_themes:
+  - twentyfifteen
+  - twentysixteen

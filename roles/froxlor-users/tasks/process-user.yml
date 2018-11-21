@@ -1,0 +1,11 @@
+---
+
+- debug: var=user
+
+- name:             check if user exists
+  shell:            mysql froxlor -sNe 'select id from ftp_users where username="{{ user.value.username }}"'
+  register:         froxuser_check
+  changed_when:     false
+
+- include_tasks:    add-user.yml
+  when:             froxuser_check.stdout == ""
