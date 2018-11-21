@@ -7,3 +7,7 @@ pkgs_fail2ban:
   - python-pyinotify
   - whois
 
+wordpress_fail2ban_secure: true
+wordpress_fail2ban_filters:
+  - https://plugins.svn.wordpress.org/wp-fail2ban/trunk/filters.d/wordpress-hard.conf
+  - https://plugins.svn.wordpress.org/wp-fail2ban/trunk/filters.d/wordpress-soft.conf

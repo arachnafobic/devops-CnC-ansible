@@ -7,17 +7,24 @@
   with_items:
     - "{{ pkgs_fail2ban }}"
 
+- name:             download wordpress related filters (optional)
+  get_url:          url={{ item }} dest=/etc/fail2ban/filter.d/ owner=root group=root mode=0640
+  notify:           restart fail2ban
+  when:             wordpress_fail2ban_secure == true
+  with_items:
+    - "{{ wordpress_fail2ban_filters }}"
+
 - name:             copy fail2ban.conf
   copy:             src=fail2ban.conf dest=/etc/fail2ban/fail2ban.conf force=yes owner=root group=root mode=0644
   notify:           restart fail2ban
 
 - name:             copy jail.conf
-  copy:             src=jail.redhat.conf dest=/etc/fail2ban/jail.conf force=yes owner=root group=root mode=0644
+  template:         src=jail.redhat.conf.j2 dest=/etc/fail2ban/jail.conf force=yes owner=root group=root mode=0644
   notify:           restart fail2ban
   when:             ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
 
 - name:             copy jail.conf
-  copy:             src=jail.debian.conf dest=/etc/fail2ban/jail.conf force=yes owner=root group=root mode=0644
+  template:         src=jail.debian.conf.j2 dest=/etc/fail2ban/jail.conf force=yes owner=root group=root mode=0644
   notify:           restart fail2ban
   when:             ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 

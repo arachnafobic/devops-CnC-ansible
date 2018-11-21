@@ -121,7 +121,7 @@ action = %(action_mwl)s
 
 enabled   = true
 port      = ssh
-banaction = ufw-ssh
+banaction = route
 filter    = sshd
 logpath   = /var/log/auth.log
 maxretry  = 3
@@ -466,6 +466,23 @@ port     = 5060,5061
 protocol = udp
 logpath  = /var/log/asterisk/messages
 
+{% if wordpress_fail2ban_secure == true %}
+[wordpress-hard]
+enabled = true
+filter = wordpress-hard
+banaction = route
+logpath = /var/log/auth.log
+maxretry = 1
+port = http,https
+
+[wordpress-soft]
+enabled = true
+filter = wordpress-soft
+banaction = route
+logpath = /var/log/auth.log
+maxretry = 3
+port = http,https
+{% endif %}
 
 # Jail for more extended banning of persistent abusers
 # !!! WARNING !!!
