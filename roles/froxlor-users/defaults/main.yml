@@ -46,6 +46,7 @@ froxlor_users:
 wordpress_default_plugins:
   - wordpress-seo
   - admin-menu-editor
+  - wp-fail2ban
 
 wordpress_delete_plugins:
   - akismet

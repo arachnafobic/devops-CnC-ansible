@@ -18,7 +18,7 @@
 # "ignoreip" can be an IP address, a CIDR mask or a DNS host. Fail2ban will not
 # ban a host which matches an address in this list. Several addresses can be
 # defined using space separator.
-ignoreip = 127.0.0.1/8 46.244.7.46/8
+ignoreip = 127.0.0.1/8 46.244.7.46/8 {{ f2b_ip.stdout }}/8
 
 # "bantime" is the number of seconds that a host is banned.
 bantime  = 600
@@ -484,6 +484,22 @@ logpath = /var/log/auth.log
 maxretry = 3
 port = http,https
 {% endif %}
+
+[phpmyadmin-syslog]
+enabled  = true
+filter   = phpmyadmin-syslog
+maxretry = 3
+banaction = ufw-ssh
+logpath = /var/log/auth.log
+port = http,https
+
+[froxlor-auth]
+enabled  = true
+filter   = froxlor-auth
+maxretry = 3
+banaction = ufw-ssh
+logpath = /var/log/auth.log
+port = http,https
 
 # Jail for more extended banning of persistent abusers
 # !!! WARNING !!!

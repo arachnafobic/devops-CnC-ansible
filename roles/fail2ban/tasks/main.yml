@@ -7,6 +7,12 @@
   with_items:
     - "{{ pkgs_fail2ban }}"
 
+- name:             fetch server IP
+  shell:            ifconfig | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|10|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})' | head -n1
+  register:         f2b_ip
+  failed_when:      false
+  changed_when:     false
+
 - name:             download wordpress related filters (optional)
   get_url:          url={{ item }} dest=/etc/fail2ban/filter.d/ owner=root group=root mode=0640
   notify:           restart fail2ban
