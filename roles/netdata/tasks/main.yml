@@ -38,6 +38,16 @@
   notify:
     - restart netdata
 
+- name:             config | Configuring Netdata not to send emails
+  lineinfile:       path=/etc/netdata/netdata.conf
+                    insertafter="^{{ item.key }}"
+                    line="{{ item.value }}"
+  when:             health_enabled == false
+  with_items:
+    - { key: '\[health\]', value: '	enabled = no' }
+  notify:
+    - restart netdata
+
 - name:             config | Setup auto-update cronjob
   file:             path=/etc/cron.daily/netdata-updater
                     src=/usr/local/src/netdata/netdata-updater.sh

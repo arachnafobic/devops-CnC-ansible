@@ -1,3 +1,4 @@
 ---
 
 localhost_only: true
+health_enabled: false
