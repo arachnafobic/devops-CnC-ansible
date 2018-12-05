@@ -1,0 +1,12 @@
+{
+  "checks":
+    {
+      "check-linux-mailq":
+        {
+          "command": "/opt/sensu/embedded/bin/check-mailq.rb -w 5 -c 10",
+          "interval": 60,
+          "occurrences": 5,
+          "subscribers": [ "all" ]
+        }
+    }
+}
