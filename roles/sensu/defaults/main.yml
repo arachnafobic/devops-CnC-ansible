@@ -21,6 +21,7 @@ sensu_default_plugins:
   - memory-checks
   - process-checks
   - load-checks
+  - postfix
 
 sensu_client_plugins:
   - vmstats
