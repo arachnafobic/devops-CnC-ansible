@@ -1,1 +1,2 @@
-deb     https://packagecloud.io/grafana/stable/debian/ stretch main
+deb https://packages.grafana.com/oss/deb stable main
+#deb     https://packagecloud.io/grafana/stable/debian/ stretch main
