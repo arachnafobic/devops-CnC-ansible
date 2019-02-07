@@ -2,6 +2,8 @@
 
 service_fail2ban_name: fail2ban
 
+fail2ban_destemail:    admin@example.com
+
 pkgs_fail2ban:
   - fail2ban
   - python-pyinotify
