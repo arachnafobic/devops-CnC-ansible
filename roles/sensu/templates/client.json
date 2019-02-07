@@ -2,7 +2,7 @@
   "client": {
     "name": "{{ ansible_hostname }}",
     "address": "{{ ansible_default_ipv4["address"] }}",
-    "subscriptions": [ "all", "{{ ansible_hostname }}" ],
+    "subscriptions": [ "all", "{{ ansible_hostname }}"{% if ansible_hostname != "monitor" %} ,"vps"{% endif %} ],
     "http_socket": {
       "bind": "127.0.0.1",
       "port": 3032,
