@@ -334,8 +334,8 @@ function data_backup ()
   run mkdir -p "$pdir_up" "$hdir" "$ldir" "$idir"
   cp_last_backup "$hdir" "$to"
 
-  [ -e "$exclude_from" ] || run rsync -a --no-owner --no-group --no-perms $verbose --delete "$@" "$path"/ "$to"/
-  [ ! -e "$exclude_from" ] || run rsync -a --exclude-from="$exclude_from" --no-owner --no-group --no-perms $verbose --delete "$@" "$path"/ "$to"/
+  [ -e "$exclude_from" ] || run rsync -Wa --no-compress --no-owner --no-group --no-perms $verbose --delete "$@" "$path"/ "$to"/
+  [ ! -e "$exclude_from" ] || run rsync -Wa --exclude-from="$exclude_from" --no-compress --no-owner --no-group --no-perms $verbose --delete "$@" "$path"/ "$to"/
 
 {% if srvbak_use_nas_path == True %}
   run ln -Tfs "{{ srvbak_nas_path }}/hash/$hash" "$pdir"
@@ -347,9 +347,9 @@ function data_backup ()
   dryrun || printf '%s' "$path" > "$info_path"
   run_ftr
 
-  run_hdr "[find $to -> stat $path] > $info_files"
-  dryrun || original_files_info "$path" "$to" > "$info_files"
-  run_ftr
+#  run_hdr "[find $to -> stat $path] > $info_files"
+#  dryrun || original_files_info "$path" "$to" > "$info_files"
+#  run_ftr
 
   rm_obsolete_backups "$hdir"
   rm_obsolete_backups "$ldir"
